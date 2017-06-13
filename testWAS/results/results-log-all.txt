@@ -1,29 +1,183 @@
-21022_0|| Excluded cat-single: YES || 
-31_0|| Excluded integer: YES || 
-22000_0|| Excluded cat-multiple: YES || 
-1_0|| CONTINUOUS MAIN || CONTINUOUS || IRNT || SUCCESS results-linear
-2_0|| CONTINUOUS MAIN || CONTINUOUS || IRNT || CONTINUOUS-SKIP-500 (200) || 
-3_0|| CONTINUOUS MAIN || CONTINUOUS || >20% IN ONE CATEGORY || cat N: 208, 458, 334 || CAT-ORD || order: 0|1|2 || num categories: 3 || SUCCESS results-ordered-logistic
-4_0|| CONTINUOUS MAIN || CONTINUOUS || >20% IN ONE CATEGORY || cat N: 16, 109, 75 || CAT-ORD || order: 0|1|2 || CATORD-SKIP-500 (200) || 
-5_0|| CONTINUOUS MAIN || CONTINUOUS || >20% IN ONE CATEGORY || Inc(>=10): 0(120) || Inc(>=10): 1(380) || sample 120/380(500) || SUCCESS results-logistic-binary 
-6_0|| CONTINUOUS MAIN || CONTINUOUS || >20% IN ONE CATEGORY || Removed 0: 5<10 examples || Inc(>=10): 1(195) || SKIP (number of levels: 1)
-21_0|| INTEGER || CONTINUOUS || IRNT || SUCCESS results-linear
-22_0|| INTEGER || Inc(>=10): 0(891) || Removed 1: 9<10 examples || SKIP (number of levels: 1)
-23_0|| INTEGER || Inc(>=10): 0(800) || Inc(>=10): 1(100) || sample 800/100(900) || SUCCESS results-logistic-binary 
-24_0|| INTEGER || Inc(>=10): 0(760) || Inc(>=10): 2(131) || Removed 1: 9<10 examples || sample 760/131(891) || SUCCESS results-logistic-binary 
-25_0|| INTEGER || Inc(>=10): 0(500) || Inc(>=10): 1(200) || Inc(>=10): 2(200) || 3-20 values || CAT-ORD || order: 0|1|2 || num categories: 3 || SUCCESS results-ordered-logistic
-26_0|| INTEGER || Inc(>=10): 0(600) || Inc(>=10): 1(291) || Removed 2: 9<10 examples || sample 600/291(891) || SUCCESS results-logistic-binary 
-27_0|| INTEGER || Inc(>=10): 11(106) || Inc(>=10): 12(106) || Inc(>=10): 13(72) || Inc(>=10): 14(87) || Inc(>=10): 15(84) || Inc(>=10): 16(89) || Inc(>=10): 17(74) || Inc(>=10): 18(70) || Inc(>=10): 19(56) || Inc(>=10): 20(46) || Inc(>=10): 21(23) || Inc(>=10): 22(31) || Inc(>=10): 23(27) || Inc(>=10): 24(10) || Inc(>=10): 25(10) || Removed 26: 4<10 examples || Removed 27: 2<10 examples || Removed 28: 1<10 examples || Removed 29: 2<10 examples || 3-20 values || CAT-ORD || order: 11|12|13|14|15|16|17|18|19|20|21|22|23|24|25 || num categories: 15 || SUCCESS results-ordered-logistic
-32_0|| CAT-SINGLE || Inc(>=10): 0(891) || Removed 1: 9<10 examples || SKIP (only one value) || 
-33_0|| CAT-SINGLE || Inc(>=10): 0(300) || Inc(>=10): 1(199) || CAT-SINGLE-BINARY || BINARY-LOGISTIC-SKIP-500 (499) || 
-34_0|| CAT-SINGLE || Inc(>=10): 0(300) || Inc(>=10): 1(600) || CAT-SINGLE-BINARY || sample 300/600(900) || SUCCESS results-logistic-binary 
-35_0|| CAT-SINGLE || Inc(>=10): 0(300) || Inc(>=10): 1(100) || Inc(>=10): 2(99) || ordered || CAT-ORD || order: 0|1|2 || CATORD-SKIP-500 (499) || 
-36_0|| CAT-SINGLE || Inc(>=10): 6(39) || Inc(>=10): 8(43) || Inc(>=10): 7(52) || Inc(>=10): 5(24) || Inc(>=10): 10(55) || Inc(>=10): 9(42) || Inc(>=10): 14(78) || Inc(>=10): 11(69) || Inc(>=10): 12(94) || Inc(>=10): 13(73) || Inc(>=10): 15(62) || Inc(>=10): 20(30) || Inc(>=10): 16(49) || Inc(>=10): 17(44) || Inc(>=10): 19(41) || Inc(>=10): 18(44) || Inc(>=10): 21(16) || Inc(>=10): 23(11) || Inc(>=10): 22(13) || Inc(>=10): 24(10) || Removed 25: 7<10 examples || Removed 27: 1<10 examples || Removed 29: 1<10 examples || Removed 26: 1<10 examples || Removed 28: 1<10 examples || ordered || CAT-ORD || order: 5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|21|22|23|24 || num categories: 20 || SUCCESS results-ordered-logistic
-37_0|| CAT-SINGLE || Inc(>=10): 0(300) || Inc(>=10): 1(100) || Inc(>=10): 2(99) || CAT-SINGLE-UNORDERED || CATUNORD-SKIP-500 (499) || 
-38_0|| CAT-SINGLE || Inc(>=10): 0(50) || Inc(>=10): 9(200) || Inc(>=10): 1(200) || Inc(>=10): 4(300) || CAT-SINGLE-UNORDERED || reference: 4=300 || SUCCESS results-notordered-logistic 
-39_0|| CAT-SINGLE || Default related field: x99_0_0 || default value 100 set, N= 250 || Inc(>=10): 100(250) || Inc(>=10): 0(50) || Inc(>=10): 9(200) || Inc(>=10): 1(200) || Inc(>=10): 4(300) || CAT-SINGLE-UNORDERED || reference: 4=300 || SUCCESS results-notordered-logistic 
-41_0|| CAT-MULTIPLE ||  CAT-MUL-BINARY-VAR A1 || NO_NAN Remove NA participants 470 || Not numeric || sample 516/14(530) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A2 || NO_NAN Remove NA participants 470 || Not numeric || IS_CM_EXPOSURE || sample 495/35(530) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A3 || NO_NAN Remove NA participants 470 || Not numeric || sample 25/505(530) || SUCCESS results-logistic-binary 
-42_0|| CAT-MULTIPLE ||  CAT-MUL-BINARY-VAR A1 || ALL || Not numeric || sample 986/14(1000) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A2 || ALL || Not numeric || sample 965/35(1000) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A3 || ALL || Not numeric || sample 495/505(1000) || SUCCESS results-logistic-binary 
-43_0|| CAT-MULTIPLE ||  CAT-MUL-BINARY-VAR A1 || Indicator name x99_0_0 || Remove indicator var NAs: 465 || Not numeric || sample 521/14(535) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A2 || Indicator name x99_0_0 || Remove indicator var NAs: 465 || Not numeric || sample 500/35(535) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A3 || Indicator name x99_0_0 || Remove indicator var NAs: 465 || Not numeric || sample 30/505(535) || SUCCESS results-logistic-binary 
-44_0|| cat-single to cat-multiple || CAT-MULTIPLE ||  CAT-MUL-BINARY-VAR A1 || NO_NAN Remove NA participants 470 || Not numeric || sample 516/14(530) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A2 || NO_NAN Remove NA participants 470 || Not numeric || sample 495/35(530) || SUCCESS results-logistic-binary  CAT-MUL-BINARY-VAR A3 || NO_NAN Remove NA participants 470 || Not numeric || sample 25/505(530) || SUCCESS results-logistic-binary 
-99_0|| Excluded continuous: YES || 
+21022_0|| Excluded integer: YES-AGE || 
+31_0|| Excluded cat-single: YES-SEX || 
+22000_0|| Excluded cat-single: YES-GENETIC || 
+54_0|| Excluded cat-single: YES-ASSESSMENT-CENTRE || 
+4609_0|| INTEGER ||     Cat1_ID                   Cat1_Title Cat2_ID  Cat2_Title Cat3_ID
+377  100000 UK Biobank Assessment Centre  100025 Touchscreen  100059
+              Cat3_Title FieldID                        Field TRAIT_OF_INTEREST
+377 Psychosocial factors    4609 Longest period of depression                  
+    EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT DATA_CODING
+377                                                                100291
+    Participants  Items Stability ValueType Units ItemType  Strata  Sexed
+377        99682 103796  Complete   Integer weeks     Data Primary Unisex
+    Instances Array                                                    Link
+377         3     1 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=4609
+                                                                                                                                                                                                                                                                                                                                                                        Notes
+377 "ACE touchscreen question ""How many weeks was the longest period when you were feeling depressed or down?"" The following checks were performed:  If answer < 1 then rejected  If answer > 999 then rejected   ~F4609~ was collected from participants who indicated they have felt depressed or down for at least a whole week, as defined by their answers to ~F4598~"
+                                      Coding
+377 -1 Do not know | -3 Prefer not to answer
+[1] 100291
+[1] "-1=NA|-3=NA"
+reassignments: -1=NA|-3=NA || CONTINUOUS || IRNT || ERROR: 4609 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+5086_0|| CONTINUOUS MAIN ||     Cat1_ID                   Cat1_Title Cat2_ID        Cat2_Title Cat3_ID
+405  100000 UK Biobank Assessment Centre  100006 Physical measures  100013
+      Cat3_Title FieldID                    Field TRAIT_OF_INTEREST EXCLUDED
+405 Eye measures    5086 Cylindrical power (left)                           
+    CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT DATA_CODING Participants
+405                                                           NA       129295
+     Items Stability  ValueType    Units ItemType  Strata  Sexed Instances
+405 399216  Complete Continuous diopters     Data Primary Unisex         2
+    Array                                                    Link
+405    10 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=5086
+                                                                                            Notes
+405 This is the cylindrical power of refractometry results for the left eye (0.00 indicates none)
+    Coding
+405       
+[1] NA
+CONTINUOUS || IRNT || ERROR: 5086 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+20087_0|| CAT-MULTIPLE ||     Cat1_ID               Cat1_Title Cat2_ID             Cat2_Title Cat3_ID
+725  100088 Additional exposure data  100090 Diet by 24-hour recall  100101
+                    Cat3_Title FieldID                                  Field
+725 Bread/pasta/rice yesterday   20087 Types of spread used on bread/crackers
+    TRAIT_OF_INTEREST EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT
+725                                                20082                       
+    DATA_CODING Participants  Items Stability            ValueType Units
+725          77       161232 617183  Complete Categorical multiple      
+    ItemType  Strata  Sexed Instances Array
+725     Data Derived Unisex         5    13
+                                                        Link
+725 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=20087
+                                                                                                                                                                                                                                                                              Notes
+725 This field indicates the type(s) of spread the participant used on bread or crackers yesterday. The data is an amalgamation of 8 individual Yes/No answers and 29 corresponding tick boxes which were asked if the participant indicated they used spread on bread or crackers.
+                                                                           Coding
+725 "Too many values, see http://biobank.ctsu.ox.ac.uk/showcase/coding.cgi?id=77"
+[1] 77
+ CAT-MUL-BINARY-VAR 164 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 164 but with missing value (<0) || sample 2249/347(2596) || ERROR: 20087#164 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 176 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 176 but with missing value (<0) || sample 2410/186(2596) || ERROR: 20087#176 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 170 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 170 but with missing value (<0) || sample 1948/648(2596) || ERROR: 20087#170 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 159 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 159 but with missing value (<0) || sample 1960/636(2596) || ERROR: 20087#159 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 188 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 188 but with missing value (<0) || sample 2471/125(2596) || ERROR: 20087#188 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 195 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 195 but with missing value (<0) || CAT-MULT-SKIP-10 (2593 vs 3) ||  CAT-MUL-BINARY-VAR 182 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 182 but with missing value (<0) || sample 2565/31(2596) || ERROR: 20087#182 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 194 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 194 but with missing value (<0) || CAT-MULT-SKIP-10 (2588 vs 8) ||  CAT-MUL-BINARY-VAR 167 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 167 but with missing value (<0) || sample 2497/99(2596) || ERROR: 20087#167 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 178 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 178 but with missing value (<0) || sample 2514/82(2596) || ERROR: 20087#178 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 172 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 172 but with missing value (<0) || sample 2313/283(2596) || ERROR: 20087#172 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 160 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 160 but with missing value (<0) || sample 2319/277(2596) || ERROR: 20087#160 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 162 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 162 but with missing value (<0) || sample 2322/274(2596) || ERROR: 20087#162 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 191 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 191 but with missing value (<0) || sample 2567/29(2596) || ERROR: 20087#191 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 173 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 173 but with missing value (<0) || sample 2475/121(2596) || ERROR: 20087#173 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 166 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 166 but with missing value (<0) || sample 2466/130(2596) || ERROR: 20087#166 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 168 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 168 but with missing value (<0) || sample 2557/39(2596) || ERROR: 20087#168 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 179 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 179 but with missing value (<0) || sample 2523/73(2596) || ERROR: 20087#179 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 161 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 161 but with missing value (<0) || sample 2549/47(2596) || ERROR: 20087#161 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 175 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 175 but with missing value (<0) || sample 2565/31(2596) || ERROR: 20087#175 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 174 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 174 but with missing value (<0) || sample 2455/141(2596) || ERROR: 20087#174 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 169 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 169 but with missing value (<0) || sample 2558/38(2596) || ERROR: 20087#169 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 163 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 163 but with missing value (<0) || sample 2563/33(2596) || ERROR: 20087#163 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 193 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 193 but with missing value (<0) || sample 2564/32(2596) || ERROR: 20087#193 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 177 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 177 but with missing value (<0) || CAT-MULT-SKIP-10 (2592 vs 4) ||  CAT-MUL-BINARY-VAR 171 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 171 but with missing value (<0) || sample 2567/29(2596) || ERROR: 20087#171 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 190 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 190 but with missing value (<0) || sample 2551/45(2596) || ERROR: 20087#190 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 181 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 181 but with missing value (<0) || CAT-MULT-SKIP-10 (2588 vs 8) ||  CAT-MUL-BINARY-VAR 189 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 189 but with missing value (<0) || CAT-MULT-SKIP-10 (2591 vs 5) ||  CAT-MUL-BINARY-VAR 165 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 165 but with missing value (<0) || sample 2577/19(2596) || ERROR: 20087#165 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 192 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 192 but with missing value (<0) || CAT-MULT-SKIP-10 (2588 vs 8) ||  CAT-MUL-BINARY-VAR 184 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 184 but with missing value (<0) || sample 2581/15(2596) || ERROR: 20087#184 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels CAT-MUL-BINARY-VAR 185 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 185 but with missing value (<0) || CAT-MULT-SKIP-10 (2588 vs 8) ||  CAT-MUL-BINARY-VAR 186 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 186 but with missing value (<0) || CAT-MULT-SKIP-10 (2594 vs 2) ||  CAT-MUL-BINARY-VAR 180 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 180 but with missing value (<0) || CAT-MULT-SKIP-10 (2594 vs 2) ||  CAT-MUL-BINARY-VAR 183 || Indicator name x20082_0_0 || Remove indicator var NAs: 15460 || Remove indicator var <0: 0 || Removed 0 examples != 183 but with missing value (<0) || CAT-MULT-SKIP-10 (2595 vs 1) || 
+4924_0|| CAT-SINGLE ||     Cat1_ID                   Cat1_Title Cat2_ID         Cat2_Title Cat3_ID
+393  100000 UK Biobank Assessment Centre  100026 Cognitive function  100027
+                 Cat3_Title FieldID                                   Field
+393 Fluid intelligence test    4924 Attempted fluid intelligence (FI) test.
+    TRAIT_OF_INTEREST EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT
+393                                                                            
+    DATA_CODING Participants  Items Stability          ValueType Units ItemType
+393      100642       187203 197037  Complete Categorical single           Data
+     Strata  Sexed Instances Array
+393 Primary Unisex         3     1
+                                                       Link
+393 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=4924
+                                                                                                                                                                                                                                                                                            Notes
+393 "ACE touchscreen question ""In this next game you will have two minutes to do as many puzzle questions as possible. Don't spend too long on any one puzzle - you can skip any puzzle if you wish."". Participants were offered the chance to skip the Fluid Intelligence test at this point."
+                                         Coding
+393 1 Begin puzzles | 2 I am unable to try this
+[1] 100642
+[1] ""
+Inc(>=10): Begin puzzles(6047) || Inc(>=10): I am unable to try this(76) || CAT-SINGLE-BINARY || sample 6047/76(6123) || ERROR: 4924 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+24014_0|| CAT-SINGLE ||      Cat1_ID               Cat1_Title Cat2_ID        Cat2_Title Cat3_ID
+1059  100088 Additional exposure data     113 Local environment     114
+                    Cat3_Title FieldID               Field TRAIT_OF_INTEREST
+1059 Residential air pollution   24014 Close to major road                  
+     EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT DATA_CODING
+1059                                                                     7
+     Participants  Items Stability          ValueType Units ItemType  Strata
+1059       495249 495249  Complete Categorical single           Data Primary
+      Sexed Instances Array
+1059 Unisex         1     1
+                                                         Link
+1059 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=24014
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             Notes
+1059 "Indicator variable indicating whether a residential address is within 50 metres of a class 1 or 2 type road and/or within 100 metres of a class 0 road, based upon central road network. The Central road network is taken from Eurostreets version 3.1 digital road network (scale 1:10000), derived from the TeleAtlas MultiNet TM dataset for the year 2008. All roads of class 0, 1 and 2 (motorways, main roads of major importance and other main roads) were classified as major roads. Based upon local knowledge classes 3 and 4 (secondary roads and local connecting roads) were also classified as major roads."
+           Coding
+1059 0 No | 1 Yes
+[1] 7
+[1] ""
+Inc(>=10): 0(16517) || Inc(>=10): 1(1253) || CAT-SINGLE-BINARY || sample 16517/1253(17770) || ERROR: 24014 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+670_0|| CAT-SINGLE ||    Cat1_ID                   Cat1_Title Cat2_ID  Cat2_Title Cat3_ID
+43  100000 UK Biobank Assessment Centre  100025 Touchscreen  100062
+          Cat3_Title FieldID                          Field TRAIT_OF_INTEREST
+43 Sociodemographics     670 Type of accommodation lived in                  
+   EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT DATA_CODING
+43                                                                100286
+   Participants  Items Stability          ValueType Units ItemType  Strata
+43       501784 530796  Complete Categorical single           Data Primary
+    Sexed Instances Array
+43 Unisex         3     1
+                                                     Link
+43 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=670
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            Notes
+43 "ACE touchscreen question ""What type of accommodation do you live in?"" If the participant activated the Help button they were shown the message:     Please select:  A house or bungalow for any whole, detached, semi-detached or terraced (including end-terrace) house or bungalow.  A flat, maisonette, or apartment for any purpose-built block of flats or tenement, part of a converted or shared house (including bed-sits) or within a commercial building (for example in an office building, or hotel, or over a shop).  If none of the options apply, select None of the above."
+                                                                                                                                                                                                    Coding
+43 "-3 Prefer not to answer | -7 None of the above | 1 A house or bungalow | 2 A flat, maisonette or apartment | 3 Mobile or temporary structure (i.e. caravan) | 4 Sheltered accommodation | 5 Care home"
+[1] 100286
+[1] ""
+Inc(>=10): A house or bungalow(16091) || Inc(>=10): A flat, maisonette or apartment(1859) || Inc(>=10): Mobile or temporary structure (i.e. caravan)(22) || Inc(>=10): Sheltered accommodation(43) || Inc(>=10): None of the above(31) || Removed Prefer not to answer: 7<10 examples || Removed Care home: 3<10 examples || CAT-SINGLE-UNORDERED || reference: A house or bungalow=16091 || ERROR: 670 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+20016_0|| INTEGER ||     Cat1_ID                   Cat1_Title Cat2_ID         Cat2_Title Cat3_ID
+684  100000 UK Biobank Assessment Centre  100026 Cognitive function  100027
+                 Cat3_Title FieldID                    Field TRAIT_OF_INTEREST
+684 Fluid intelligence test   20016 Fluid intelligence score                  
+    EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT DATA_CODING
+684                                                                    NA
+    Participants  Items Stability ValueType           Units ItemType  Strata
+684       184147 193905  Complete   Integer correct-answers     Data Derived
+     Sexed Instances Array
+684 Unisex         3     1
+                                                        Link
+684 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=20016
+                                                                                                                                                                                                                                                               Notes
+684 This is a simple unweighted sum of the number of correct answers given to the 13 fluid intelligence questions. Participants who did not answer all of the questions within the allotted 2 minute limit are scored as zero for each of the unattempted questions.
+    Coding
+684       
+[1] NA
+Inc(>=10): 7(984) || Inc(>=10): 4(783) || Inc(>=10): 5(998) || Inc(>=10): 6(931) || Inc(>=10): 13(11) || Inc(>=10): 2(188) || Inc(>=10): 8(855) || Inc(>=10): 3(413) || Inc(>=10): 9(389) || Inc(>=10): 10(244) || Inc(>=10): 11(135) || Removed 0: 9<10 examples || Inc(>=10): 1(51) || Inc(>=10): 12(56) || 3-20 values || CAT-ORD || order: 1|2|3|4|5|6|7|8|9|10|11|12|13 || num categories: 13 || ERROR: 20016 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+41235_0|| INTEGER ||      Cat1_ID              Cat1_Title Cat2_ID          Cat2_Title Cat3_ID
+2037  100091 Health-related outcomes    2000 Hospital in-patient    2001
+                  Cat3_Title FieldID              Field TRAIT_OF_INTEREST
+2037 Admission and discharge   41235 Spells in hospital                  
+     EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT DATA_CODING
+2037                                                                    NA
+     Participants  Items Stability ValueType  Units ItemType  Strata  Sexed
+2037       330529 330529   Ongoing   Integer Spells     Data Derived Unisex
+     Instances Array                                                     Link
+2037         1     1 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=41235
+                                                                                                                                                                                                                                                                             Notes
+2037 "This field holds the total number of known spells a participant has had in hospital, as derived from all of their available hospital Episode records. As the data does not always permit Episodes to be unambiguously amalgamated into Spells, the figures are approximate."
+     Coding
+2037       
+[1] NA
+CONTINUOUS || >20% IN ONE CATEGORY || cat N: 3721, 2368, 5203 || CAT-ORD || order: 0|1|2 || num categories: 3 || ERROR: 41235 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+20082_0|| INTEGER ||     Cat1_ID               Cat1_Title Cat2_ID             Cat2_Title Cat3_ID
+720  100088 Additional exposure data  100090 Diet by 24-hour recall  100114
+                        Cat3_Title FieldID                     Field
+720 Diet questionnaire performance   20082 Duration of questionnaire
+    TRAIT_OF_INTEREST EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT
+720                                                                            
+    DATA_CODING Participants  Items Stability ValueType   Units ItemType
+720          NA       211048 458686  Complete   Integer minutes     Data
+     Strata  Sexed Instances Array
+720 Derived Unisex         5     1
+                                                        Link
+720 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=20082
+                                                                                                                                                                                                                                                                                                                                                                         Notes
+720 "This is the time participants took to complete the diet questionnaire as measured from initially connecting to the web-server to clicking the sign-off button on the final screen. Participants were able to stop and resume completing a questionnaire multiple times within the same day, and hence the longer times recorded are unlikely to indicate continuous use."
+    Coding
+720       
+[1] NA
+CONTINUOUS || IRNT || ERROR: 20082 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
+2385_0|| CAT-SINGLE ||     Cat1_ID                   Cat1_Title Cat2_ID  Cat2_Title Cat3_ID
+190  100000 UK Biobank Assessment Centre  100025 Touchscreen  100068
+              Cat3_Title FieldID                    Field TRAIT_OF_INTEREST
+190 Sex-specific factors    2385 Relative age voice broke                  
+    EXCLUDED CAT_MULT_INDICATOR_FIELDS CAT_SINGLE_TO_CAT_MULT DATA_CODING
+190                                                                100570
+    Participants  Items Stability          ValueType Units ItemType  Strata
+190       227248 241139  Complete Categorical single           Data Primary
+    Sexed Instances Array
+190  Male         3     1
+                                                       Link
+190 http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=2385
+                                                                                                                                                                                                           Notes
+190 "ACE touchscreen question ""When did your voice break?"" If the participant activated the Help button they were shown the message:     If you are unsure, please provide an estimate or select Do not know."
+                                                                                                            Coding
+190 -1 Do not know | -3 Prefer not to answer | 1 Younger than average | 2 About average age | 3 Older than average
+[1] 100570
+[1] ""
+Inc(>=10): Do not know(1339) || Inc(>=10): Older than average(1013) || Inc(>=10): About average age(14947) || Inc(>=10): Younger than average(744) || Inc(>=10): Prefer not to answer(12) || ordered || CAT-ORD || order: About average age|Do not know|Older than average|Prefer not to answer|Younger than average || num categories: 5 || ERROR: 2385 Error in `contrasts<-`(`*tmp*`, value = contr.funs[1 + isOF[nn]]): contrasts can be applied only to factors with 2 or more levels
