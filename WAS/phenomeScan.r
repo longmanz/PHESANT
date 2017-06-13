@@ -48,20 +48,6 @@ option_list <- list(
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
-datadir <- '../testWAS/data/'
-
-# Andreas test file for me.
-opt$traitofinterestfile <- paste(datadir,'yesnosex.csv', sep="")
-opt$phenofile <-  paste(datadir,'duncan_subset.Rdata', sep="")
-opt$phenofile <-  paste(datadir,'duncan_subset.tsv', sep="")
-opt$variablelistfile <- paste(datadir, 'outcome-info-ag.tsv', sep="")
-opt$datacodingfile <- paste(datadir, 'data-coding-ordinal-info.txt', sep="")
-opt$traitofinterest <- 'SS'
-opt$resDir <- '../testWAS/results/'
-opt$userId <- 'userId'
-opt$sensitivity <- FALSE
-opt$genetic <- TRUE
-opt$log <- "andreas_log_file.log"
 
 varlogfile <- opt$log
 
