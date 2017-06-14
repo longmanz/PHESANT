@@ -14,8 +14,7 @@ testContinuous <- function(varName, varType, thisdata, varlogfile)
 
 # Main code used to process continuous fields, or integer fields that have been reassigned as continuous because they have >20 distinct values.
 # This is needed because we have already reassigned values for integer fields, so do this in the function above for continuous fields.
-testContinuous2 <- function(varName, varType, thisdata, varlogfile,
-                            notests = TRUE)
+testContinuous2 <- function(varName, varType, thisdata, varlogfile)
 {
     cat("CONTINUOUS || ", file=varlogfile, append=TRUE)
 
@@ -57,7 +56,7 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile,
             # Remove categories if < 10 examples to see if this should be binary
             # or not, but if ordered categorical then we include all values when 
             # generating this.
-            phenoAvgMoreThan10 <- testNumExamples(phenoAvg)
+            phenoAvgMoreThan10 <- testNumExamples(phenoAvg, varlogfile)
 
             # Binary if 2 distinct values, else ordered categorical
             phenoFactor <- factor(phenoAvgMoreThan10)
@@ -153,46 +152,16 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile,
 
             # Do regression (use standardised geno values)
             geno <- scale(thisdata[,"geno"])
-            confounders=thisdata[,2:numPreceedingCols]
-
-            # sink()
-            # sink(modelFitLogFile, append=TRUE)
+            confounders <- thisdata[,2:numPreceedingCols]
 
             # BEGIN TRYCATCH
             tryCatch(
             {
-                if (notests != TRUE) {
-                    fit <- lm(phenoIRNT ~ geno + ., data=confounders)
-
-                    # sink()
-                    # sink(resLogFile, append=TRUE)
-
-                    cis <- confint(fit, level=0.95)
-                    sumx <- summary(fit)
-
-                    pvalue <- sumx$coefficients['geno','Pr(>|t|)']
-                    beta <- sumx$coefficients["geno","Estimate"]
-                    lower <- cis["geno", "2.5 %"]
-                    upper <- cis["geno", "97.5 %"]
-
-                    numNotNA <- length(which(!is.na(phenoIRNT)))
-
-                    ## Save result to file
-                    write(paste(varName, varType, numNotNA,
-                                beta, lower, upper, pvalue, sep=","),
-                          file=paste(opt$resDir, "results-linear-", opt$varTypeArg,
-                                     ".txt", sep=""),
-                          append="TRUE")
-                    cat("SUCCESS results-linear")
-                }
-
                 incrementCounter("success.continuous")
                 return(list(phenoIRNT, varName))
 
                 # END TRYCATCH
             }, error = function(e) {
-                # sink()
-                # sink(resLogFile, append=TRUE)
                 cat("ERROR:", varName, gsub("[\r\n]", "", e))
                 incrementCounter("continuous.error")
             })

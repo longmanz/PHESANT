@@ -6,11 +6,11 @@ loadData <- function()
 {
     # Load phenotype
     cat("Loading phenotypes...\n")
-    
+
     if (length(grep('.tsv', opt$phenofile)) == 1 | length(grep('.tab', opt$phenofile)) == 1) {
-        phenotype <- read.table(opt$phenofile, header=1,sep='\t')
+        phenotype <- read.table(opt$phenofile, header=TRUE, sep='\t')
     } else if (length(grep('.csv', opt$phenofile)) == 1) {
-            phenotype <- read.table(opt$phenofile, header=1,sep=',')
+            phenotype <- read.table(opt$phenofile, header=TRUE, sep=',')
     } else if (length(grep('.Rdata', opt$phenofile)) == 1) {
         load(opt$phenofile)
         if (!exists("phenotype")) {
