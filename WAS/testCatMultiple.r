@@ -13,7 +13,7 @@ testCategoricalMultiple <- function(varName, varType, thisdata, varlogfile)
     pheno <- thisdata[,phenoStartIdx:ncol(thisdata)]
     pheno <- reassignValue(pheno, varName, varlogfile)
 
-    # get unique values from all columns of this variable
+    # Get unique values from all columns of this variable
     uniqueValues <- unique(na.omit(pheno[,1]))
 
     numCols <- ncol(pheno)

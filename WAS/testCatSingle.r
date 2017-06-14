@@ -42,7 +42,7 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
     # this is used where there is no zero option e.g. field 100200
     defaultValue <- dataDataCode$default_value
     defaultRelatedID <- dataDataCode$default_related_field
-    pheno <- setDefaultValue(pheno, defaultValue, defaultRelatedID)
+    pheno <- setDefaultValue(pheno, defaultValue, defaultRelatedID, varlogfile)
 
     # All categories coded as <0 we assume are `missing' values
     pheno <- replaceMissingCodes(pheno)
