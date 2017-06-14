@@ -1,6 +1,6 @@
 # Performs ordered logistic regression test and saves results in ordered logistic results file
 testCategoricalOrdered <- function(varName, varType, thisdata,
-    varlogfile, orderStr="", notests=TRUE)
+    varlogfile, orderStr="")
 {
     pheno <- thisdata[,phenoStartIdx:ncol(thisdata)]
     geno <- thisdata[,"geno"]
