@@ -8,11 +8,14 @@ loadData <- function()
     cat("Loading phenotypes...\n")
 
     if (length(grep('.tsv', opt$phenofile)) == 1 | length(grep('.tab', opt$phenofile)) == 1) {
-        phenotype <- read.table(opt$phenofile, header=TRUE, sep='\t')
+        phenotype <- fread(opt$phenofile, header=TRUE, sep='\t')
+        phenotype <- as.data.frame(phenotype)
     } else if (length(grep('.csv', opt$phenofile)) == 1) {
-            phenotype <- read.table(opt$phenofile, header=TRUE, sep=',')
+            phenotype <- fread(opt$phenofile, header=TRUE, sep=',')
+            phenotype <- as.data.frame(phenotype)
     } else if (length(grep('.Rdata', opt$phenofile)) == 1) {
         load(opt$phenofile)
+        print(ls())
         if (!exists("phenotype")) {
             stop("Error: phenotype not found in .Rdata file")
         }

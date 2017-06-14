@@ -16,7 +16,11 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 
+load("/humgen/atgu1/fs03/dpalmer/data/ukbb_phenotypes_parsed.Rdata")
+print(ls())
+
 library("optparse")
+library("data.table")
 
 option_list <- list(
   make_option(c("-f", "--phenofile"), type="character", default=NULL,
@@ -27,29 +31,34 @@ option_list <- list(
     help="variablelistfile file name (should be tab separated)", metavar="character"),
   make_option(c("-d", "--datacodingfile"), type="character", default=NULL,
     help="datacodingfile file name (should be comma separated)", metavar="character"),
-  make_option(c("-e", "--traitofinterest"), type="character", default=NULL, help="traitofinterest option should specify trait of interest variable name", metavar="character"),
+  make_option(c("-e", "--traitofinterest"), type="character", default=NULL,
+    help="traitofinterest option should specify trait of interest variable name", metavar="character"),
   make_option(c("-r", "--resDir"), type="character", default=NULL,
     help="resDir option should specify directory where results files should be stored", metavar="character"),
   make_option(c("-u", "--userId"), type="character", default="userId",
-    help=paste("userId option should specify user ID column in trait of interest and phenotype files [default= %default]"), metavar="character"),
+    help=paste("userId option should specify user ID column in trait of interest and phenotype files [default = %default]"), 
+    metavar="character"),
   make_option(c("-t", "--test"), action="store_true", default=FALSE,
-    help="run test phenome scan on test data (see test subfolder) [default= %default]"),
+    help="run test phenome scan on test data (see test subfolder) [default = %default]"),
   make_option(c("-s", "--sensitivity"), action="store_true", default=FALSE,
-    help="run sensitivity phenome scan [default= %default]"),
+    help="run sensitivity phenome scan [default = %default]"),
   make_option(c("-a", "--partIdx"), type="integer", default=NULL,
     help="part index of phenotype (used to parellise)"),
   make_option(c("-b", "--numParts"), type="integer", default=NULL,
     help="number of phenotype parts (used to parellise)"),
   make_option(c("-j", "--genetic"), action="store", default=TRUE,
-    help="trait of interest is genetic, e.g. a SNP or genetic risk score [default= %default]"),
+    help="trait of interest is genetic, e.g. a SNP or genetic risk score [default = %default]"),
   make_option(c("-l", "--log"), type="character", default='log',
-    help="name of the logfile [default= %default]")
+    help="name of the logfile [default = %default]")
+  make_option(c("-o", "--out"), type="character", default='output',
+    help="name of the output .tsv file containing the parsed columns in the provided phenofile [default = %default]")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 
-varlogfile <- opt$log
+varlogfile <- paste(opt$resDir, '/', opt$log, '.', opt$partIdx, '.log', sep='')
+outputfile <- paste(opt$resDir, '/', opt$log, '.', opt$partIdx, '.tsv', sep='')
 
 source("processArgs.r")
 opt <<- opt
@@ -168,8 +177,7 @@ colnames(data_to_store) <- data_to_store_var
 data_to_store <- cbind.data.frame(data$userId, confounders, data_to_store)
 colnames(data_to_store)[1] <- "userId"
 
-write.table(data_to_store, sep='\t', 
-    quote=FALSE, row.names=FALSE, file="andrea_test_file.tsv")
+write.table(data_to_store, sep='\t', quote="TRUE", row.names=FALSE, file=outputfile)
 
 # Save counters of each path in variable flow
 saveCounts()
