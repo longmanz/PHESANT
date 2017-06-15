@@ -46,7 +46,7 @@ option_list <- list(
   make_option(c("-j", "--genetic"), action="store", default=TRUE,
     help="trait of interest is genetic, e.g. a SNP or genetic risk score [default = %default]"),
   make_option(c("-l", "--log"), type="character", default='log',
-    help="name of the logfile [default = %default]")
+    help="name of the logfile [default = %default]"),
   make_option(c("-o", "--out"), type="character", default='output',
     help="name of the output .tsv file containing the parsed columns in the provided phenofile [default = %default]")
 )
