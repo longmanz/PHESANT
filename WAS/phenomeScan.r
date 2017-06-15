@@ -16,9 +16,6 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 # DEALINGS IN THE SOFTWARE.
 
-load("/humgen/atgu1/fs03/dpalmer/data/ukbb_phenotypes_parsed.Rdata")
-print(ls())
-
 library("optparse")
 library("data.table")
 
