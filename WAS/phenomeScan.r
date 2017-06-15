@@ -174,7 +174,7 @@ colnames(data_to_store) <- data_to_store_var
 data_to_store <- cbind.data.frame(data$userId, confounders, data_to_store)
 colnames(data_to_store)[1] <- "userId"
 
-write.table(data_to_store, sep='\t', quote="TRUE", row.names=FALSE, file=outputfile)
+write.table(data_to_store, sep='\t', quote=TRUE, row.names=FALSE, file=outputfile)
 
 # Save counters of each path in variable flow
 saveCounts()

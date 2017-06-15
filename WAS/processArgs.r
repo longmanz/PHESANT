@@ -18,7 +18,6 @@ processArgs <- function()
         processParts(opt$partIdx, opt$numParts)	
     } else {
         # Check arguments are supplied correctly
-        print(opt$phenofile)
         if (is.null(opt$phenofile)){
             print_help(opt_parser)
             stop("phenofile argument must be supplied", call.=FALSE)
