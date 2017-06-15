@@ -15,7 +15,8 @@ loadData <- function()
             phenotype <- as.data.frame(phenotype)
     } else if (length(grep('.Rdata', opt$phenofile)) == 1) {
         load(opt$phenofile)
-        print(ls())
+        phenotype <- phenotypes
+        rm("phenotypes")
         if (!exists("phenotype")) {
             stop("Error: phenotype not found in .Rdata file")
         }
