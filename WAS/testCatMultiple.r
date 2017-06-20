@@ -2,7 +2,7 @@
 # 1) Reassigning values as specified in data coding file
 # 2) Generating binary variable for each category in field, restricting to correct set of participants as specified
 # in CAT_MULT_INDICATOR_FIELDS field of variable info file (either NO_NAN, ALL or a field ID)
-# 3) Checking derived variable has at least 10 cases in each group
+# 3) Checking derived variable has at least catmultcutoff cases in each group
 # 4) Calling binaryLogisticRegression function for this derived binary variable
 
 testCategoricalMultiple <- function(varName, varType, thisdata, varlogfile)
@@ -64,12 +64,12 @@ testCategoricalMultiple <- function(varName, varType, thisdata, varlogfile)
             idxTrue <- length(which(newthisdata_to_save[,phenoStartIdx] == TRUE))
             idxFalse <- length(which(newthisdata_to_save[,phenoStartIdx] == FALSE))
                     
-            if (idxTrue < 10 || idxFalse < 10) {
-                cat("CAT-MULT-SKIP-10 (", idxTrue, " vs ", idxFalse, ") || ",
+            if (idxTrue < opt$catmultcutoff || idxFalse < opt$catmultcutoff) {
+                cat("CAT-MULT-SKIP-", opt$catmultcutoff, " (", idxTrue, " vs ", idxFalse, ") || ",
                     sep="", file=varlogfile, append=TRUE)
-                incrementCounter("catMul.10")
+                incrementCounter(paste("catMul.", opt$catmultcutoff, sep=""))
             } else {
-                incrementCounter("catMul.over10")
+                incrementCounter(paste("catMul.over", opt$catmultcutoff, sep=""))
             	# Binary so logistic regression
                 data_to_add <- binaryLogisticRegression(paste(varName, variableVal, sep="_"),
                     varType, newthisdata_to_save, varlogfile)

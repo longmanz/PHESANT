@@ -48,7 +48,9 @@ option_list <- list(
   make_option(c("-l", "--log"), type="character", default='log',
     help="name of the logfile [default = %default]"),
   make_option(c("-o", "--out"), type="character", default='output',
-    help="name of the output .tsv file containing the parsed columns in the provided phenofile [default = %default]")
+    help="name of the output .tsv file containing the parsed columns in the provided phenofile [default = %default]"),
+  make_option(c("-c", "--catmultcutoff"), type="integer", default=10,
+    help="The cutoff for exclusion when creating dichotomous variables for CAT-MULTIPLE.")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -59,6 +61,7 @@ outputfile <- paste(opt$resDir, '/', opt$log, '.', opt$partIdx, '.tsv', sep='')
 
 source("processArgs.r")
 opt <<- opt
+print(opt)
 processArgs()
 
 source("initFunctions.r")

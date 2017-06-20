@@ -1,5 +1,5 @@
 # Tests the association of a field, determined by its field type
-testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile)
+testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, catmultcutoff)
 {
     # Call file for variable type.
     tryCatch(
