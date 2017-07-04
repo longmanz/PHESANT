@@ -141,10 +141,10 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile)
 
         # Check there are at least 500 examples
         numNotNA <- length(which(!is.na(phenoAvg)))
-        if (numNotNA<500) {
-            cat("CONTINUOUS-SKIP-500 (", numNotNA, ") || ",sep="",
+        if (numNotNA < opt$contnacutoff) {
+            cat("CONTINUOUS-SKIP-", opt$contnacutoff, " (", numNotNA, ") || ",sep="",
                 file=varlogfile, append=TRUE)
-            incrementCounter("cont.main.500")
+            incrementCounter(paste("cont.main.", opt$contnacutoff, sep=""))
             return(NULL)
         } else {
             # Inverse rank normal transformation

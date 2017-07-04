@@ -9,10 +9,10 @@ testCategoricalUnordered <- function(varName, varType, thisdata, varlogfile) {
     numNotNA <- length(which(!is.na(pheno)))
     numRows <- nrow(thisdata)
 
-    if (numNotNA < 500) {
-        cat("CATUNORD-SKIP-500 (", numNotNA, ") || ",sep="",
+    if (numNotNA < opt$catunordnacutoff) {
+        cat("CATUNORD-SKIP-", opt$catunordnacutoff, " (", numNotNA, ") || ",sep="",
             file=varlogfile, append=TRUE)
-        incrementCounter("unordCat.500")
+        incrementCounter(paste("unordCat.", opt$catunordnacutoff, sep=""))
         return(NULL)
     } else {
         # Check there are not too many levels and skip if there are.

@@ -7,7 +7,7 @@ testNumExamples <- function(pheno, varlogfile)
     for (u in uniqVar) {
         withValIdx <- which(pheno==u)
         numWithVal <- length(withValIdx)
-        if (numWithVal<10) {
+        if (numWithVal < 10) {
             pheno[withValIdx] <- NA
             cat("Removed ",u ,": ", numWithVal, "<10 examples || ", sep="",
                 file=varlogfile, append=TRUE)

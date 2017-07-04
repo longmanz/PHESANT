@@ -49,8 +49,19 @@ option_list <- list(
     help="name of the logfile [default = %default]"),
   make_option(c("-o", "--out"), type="character", default='output',
     help="name of the output .tsv file containing the parsed columns in the provided phenofile [default = %default]"),
-  make_option(c("-c", "--catmultcutoff"), type="integer", default=10,
-    help="The cutoff for exclusion when creating dichotomous variables for CAT-MULTIPLE.")
+  make_option(c("-c", "--catmultcutoff"), type="integer", default=50,
+    help="The cutoff for exclusion when creating dichotomous variables for CAT-MULTIPLE."),
+  make_option(c("-z", "--catordnacutoff"), type="integer", default=5000,
+    help="The cutoff for exclusion for number of non-NAs in ordered categorical variables."),
+  make_option(c("-w", "--catunordnacutoff"), type="integer", default=5000,
+    help="The cutoff for exclusion for number of non-NAs in unordered categorical variables."),
+  make_option(c("-x", "--contnacutoff"), type="integer", default=5000,
+    help="The cutoff for exclusion for number of non-NAs in continuous variables."),
+  make_option(c("-n", "--binnacutoff"), type="integer", default=5000,
+    help="The cutoff for exclusion for number of non-NAs in binary-variables."),
+  make_option(c("-i", "--bintruecutoff"), type="integer", default=100,
+    help="The cutoff for exclusion for numbers of members of a category in binary-variables.")
+
 )
 
 opt_parser <- OptionParser(option_list = option_list)

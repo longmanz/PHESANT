@@ -17,10 +17,10 @@ testCategoricalOrdered <- function(varName, varType, thisdata,
 
     # Check sample size
     numNotNA <- length(which(!is.na(pheno)))
-    if (numNotNA < 500) {
-        cat("CATORD-SKIP-500 (", numNotNA, ") || ", sep="",
+    if (numNotNA < opt$catordnacutoff) {
+        cat("CATORD-SKIP-", opt$catordnacutoff, " (", numNotNA, ") || ", sep="",
             file=varlogfile, append=TRUE)
-        incrementCounter("ordCat.500")
+        incrementCounter(paste("ordCat.", opt$catordnacutoff, sep=""))
         return(NULL)
     } else {
         # Test this cat ordered variable with ordered logistic regression	

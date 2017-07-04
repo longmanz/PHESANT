@@ -1,6 +1,6 @@
-data <- read.table("test_log_file..tsv",sep='\t',header=TRUE)
+tsv_data <- read.table("test_log_file..tsv",sep='\t',header=TRUE)
 log_file <- "test_log_file..log"
-metadata <- read.table("../variable-info/outcome-info-ag_edited.tsv",
+outcome_info <- read.table("../variable-info/outcome_info_final.tsv",
 					   sep='\t', quote="", comment.char="", header=TRUE)
 
 trim <- function (x) {
@@ -22,7 +22,7 @@ for(i in to_read) {
 
 get_subtype <- function(x) paste(x[2:length(x)],collapse=" ")
 
-get_hists_and_notes <- function(hist_filename)
+get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables)
 {
 	pdf(file=paste(hist_filename,".pdf",sep=""), width=5, height=5)
 	par(oma=c(4,0,0,0))
@@ -35,10 +35,10 @@ get_hists_and_notes <- function(hist_filename)
 		type <- class(data[i][,1])
 		if(type == "numeric") {
 			var <- substr(i,2,nchar(i))
-			where <- which(metadata$FieldID == var)
-			i_name <- paste(trim(metadata$Field[where]),"-",i)
+			where <- which(outcome_info$FieldID == var)
+			i_name <- paste(trim(outcome_info$Field[where]),"-",i)
 			# Add the notes:
-			notes[k,1] <- remove_excess_whitespace(as.character(trim(metadata$Notes[where])))
+			notes[k,1] <- remove_excess_whitespace(as.character(trim(outcome_info$Notes[where])))
 			matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
 			notes[k,2] <- matching_line
 
@@ -51,9 +51,9 @@ get_hists_and_notes <- function(hist_filename)
 			var <- strsplit(i, split="_")[[1]][1]
 			var <- substr(var, 2, nchar(var))
 			subvar <- strsplit(i, split="_")[[1]][2]
-			where <- which(metadata$FieldID == var)
+			where <- which(outcome_info$FieldID == var)
 			# Add the notes:
-			notes[k,1] <- remove_excess_whitespace(as.character(trim(metadata$Notes[where])))
+			notes[k,1] <- remove_excess_whitespace(as.character(trim(outcome_info$Notes[where])))
 			matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
 			if (length(grep("^.*CAT-MULTIPLE", matching_line)) > 0) {
 				new_matching_line <- paste(gsub(paste("^(.*?)\\|.*(CAT-MUL-BINARY-VAR", subvar, ".*?)CAT.*"), "\\1 \\|\\| \\2", matching_line))
@@ -73,8 +73,8 @@ get_hists_and_notes <- function(hist_filename)
 				notes[k,3] <- trim(gsub("^.*(reassignments: .*?)\\|\\|.*", "\\1", matching_line))
 			}
 
-			i_name <- paste(trim(metadata$Field[where]), "-", i)
-			i_subname <- as.character(metadata$Coding[where])
+			i_name <- paste(trim(outcome_info$Field[where]), "-", i)
+			i_subname <- as.character(outcome_info$Coding[where])
 			if(nchar(i_subname)>0 && !is.na(subvar)) {
 				to_parse <- strsplit(i_subname, split="\\|")[[1]]
 				if(length(to_parse) > 1) {
@@ -107,3 +107,6 @@ get_hists_and_notes <- function(hist_filename)
 	}
 	dev.off()
 }
+
+hist_filename <- "bam"
+get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables)

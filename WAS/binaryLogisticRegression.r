@@ -18,15 +18,15 @@ binaryLogisticRegression <- function(varName, varType, thisdata, varlogfile)
     idxFalse <- length(which(phenoFactor == facLevels[2]))
     numNotNA <- length(which(!is.na(phenoFactor)))
 
-    if (idxTrue < 10 || idxFalse < 10) {
-        cat("BINARY-LOGISTIC-SKIP-10 (", idxTrue, "/", idxFalse, ") || ",
+    if (idxTrue < opt$bintruecutoff || idxFalse < opt$bintruecutoff) {
+        cat("BINARY-LOGISTIC-SKIP-", opt$bintruecutoff, " (", idxTrue, "/", idxFalse, ") || ",
             sep="", file=varlogfile, append=TRUE)
-        incrementCounter("binary.10")
+        incrementCounter(paste("binary.", opt$bintruecutoff, sep=""))
         return(NULL)
     } else if (numNotNA < 500) {	
-        cat("BINARY-LOGISTIC-SKIP-500 (", numNotNA, ") || ",
+        cat("BINARY-LOGISTIC-SKIP-", opt$binnacutoff, " (", numNotNA, ") || ",
             sep="", file=varlogfile, append=TRUE)
-        incrementCounter("binary.500")
+        incrementCounter(paste("binary.", opt$binnacutoff, sep=""))
         return(NULL)
     } else {
         cat("sample ", idxTrue, "/", idxFalse, "(", numNotNA, ") || ",
