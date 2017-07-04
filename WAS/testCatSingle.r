@@ -44,7 +44,7 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
     defaultRelatedID <- dataDataCode$default_related_field
     pheno <- setDefaultValue(pheno, defaultValue, defaultRelatedID, varlogfile)
 
-    # All categories coded as <0 we assume are `missing' values
+    # All categories coded as < 0 we assume are `missing' values
     pheno <- replaceMissingCodes(pheno)
 
     # Remove categories if < 10 examples
