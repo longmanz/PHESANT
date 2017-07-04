@@ -29,7 +29,6 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                     return(NULL)
                 } else {
                     incrementCounter("start.int")
-                    cat("INTEGER\n", file=varlogfile, append=TRUE)
                     data_to_add <- testInteger(currentVarShort, "INTEGER",
                                                thisdata, varlogfile)
                     cat("\n", file=varlogfile, append=TRUE)
@@ -44,7 +43,6 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                     return(NULL)
                 } else {
                     incrementCounter("start.cont")
-                    cat("CONTINUOUS\n", file=varlogfile, append=TRUE)
                     data_to_add <- testContinuous(currentVarShort, "CONTINUOUS",
                                                   thisdata, varlogfile)
                     cat("\n", file=varlogfile, append=TRUE)
@@ -61,7 +59,6 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                     return(NULL)
                 } else {
                     incrementCounter("start.catSin")
-                    cat("CATEGORICAL\n", file=varlogfile, append=TRUE)
                     data_to_add <- testCategoricalSingle(currentVarShort, "CAT-SIN",
                                                          thisdata, varlogfile)
                     cat('\n', file=varlogfile, append=TRUE)
@@ -72,7 +69,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                 # CAT MULTIPLE
                 cat(currentVar, "|| ", sep="", file=varlogfile, append=TRUE)
                 if (excluded != "") {
-                    cat("Excluded cat-multiple:", excluded, "||",
+                    cat("Excluded cat-multiple:", excluded, "||\n",
                         file=varlogfile, append=TRUE)
                     incrementCounter("excluded.catMul")
                     return(NULL)
@@ -83,8 +80,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                             file=varlogfile, append=TRUE)
                         incrementCounter("catSinToCatMul")
                     }
-	
-                    cat("CATEGORICAL MULTIPLE\n", file=varlogfile, append=TRUE)
+                    
                     data_to_add <- testCategoricalMultiple(currentVarShort, "CAT-MUL",
                                                            thisdata, varlogfile)
                 }

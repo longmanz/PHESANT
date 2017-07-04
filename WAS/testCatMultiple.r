@@ -29,7 +29,7 @@ testCategoricalMultiple <- function(varName, varType, thisdata, varlogfile)
         for (variableVal in uniqueValues) {
             # Numeric negative values we assume are missing - check this
             if (is.numeric(variableVal) & variableVal<0) {
-                cat("SKIP_val:", variableVal," < 0", sep="",
+                cat("SKIP_val:", variableVal," < 0 || ", sep="",
                     file=varlogfile, append=TRUE)
                 next
             }
@@ -37,7 +37,7 @@ testCategoricalMultiple <- function(varName, varType, thisdata, varlogfile)
             # Make variable for this value
             idxForVar <- which(pheno == variableVal, arr.ind=TRUE)
 
-            cat("\nCAT-MUL-BINARY-VAR ", variableVal, " || ", sep="",
+            cat("CAT-MUL-BINARY-VAR ", variableVal, " || ", sep="",
                 file=varlogfile, append=TRUE)
             incrementCounter("catMul.binary")
 

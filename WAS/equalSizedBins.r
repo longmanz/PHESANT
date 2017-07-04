@@ -7,12 +7,15 @@ equalSizedBins <- function(phenoAvg, varlogfile)
     maxX <- max(phenoAvg, na.rm=TRUE)
     phenoBinned <- phenoAvg
 
+    cat("Split into three bins: ", file=varlogfile, append=TRUE)
+
     if (q[1] == minX) {
         
         # Edge case - quantile value is lowest value
         # Assign min value as cat1
         idx1 <- which(phenoAvg == q[1])
         phenoBinned[idx1] <- 0
+        cat("0: [", q[1], ",", q[1], "],", file=varlogfile, append=TRUE, sep="")
 
         # Divide remaining values into cat2 and cat3
         phenoAvgRemaining <- phenoAvg[which(phenoAvg!=q[1])]
@@ -23,14 +26,22 @@ equalSizedBins <- function(phenoAvg, varlogfile)
         if (qx[1] == minXX) {
             # Edge case again - quantile value is lowest value
             idx2 <- which(phenoAvg == qx[1])
+            cat(" 1: [", qx[1], ",", qx[1], "],", file=varlogfile, append=TRUE, sep="")
+
             idx3 <- which(phenoAvg > qx[1])
+            cat(" 2: >", qx[1], " ||", file=varlogfile, append=TRUE, sep="")
+
         } else if (qx[1] == maxXX) {
             # Edge case again - quantile value is max value
             idx2 <- which(phenoAvg < qx[1] & phenoAvg > q[1])
+            cat(" 1: (", q[1], ",", qx[1], "),", file=varlogfile, append=TRUE, sep="")
             idx3 <- which(phenoAvg == qx[1])
+            cat(" 2: [",qx[1],",", qx[1], "] ||", file=varlogfile, append=TRUE, sep="")
         } else {
             idx2 <- which(phenoAvg < qx[1] & phenoAvg > q[1])
+            cat(" 1: (", q[1], ",", qx[1], "),", file=varlogfile, append=TRUE, sep="")
             idx3 <- which(phenoAvg >= qx[1])
+            cat(" 2: >=", qx[1], " ||", file=varlogfile, append=TRUE, sep="")
         }
 
         phenoBinned[idx2] <- 1
@@ -52,18 +63,26 @@ equalSizedBins <- function(phenoAvg, varlogfile)
     	if (qx[1] == minXX) {
             # edge case again - quantile value is lowest value
             idx1 <- which(phenoAvg == qx[1])
+            cat("0: [", qx[1], ",", qx[1],"],", file=varlogfile, append=TRUE, sep="") 
             idx2 <- which(phenoAvg > qx[1] & phenoAvg < q[2])
+            cat(" 1: (", qx[1], ",", q[2], "),", file=varlogfile, append=TRUE, sep="") 
         } else if	(qx[1] == maxXX) {
             # edge case again - quantile value is max value
             idx1 <- which(phenoAvg < qx[1])
+            cat("0: <", qx[1], ",", file=varlogfile, append=TRUE, sep="") 
             idx2 <- which(phenoAvg == qx[1])
+            cat(" 1: [", qx[1], ",", qx[1], "] ", file=varlogfile, append=TRUE, sep="") 
         } else {
             idx1 <- which(phenoAvg < qx[1])  
+            cat("0: <", qx[1], ",", file=varlogfile, append=TRUE, sep="") 
             idx2 <- which(phenoAvg >= qx[1] & phenoAvg < q[2])
+            cat(" 1: [", qx[1], ",", q[2], "),", file=varlogfile, append=TRUE, sep="") 
     	}
 
         phenoBinned[idx1] <- 0
         phenoBinned[idx2] <- 1
+
+        cat(" 2: [", q[2], ",", q[2],"] ||", file=varlogfile, append=TRUE, sep="")        
 
     } else if (q[1] == q[2]) {
         
@@ -75,6 +94,7 @@ equalSizedBins <- function(phenoAvg, varlogfile)
         idx1 <- which(phenoAvg < q[1])
         idx2 <- which(phenoAvg == q[2])
         idx3 <- which(phenoAvg > q[2])
+        cat("0: <", q[1], ", 1: [", q[2], ",", q[2], "], 2: >", q[2]," ||", file=varlogfile, append=TRUE, sep="")    
         phenoBinned[idx1] <- 0
         phenoBinned[idx2] <- 1
         phenoBinned[idx3] <- 2
@@ -86,8 +106,10 @@ equalSizedBins <- function(phenoAvg, varlogfile)
 
         phenoBinned <- phenoAvg
         idx1 <- which(phenoAvg < q[1])
-        idx2 <- which(phenoAvg >= q[1] & phenoAvg<q[2])
+        idx2 <- which(phenoAvg >= q[1] & phenoAvg < q[2])
         idx3 <- which(phenoAvg >= q[2])
+        cat("0: <", q[1],", 1: [", q[1], ",", q[2], "), 2: >=", q[2]," ||", file=varlogfile, append=TRUE, sep="")    
+
         phenoBinned[idx1] <- 0
         phenoBinned[idx2] <- 1
         phenoBinned[idx3] <- 2

@@ -70,7 +70,7 @@ chooseReferenceCategory <- function(pheno, varlogfile)
         withValIdx <- which(pheno==u)
         numWithVal <- length(withValIdx)
 
-        if (numWithVal>maxFreq) {
+        if (numWithVal > maxFreq) {
             maxFreq <- numWithVal
             maxFreqVar <- u
         }
