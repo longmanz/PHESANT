@@ -12,8 +12,6 @@ processArgs <- function()
         opt$traitofinterest <<- 'exposure'
         opt$resDir <<- '../testWAS/results/'
         opt$userId <<- 'userId'
-        opt$sensitivity <<- FALSE
-        opt$genetic <<- TRUE
 
         processParts(opt$partIdx, opt$numParts)	
     } else {
@@ -64,15 +62,7 @@ processArgs <- function()
     }
     
     # Just some information to the user
-    if (opt$sensitivity==TRUE & opt$genetic==TRUE) {
-        print("Adjusting for age, sex, genotype chip, top 10 genetic principal components and assessment centre")
-    } else if (opt$sensitivity==FALSE & opt$genetic==TRUE) {
-        print("Adjusting for age, sex and genotype chip")
-    } else if (opt$sensitivity==TRUE & opt$genetic==FALSE) {
-        print("Adjusting for age, sex and assessment centre")
-    } else if	(opt$sensitivity==FALSE & opt$genetic==FALSE) {
-        print("Adjusting for age and sex")
-    }
+    print("Adjusting for age and sex")
 }
 
 # Parse the 'part' arguments and check they are valid

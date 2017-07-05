@@ -17,30 +17,6 @@ validatePhenotypeInput <- function(phenoIn)
     if (length(idx) == 0)
         stop("phenotype file doesn't contain required sex colunn: x31_0_0", call.=FALSE)
 
-
-    if (opt$genetic ==TRUE) {
-        idx <- which(names(phenoIn) == "x22000_0_0");
-        if (length(idx) == 0) 
-        stop("phenotype file doesn't contain required genetic batch colunn: x22000_0_0", call.=FALSE)	
-    }
-
-    # If running with sensitivity option then check extra columns exist in pheno file (genetic PCs and assessment centre)
-    if (opt$sensitivity==TRUE) {
-
-        if (opt$genetic ==TRUE) {
-            # Check first 10 genetic PCs exist
-            for (i in 1:10) {
-                idx <- which(names(phenoIn) == paste("x22009_0_", i, sep=""))
-                if (length(idx) == 0)
-                	stop(paste("phenotype file doesn't contain required genetic principal component colunn: x22009_0_", i, sep=""), call.=FALSE)
-            }
-        }
-
-        # Assessment centre field
-        idx <- which(names(phenoIn) == "x54_0_0");
-        if (length(idx) == 0)
-            stop("phenotype file doesn't contain required assessment centre colunn: x54_0_0", call.=FALSE)
-    }
 	print("Phenotype file validated")
 }
 
