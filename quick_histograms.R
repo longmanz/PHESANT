@@ -20,7 +20,7 @@ get_subtype <- function(x) paste(x[2:length(x)],collapse=" ")
 
 get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables)
 {
-	if (ncol(tsv_data) > 5) {
+	if (ncol(tsv_data) > 4) {
 		pdf(file=paste(hist_filename,".pdf",sep=""), width=5, height=5)
 		par(oma=c(4,0,0,0))
 
@@ -107,13 +107,14 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 	}
 }
 
-tsv_filename <- "~/results/ukb9403."
+tsv_filename <- "~/results/ukb9403"
+hist_filename <- "~/results/ukb9403"
 
 for(i in 1:20) {
 	tsv_filename_i <- paste(tsv_filename, ".", i, ".tsv", sep="")
 	log_file <- paste(tsv_filename, ".", i, ".log", sep="")
-	tsv_data <- fread(tsv_filename_i, header=TRUE, sep='\t')
-	tsv_data <- as.data.frame(tsv_data)
+	tsv_data <- read.table(tsv_filename_i, header=TRUE, sep='\t')
+	# tsv_data <- as.data.frame(tsv_data)
 	
 	outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final.tsv",
 						   sep='\t', quote="", comment.char="", header=TRUE)

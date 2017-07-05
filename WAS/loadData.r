@@ -77,6 +77,7 @@ loadData <- function()
         print("Merging trait of interest and phenotype data")
         # Merge to one matrix
         datax <- merge(snpScores, phenotype, by=opt$userId, all=FALSE)
+        print(dim(datax))
     }
 
     if (nrow(datax)==0) {

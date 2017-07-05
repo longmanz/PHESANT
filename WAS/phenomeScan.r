@@ -43,7 +43,7 @@ option_list <- list(
     help="part index of phenotype (used to parellise)"),
   make_option(c("-b", "--numParts"), type="integer", default=NULL,
     help="number of phenotype parts (used to parellise)"),
-  make_option(c("-j", "--genetic"), action="store", default=TRUE,
+  make_option(c("-j", "--genetic"), action="store_true", default=FALSE,
     help="trait of interest is genetic, e.g. a SNP or genetic risk score [default = %default]"),
   make_option(c("-l", "--log"), type="character", default='log',
     help="name of the logfile [default = %default]"),
@@ -127,6 +127,8 @@ i <- 1
 data_to_store <- matrix(nrow = nrow(data), ncol = 0)
 data_to_store <- as.data.frame(data_to_store)
 data_to_store_var <- c()
+
+print(dim(data_to_store))
 
 for (var in phenoVars) { 
 
