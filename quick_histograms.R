@@ -20,15 +20,15 @@ get_subtype <- function(x) paste(x[2:length(x)],collapse=" ")
 
 get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables)
 {
-	if (ncol(tsv_data) > 4) {
+	if (ncol(tsv_data) > 3) {
 		pdf(file=paste(hist_filename,".pdf",sep=""), width=5, height=5)
 		par(oma=c(4,0,0,0))
 
-		notes <- matrix(nrow=(ncol(tsv_data)-4),ncol=3)
-		rownames(notes) <- colnames(tsv_data)[5:ncol(tsv_data)]
+		notes <- matrix(nrow=(ncol(tsv_data)-3),ncol=3)
+		rownames(notes) <- colnames(tsv_data)[4:ncol(tsv_data)]
 		samples <- nrow(tsv_data)
 		k <- 1
-		for(i in colnames(tsv_data)[5:ncol(tsv_data)]){
+		for(i in colnames(tsv_data)[4:ncol(tsv_data)]){
 			type <- class(tsv_data[i][,1])
 			if(type == "numeric") {
 				var <- substr(i,2,nchar(i))
@@ -107,8 +107,8 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 	}
 }
 
-tsv_filename <- "~/results/ukb9403"
-hist_filename <- "~/results/ukb9403"
+tsv_filename <- "~/results/ukb9403_final"
+hist_filename <- "~/results/ukb9403_final"
 
 for(i in 1:20) {
 	tsv_filename_i <- paste(tsv_filename, ".", i, ".tsv", sep="")
