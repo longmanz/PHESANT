@@ -30,22 +30,22 @@ loadData <- function()
     validatePhenotypeInput(phenotype)
 
     # Load SNPs.
-    cat("Loading trait of interest file...\n")
-    snpScores <- read.table(opt$traitofinterestfile, sep=",", header=1)
-    validateTraitInput(snpScores)
+    # cat("Loading trait of interest file...\n")
+    # snpScores <- read.table(opt$traitofinterestfile, sep=",", header=1)
+    # validateTraitInput(snpScores)
 
-    # Keep only the userID and exposure variable
-    idx2 <- which(names(snpScores) == opt$traitofinterest)
+    # # Keep only the userID and exposure variable
+    # idx2 <- which(names(snpScores) == opt$traitofinterest)
 
-    # Remove all rows with no trait of interest
-    idxNotEmpty <- which(!is.na(snpScores[,idx2]))
-    cat("Trait of interest has", nrow(snpScores), "rows with",
-        length(idxNotEmpty), "not NA.")
-    snpScores <- snpScores[idxNotEmpty,]
+    # # Remove all rows with no trait of interest
+    # idxNotEmpty <- which(!is.na(snpScores[,idx2]))
+    # cat("Trait of interest has", nrow(snpScores), "rows with",
+    #     length(idxNotEmpty), "not NA.")
+    # snpScores <- snpScores[idxNotEmpty,]
 
     # DEV: Hack - set the userId in the trait of interest file to be 
     # the same as that in the phenotype file.
-    snpScores <- cbind.data.frame(phenotype$userId, snpScores[,idx2])
+    snpScores <- cbind.data.frame(phenotype$userId, 0)#snpScores[,idx2])
     colnames(snpScores)[1] <- opt$userId
     colnames(snpScores)[2] <- "geno"
 
