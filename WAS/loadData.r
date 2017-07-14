@@ -63,8 +63,7 @@ loadData <- function()
     print(dim(datax))
     
     # Variables we adjust for.
-    # DEV: HACK.
-    age <- rep(1, nrow(datax))
+    age <- datax[,"x21022_0_0"]
     sex <- datax[,"x31_0_0"]
     confounders <- cbind.data.frame(age,sex)
 
