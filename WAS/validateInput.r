@@ -21,21 +21,21 @@ validatePhenotypeInput <- function(phenoIn)
 }
 
 # Validate the contents of the trait of interest file
-validateTraitInput <- function(snpIn)
-{
-    # Trait of interest file validation
-    print(paste("Number of columns in trait of interest file:", ncol(snpIn)))
+# validateTraitInput <- function(snpIn)
+# {
+#     # Trait of interest file validation
+#     print(paste("Number of columns in trait of interest file:", ncol(snpIn)))
 
-    # Check user id exists in snp file
-    idx1 <- which(names(snpIn) == opt$userId);
-    if (length(idx1) ==  0)
-        stop(paste("Trait of interest file doesn't contain userID colunn:", opt$userId), call.=FALSE)
+#     # Check user id exists in snp file
+#     idx1 <- which(names(snpIn) == opt$userId);
+#     if (length(idx1) ==  0)
+#         stop(paste("Trait of interest file doesn't contain userID colunn:", opt$userId), call.=FALSE)
     
-    # Check trait of interest exists in trait of interest file
-    idx2 <- which(names(snpIn) == opt$traitofinterest);
-    if (length(idx2) == 0)
-        stop(paste("Trait of interest file doesn't contain trait of interest variable column:", opt$traitofinterest), call.=FALSE)
+#     # Check trait of interest exists in trait of interest file
+#     idx2 <- which(names(snpIn) == opt$traitofinterest);
+#     if (length(idx2) == 0)
+#         stop(paste("Trait of interest file doesn't contain trait of interest variable column:", opt$traitofinterest), call.=FALSE)
 
-    print("Trait of interest file validated")
-}
+#     print("Trait of interest file validated")
+# }
 

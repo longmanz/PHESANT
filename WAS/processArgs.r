@@ -5,7 +5,7 @@ processArgs <- function()
     if (opt$test==TRUE) {
         # Set up the test phenome scan settings
         datadir <- '../testWAS/data/'
-        opt$traitofinterestfile <<- paste(datadir,'exposure.csv', sep="")
+        # opt$traitofinterestfile <<- paste(datadir,'exposure.csv', sep="")
         opt$phenofile <<-  paste(datadir,'phenotypes.csv', sep="")
         opt$variablelistfile <<- '../testWAS/variable-lists/outcome-info.tsv'
         opt$datacodingfile <<- '../testWAS/variable-lists/data-coding-ordinal-info.txt'
@@ -24,11 +24,11 @@ processArgs <- function()
                 " does not exist", sep=""), call.=FALSE)
         }
 
-        if (!is.null(opt$traitofinterestfile) & 
-            !file.exists(opt$traitofinterestfile)) {
-            stop(paste("trait of interest data file traitofinterestfile=",
-                opt$traitofinterestfile, " does not exist", sep=""), call.=FALSE)
-        }
+        # if (!is.null(opt$traitofinterestfile) & 
+        #     !file.exists(opt$traitofinterestfile)) {
+        #     stop(paste("trait of interest data file traitofinterestfile=",
+        #         opt$traitofinterestfile, " does not exist", sep=""), call.=FALSE)
+        # }
 
         if (is.null(opt$variablelistfile)){
             print_help(opt_parser)
@@ -46,10 +46,10 @@ processArgs <- function()
                 opt$datacodingfile, " does not exist", sep=""), call.=FALSE)
         }
 
-        if (is.null(opt$traitofinterest)){
-            print_help(opt_parser)
-            stop("traitofinterest argument must be supplied", call.=FALSE)
-        }
+        # if (is.null(opt$traitofinterest)){
+        #     print_help(opt_parser)
+        #     stop("traitofinterest argument must be supplied", call.=FALSE)
+        # }
 
         if (is.null(opt$resDir)){
             print_help(opt_parser)
