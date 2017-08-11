@@ -25,7 +25,8 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 	# - used.in.pca.calculation==1
 	# - excess.relatives==0
 	# - putative.sex.chromosome.aneuploidy==0
-	# = this should leave you with 337208 samples
+	# ...this should leave you with 337208 samples
+
 	where_good_samples <- which(qc_data$in.white.British.ancestry.subset==1 &
 						 	     qc_data$used.in.pca.calculation == 1 &
 						 	     qc_data$excess.relatives == 0 & 
@@ -75,14 +76,17 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 				notes[k,1] <- trim(outcome_info$Field[where])
 				# The sixth column is the 'Notes' field in variable-info file:
 				notes[k,6] <- remove_excess_whitespace(as.character(trim(outcome_info$Notes[where])))
-				# The seventh column is information about how the data is parsed using PHESANT:
-				matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
-				notes[k,7] <- matching_line
+				
+				if (log_file != FALSE){
+					# The seventh column is information about how the data is parsed using PHESANT:
+					matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
+					notes[k,7] <- matching_line
 
-				# The eighth column is usually empty, unless there are PHESANT reassignments, in which
-				# case we detail those reassignments here:
-				if (length(grep("reassignments", matching_line)) > 0) {
-					notes[k,8] <- trim(gsub("^.*(reassignments: .*?)\\|\\|.*", "\\1", matching_line))
+					# The eighth column is usually empty, unless there are PHESANT reassignments, in which
+					# case we detail those reassignments here:
+					if (length(grep("reassignments", matching_line)) > 0) {
+						notes[k,8] <- trim(gsub("^.*(reassignments: .*?)\\|\\|.*", "\\1", matching_line))
+					}
 				}
 
 				hist(tsv_data[i][,1], main=i_name, col="grey", breaks=100, xlab="value")
@@ -96,27 +100,29 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 				# The sixth column is the 'notes' field in variable-info file:
 				notes[k,6] <- remove_excess_whitespace(as.character(trim(outcome_info$Notes[where])))
 				
-				# The seventh column is information about how the data is parsed using PHESANT:
-				matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
-				
-				if (length(grep("^.*CAT-MULTIPLE", matching_line)) > 0) {
-					new_matching_line <- paste(gsub(paste("^(.*?)\\|.*(CAT-MUL-BINARY-VAR", subvar, ".*?)CAT.*"), "\\1 \\|\\| \\2", matching_line))
-					if(matching_line == new_matching_line){
-						new_matching_line <- paste(gsub(paste("^(.*?)\\|.*(CAT-MUL-BINARY-VAR", subvar, ".*)"), "\\1 \\|\\| \\2", matching_line))
+				if (log_file != FALSE) {
+					# The seventh column is information about how the data is parsed using PHESANT:
+					matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
+					
+					if (length(grep("^.*CAT-MULTIPLE", matching_line)) > 0) {
+						new_matching_line <- paste(gsub(paste("^(.*?)\\|.*(CAT-MUL-BINARY-VAR", subvar, ".*?)CAT.*"), "\\1 \\|\\| \\2", matching_line))
+						if(matching_line == new_matching_line){
+							new_matching_line <- paste(gsub(paste("^(.*?)\\|.*(CAT-MUL-BINARY-VAR", subvar, ".*)"), "\\1 \\|\\| \\2", matching_line))
+						}
+						notes[k,7] <- trim(new_matching_line)
+					} else if (length(grep("CAT-SINGLE-UNORDERED", matching_line)) > 0) {
+						new_matching_line <- gsub(paste("^(.*?)\\|.*(Inc.*?: ", subvar, "\\([0-9]+\\)).*", sep=""),
+							paste("\\1 \\|\\| CAT-SINGLE \\|\\| CAT-SINGLE-BINARY-VAR:", subvar, " \\|\\| \\2 \\|\\|"), matching_line)
+						notes[k,7] <- trim(new_matching_line)
+					} else {
+						notes[k,7] <- trim(matching_line)
 					}
-					notes[k,7] <- trim(new_matching_line)
-				} else if (length(grep("CAT-SINGLE-UNORDERED", matching_line)) > 0) {
-					new_matching_line <- gsub(paste("^(.*?)\\|.*(Inc.*?: ", subvar, "\\([0-9]+\\)).*", sep=""),
-						paste("\\1 \\|\\| CAT-SINGLE \\|\\| CAT-SINGLE-BINARY-VAR:", subvar, " \\|\\| \\2 \\|\\|"), matching_line)
-					notes[k,7] <- trim(new_matching_line)
-				} else {
-					notes[k,7] <- trim(matching_line)
-				}
 
-				# The eighth column is usually empty, unless there are PHESANT reassignments, in which
-				# case we detail those reassignments here:
-				if (length(grep("reassignments", matching_line)) > 0) {
-					notes[k,8] <- trim(gsub("^.*(reassignments: .*?)\\|\\|.*", "\\1", matching_line))
+					# The eighth column is usually empty, unless there are PHESANT reassignments, in which
+					# case we detail those reassignments here:
+					if (length(grep("reassignments", matching_line)) > 0) {
+						notes[k,8] <- trim(gsub("^.*(reassignments: .*?)\\|\\|.*", "\\1", matching_line))
+					}
 				}
 
 				i_name <- paste(trim(outcome_info$Field[where]), "-", i)
@@ -196,7 +202,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		}
 		dev.off()
 		# Get rid of the X that's appended at the start of each variable.
-		rownames(notes) <- substr(rownames(notes), 2, nchar(rownames(notes))
+		rownames(notes) <- substr(rownames(notes), 2, nchar(rownames(notes)))
 		return(notes)
 	}
 }
@@ -250,64 +256,9 @@ include_PHESANT_reassignment_names <- function(pheno_summary, outcome_info)
 
 						pheno_summary[where_reassignment[i],1] <- paste(pheno_summary[where_reassignment[i],1], i_subname, sep="")
 					}
-
 				}
 			}
 		}
 	}
 	return(pheno_summary)
 }
-
-# Running Verneri's application through.
-hist_filename <- "~/results/ukb1859_hist"
-pheno_summary <- "~/results/ukb1859_phenosummary.tsv"
-
-filename <- "~/results/ukb7127_output"
-tsv_filename <- paste(filename, ".tsv", sep="")
-log_file <- paste(filename, ".log", sep="")
-tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
-
-qc_data <- read.table("~/results/ukb1859_qc.tsv", header=TRUE)
-
-outcome_info <- read.table("PHESANT/variable-info/outcome_info_final.tsv",
-					   sep='\t', quote="", comment.char="", header=TRUE)
-
-samples_for_removal <- as.character(read.table("~/results/w1859_20170726_participantwithdrawallist.csv")$V1)
-
-notes_for_manny_1859 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal)
-
-write.table(notes_for_manny_1859, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
-
-
-# Running Joel's application through.
-hist_filename <- "~/results/ukb1189_hist"
-pheno_summary <- "~/results/ukb1189_phenosummary.tsv"
-
-filename <- "~/results/ukb1189_output"
-tsv_filename <- paste(filename, ".tsv", sep="")
-log_file <- paste(filename, ".log", sep="")
-tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
-
-qc_data <- read.table("~/results/ukb1189_qc.tsv", header=TRUE)
-
-outcome_info <- read.table("PHESANT/variable-info/outcome_info_final.tsv",
-					   sep='\t', quote="", comment.char="", header=TRUE)
-
-samples_for_removal <- as.character(read.table("~/results/w1189_20170726_participantwithdrawallist.csv")$V1)
-
-notes_for_manny_1189 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal)
-
-write.table(notes_for_manny_1189, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
-
-
-pheno_summary <- "~/results/ukb1859_phenosummary.tsv"
-pheno_summary_PHESANT <- "~/results/ukb1859_phenosummary_final.tsv"
-notes_for_manny_1859_PHESANT_codings_included <- include_PHESANT_reassignment_names(pheno_summary, outcome_info)
-write.table(notes_for_manny_1859_PHESANT_codings_included, file=pheno_summary_PHESANT, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
-
-pheno_summary <- "~/results/ukb1189_phenosummary.tsv"
-pheno_summary_PHESANT <- "~/results/ukb1189_phenosummary_final.tsv"
-notes_for_manny_1189_PHESANT_codings_included <- include_PHESANT_reassignment_names(pheno_summary, outcome_info)
-write.table(notes_for_manny_1189_PHESANT_codings_included, file=pheno_summary_PHESANT, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
-
-
