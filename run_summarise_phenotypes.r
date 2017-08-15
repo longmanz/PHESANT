@@ -36,9 +36,9 @@ outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_fi
 					   sep='\t', quote="", comment.char="", header=TRUE)
 
 samples_for_removal <- ""
-samples_for_inclusion <- as.character(read.table("~/results/ukb1859_qc.sample_list", header=TRUE)$sample
+samples_for_inclusion <- as.character(read.table("~/results/ukb1859_qc.sample_list", header=TRUE)$sample)
 
-notes_for_manny_1859 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal)
+notes_for_manny_1859 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal, samples_for_inclusion)
 
 write.table(notes_for_manny_1859, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
 
@@ -62,6 +62,51 @@ samples_for_removal <- as.character(read.table("~/results/w1189_20170726_partici
 notes_for_manny_1189 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal)
 
 write.table(notes_for_manny_1189, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
+
+
+# Check against the samples you get if using Liam's collection.
+hist_filename <- "~/results/ukb1189_hist_2"
+pheno_summary <- "~/results/ukb1189_phenosummary_2.tsv"
+
+filename <- "~/results/ukb1189_output"
+tsv_filename <- paste(filename, ".tsv", sep="")
+log_file <- paste(filename, ".log", sep="")
+tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
+
+qc_data <- ""
+
+outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final.tsv",
+					   sep='\t', quote="", comment.char="", header=TRUE)
+
+samples_for_removal <- ""
+samples_for_inclusion <- as.character(read.table("~/results/ukb1189_qc.sample_list", header=TRUE)$sample)
+
+notes_for_manny_1189 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal, samples_for_inclusion)
+
+write.table(notes_for_manny_1189, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
+
+
+# Running Andrea's application through.
+hist_filename <- "~/results/ukb9438_hist"
+pheno_summary <- "~/results/ukb9438_phenosummary.tsv"
+
+filename <- "~/results/ukb9438_output"
+tsv_filename <- paste(filename, ".tsv", sep="")
+log_file <- paste(filename, ".log", sep="")
+tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
+
+qc_data <- ""
+
+outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final.tsv",
+					   sep='\t', quote="", comment.char="", header=TRUE)
+
+samples_for_removal <- ""
+samples_for_inclusion <- tsv_data$userId
+check <- FALSE
+
+notes_for_manny_9438 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal, samples_for_inclusion, check)
+write.table(notes_for_manny_9438, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
+
 
 pheno_summary <- "~/results/ukb1859_phenosummary.tsv"
 pheno_summary_PHESANT <- "~/results/ukb1859_phenosummary_final.tsv"
