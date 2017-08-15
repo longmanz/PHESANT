@@ -1,19 +1,9 @@
-# PHESANT - PHEnome Scan ANalysis Tool
-Run a phenome scan (pheWAS, Mendelian randomisation (MR)-pheWAS etc.) in UK Biobank.
-
-There are three components in this project:
-
-1. Running a phenome scan in UK Biobank
-2. Post-processing of results
-3. PHESANT-viz: Visualising the results
-
+# Customised PHESANT - PHEnome Scan ANalysis Tool.
+Run a phenome scan and write the resultant phenotypes to disk. Much of the code is identical to [PHESANT](https://github.com/MRCIEU/PHESANT), and we refer users to that repository for running analyses and creating visualisations.
 
 ## General requirements
 
-R for parts 1 and 2 above. Tested with R-3.3.1-ATLAS. Phenome scan requires the R packages: optparse (V1.3.2), MASS (V7.3-45), lmtest (V0.9-34), nnet (V7.3-12) and forestplot (V1.7).
-
-Java for part 3 above. Tested with jdk-1.8.0-66.
-
+R with the R packages: data.table, optparse and MASS.
 
 ## Citing this project
 
@@ -21,12 +11,11 @@ Please cite:
 
 Millard LAC, Davies NM, Gaunt TR, Davey Smith G, Tilling K. PHESANT: a tool for performing automated phenome scans in UK Biobank. bioRxiv (2017)
 
+## Running a phenome scan
 
-## 1) Running a phenome scan
+A phenome scan is run using `WAS/phenomeScan.r`. We have modified the original code so that now no tests are performed, we simply clean the phenotype information and provide a .tsv file which can be used for downstream analysis. In addition, we provide some simple scripts to summarise the resultant phenotype data.
 
-A phenome scan is run using `WAS/phenomeScan.r`. This is basically ready to go - the only essential amendment you will need to make is the TRAIT_OF_INTEREST column in the variable information file (see below).
-
-The PHESANT phenome scan processing pipeline is illustrated in the figure [here](biobank-PHESANT-figure.pdf), and described in detail in the paper above.
+The modifield custom PHESANT phenome scan processing pipeline is illustrated in the figure [here](pipeline.pdf). The original pipeline, together with extensive detailed descriptions can be found in the above paper.
 
 The phenome scan is run with the following command:
 
@@ -35,10 +24,8 @@ cd WAS/
 
 Rscript phenomeScan.r \
 --phenofile=<phenotypesFilePath> \
---traitofinterestfile=<traitOfInterestFilePath> \
 --variablelistfile="../variable-info/outcome-info.tsv" \
 --datacodingfile="../variable-info/data-coding-ordinal-info.csv" \
---traitofinterest=<traitOfInterestName> \
 --resDir=<resultsDirectoryPath> \
 --userId=<userIdFieldName>
 ```
@@ -50,20 +37,16 @@ Arg | Description
 phenofile 		| Comma separated file containing phenotypes. Each row is a participant, the first column contains the user id and the remaining columns are phenotypes. Where there are multiple columns for a phenotype these must be adjacent in the file. Specifically for a given field in Biobank the instances should be adjacent and within each instance the arrays should be adjacent. Each variable name is in the format 'x[varid]\_[instance]\_[array]' (we use the prefix 'x' so that the variable names are valid in R).
 variablelistfile 	| Tab separated file containing information about each phenotype, that is used to process them (see below).
 datacodingfile 		| Comma separated file containing information about data codings (see below).
-traitofinterest 	| Variable name as in traitofinterestfile.
 resDir 			| Directory where you want the results to be stored.
 
 ### Optional arguments
 Arg | Description
 -------|--------
-traitofinterestfile             | Comma separated file containing the trait of interest (e.g. a snp, genetic risk score or observed phenotype). Each row is a participant and there should be two columns - the user ID and the trait of interest. Where this argument is not supplied, the trait of interest should be a column in the phenofile.
 userId                  | User id column as in the traitofinterestfile and the phenofile (default: userId).
 partIdx			| Subset of phenotypes you want to run (for parallelising).
 numParts		| Number of subsets you are using (for parallelising).
-sensitivity		| By default `sensitivity=FALSE`, and analyses are adjusted for age (field [21022](http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=21022)), sex (field [31](http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=31)) and, if the genetic arg is set to TRUE, genotype chip (a binary variable derived from field [22000](http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=22000)). If sensitivity argument is set to TRUE then analyses additionally adjust for the assessment centre (field [54](http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=54)), and if the genetic arg is set to true, the first 10 genetic principal components (fields [22009_0_1](http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=22009) to [22009_0_10](http://biobank.ctsu.ox.ac.uk/showcase/field.cgi?id=22009)).
-genetic			| By default `genetic=TRUE`, and we assume the trait of interest is a genetic variable (e.g. a SNP or genetic risk score). If this is not the case (e.g you are running an environment-wide association study) then set this flag to FALSE. This option determines which variables are controlled for in analyses, see sensitivity arg above.
 
-The numParts and partIdx arguments are both used to parallelise the phenome scan. E.g. setting numParts to 5 will divide the set of phenotypes into 5 (rough) parts and then partIdx can be used to call the phenome scan on a specific part (1-5).
+The numParts and partIdx arguments are both used to parallelise the phenome scan. Note that this acts on the original phenotype file, so the resultant pieces will be of differing sizes as phenotypes are chosen for inclusion or split up according the rules outlined in the [pipeline](pipeline.pdf). E.g. setting numParts to 5 will divide the set of phenotypes into 5 (rough) parts and then partIdx can be used to call the phenome scan on a specific part (1-5).
 
 #### Data coding file
 
@@ -100,7 +83,7 @@ This data dictionary provides the following set of information about fields, use
 3. FieldID column - We use this to match the variable in our biobank data file to the correct row in this TSV file.
 4. Field column -  The name of the field.
 
-The variable information file also has the following columns that we have added, to provide additional information used in the phenome scan:
+The variable information file also has the following columns that we have added, to provide additional information used in the phenome scan. For the parsed phenotype information used for GWAS in our group, we use the EXCLUDED column to manually curate the phenotypes of interest - see below.
 
 1. TRAIT_OF_INTEREST - Specifies any field that represents the trait of interest (set this column to 'YES'). This is a marker so that after the phenome scan is run we can use these
 results as validation only (e.g. a pheWAS of the BMI FTO SNP would expect the BMI phenotypes to show high in the results ranking), i.e. they do not contribute to the multiple testing burden. We have set this up for BMI, so have marked BMI/weight fields as the trait of interest - you will need to change this for your particular trait of interest. 
@@ -114,6 +97,7 @@ For categorical multiple fields you may want to mark the whole field as denoting
  - YES-GENETIC: Genetic description variables.
  - YES-SENSITIVE: Variables not received from Biobank because they are sensitive so have more restricted access.
  - YES-SEX: Sex fields.
+ - YES-NEALELAB: Removing these fields in addition to the above removals defines our manually curated phenotype collection (assumming access to the entire collection of phenotypes).
 3. CAT_MULT_INDICATOR_FIELDS - every categorical multiple field must have a value in this column. 
 The value describes which set of participants to include as the negative examples, when a binary variable is created from each value (see above cited paper for more information). 
 The positive examples for a value `v` in this categorical multiple field are simply the people with this particular value. However the negative values can be determined in three ways:
@@ -126,75 +110,10 @@ The positive examples for a value `v` in this categorical multiple field are sim
 ### Output
 In the directory specified with the `resDir` argument, the following files will be created:
 
-1. Results files for each test type:
- - Linear regression: results-linear-all.txt - One line for each linear regression result
- - Logistic regression: results-logistic-all.txt - One line for each logistic regression result
- - Multinomial regression: results-multinomial-all.txt - Each multinomial regression results in *n* lines in this results file, where *n* is the number of categories in the variable. One line corresponds to the results for a particular category compared to an assigned baseline category (the category with the highest sample size), and then there is also one line for the overall association of this variable (across all categories), using a likelihood ratio test comparing this model with the model with confounders only.
- - Ordered logistic regression: results-ordered-logistic-all.txt - One line for each ordinal logistic regression result.
-2. A log file: results-log-all.txt - One line for each Biobank field, providing information about the processing flow for this field.
-3. A model fit log file: modelfit-log-all.txt - shows model fit output for categorical unordered models.
-4. Flow counts file: variable-flow-counts-all.txt - A set of counts denoting the number of variables reaching each point in the processing flow. Each code with count value corresponds to a particular position in the processing flow (see figure [here](PHESANT-counter-codes.pdf)).
+1. A .tsv file: A large file consisting of #individuals rows, and #PHESANT-phenotypes columns, which can be used for downstream analysis.
+2. A .log file: One line for each Biobank field, providing information about the processing flow for this field.
+3. Flow counts file: variable-flow-counts-all.txt - A set of counts denoting the number of variables reaching each point in the processing flow.
 
 Where the phenome scan is run in parallel setup, then each parallel part will have one of each of the above files, with 'all' in each filename replaced with: [partIdx]-[numParts].
 
-
-See testWAS/README.md for an example with test data.
-
-
-## 2) Post phenome scan results processing
-
-The resultsProcessing folder provides code to post-process the results, specifically:
-
-1. Combine the results where they were generated in parallel.
-2. Combine the flow counts.
-3. Add the description information for each variable from the `variablelistfile` file, to the results file.
-4. Rank the results by P value.
-5. For the multinomial regression results, include only the main result (not the results for each particular category of a given variable as described above).
-6. Generate basic figures: qqplot, and 3 forest plots for continous, ordered categorical and binary results separately (for results with P<0.05/numTests, i.e. the
-Bonferroni corrected 0.05 threshold). 
-We do not generate a forest plot for the categorical unordered results, because we have no overall estimate (and confidence interval) for the model overall, 
-because we use a likelihood ratio test to generate a model P value. For these plots we use all results except for phenotypes marked as 'trait of interest'. 
-
-The results processing is run with the following command:
-
-```bash
-cd resultsProcessing/
-
-Rscript mainCombineResults.r \
---resDir=<resultsDirectoryPath> \
---variablelistfile="../variable-info/outcome-info.tsv"
-```
-
-### Required arguments
-
-Arg | Description
--------|--------
-resDir			| Directory where the phenome scan results are stored.
-variablelistfile	| Tab separated file containing information about each phenotype, that is used to process them. Same as `variablelistfile` used in main phenome scan.
-
-### Optional argument
-
-Arg | Description
--------|--------
-numParts                | Number of subsets (parts) you have used (for parallelising).
-
-
-See `testWAS/README.md` for an example with test data.
-
-### QQ plot description
-The QQ plot contains the following elements:
-
-1. A horizontal line (dashed, green) denoting the Bonferroni corrected P value threshold.
-2. A line (dotted, blue) denoting the expected trajectory of points under the null (actual=expected).
-3. A set of points each denoting the result for a phenotype. It is possible (as in the testWAS) that the P value is smaller than the smallest possible value that R can store (see [.Machine documentation](https://stat.ethz.ch/R-manual/R-devel/library/base/html/zMachine.html)).
-When this occurs the P value is set to zero, and on the QQ plot we set these to 5e-324 (the smallest positive double on a typical R platform) and display these as red stars to indicate that an exact P value was not recorded.
-
-
-## 3) PHESANT-viz: Results visualisation
-
-A phenome scan generates a large number of results. The aim of this visualisation is to help with interpretation, by allowing the researcher to view each result in the context of the
-results of related traits.
-
-See the PHESANT-viz folder and README therein for more information.
-
-
+In addition, we also provide scripts to summarise the resultant phenotypes, taking the .tsv and .log files as input. These scripts use "variable-info/outcome-info.tsv" and "variable-info/data-coding-ordinal-info.csv" to create histograms and provide summary tables of the phenotype information.
