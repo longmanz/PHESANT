@@ -7,8 +7,8 @@ trim <- function (x) {
 remove_excess_whitespace <- function(x) x <- gsub("\\s+", " ", x)
 
 # Read in all the data table codings
-to_read <- paste("PHESANT/WAS/codings/",
-	dir("PHESANT/WAS/codings"), sep="")
+to_read <- paste("~/Repositories/PHESANT/WAS/codings/",
+	dir("~/Repositories/PHESANT/WAS/codings"), sep="")
 codings_tables <- list()
 
 for(i in to_read) {
@@ -18,42 +18,53 @@ for(i in to_read) {
 
 get_subtype <- function(x) paste(x[2:length(x)],collapse=" ")
 
-get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal)
-{
-	# First, let's restrict to the samples that we want to parse.
-	# - in.white.British.ancestry.subset==1
-	# - used.in.pca.calculation==1
-	# - excess.relatives==0
-	# - putative.sex.chromosome.aneuploidy==0
-	# ...this should leave you with 337208 samples
+get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data,
+	samples_for_removal, samples_for_inclusion=FALSE)
+{	
+	if(samples_for_inclusion == FALSE) {
+		# First, let's restrict to the samples that we want to parse.
+		# - in.white.British.ancestry.subset==1
+		# - used.in.pca.calculation==1
+		# - excess.relatives==0
+		# - putative.sex.chromosome.aneuploidy==0
+		# ...this should leave you with 337208 samples
 
-	where_good_samples <- which(qc_data$in.white.British.ancestry.subset==1 &
-						 	     qc_data$used.in.pca.calculation == 1 &
-						 	     qc_data$excess.relatives == 0 & 
-						 	     qc_data$putative.sex.chromosome.aneuploidy == 0)
-	# Check
-	if(length(where_good_samples) != 337208) {
-		return("failed")
+		where_good_samples <- which(qc_data$in.white.British.ancestry.subset==1 &
+							 	     qc_data$used.in.pca.calculation == 1 &
+							 	     qc_data$excess.relatives == 0 & 
+							 	     qc_data$putative.sex.chromosome.aneuploidy == 0)
+		# Check
+		if(length(where_good_samples) != 337208) {
+			return("failed")
+		}
+
+		# Check that after removal of redacted samples, we have 337205.
+		where_redacted_samples <- which(qc_data$eid %in% c("-1", "-2", "-3"))
+		if(length(where_redacted_samples) != 3) {
+			return("failed - couldn't find all 3 redacted samples")
+		}
+
+		# Check after final removal of the last 6 samples, we have 337199.
+		where_samples_for_removal <- which(qc_data$eid %in% samples_for_removal)
+
+		where_good_samples <- setdiff(where_good_samples, where_redacted_samples)
+		where_good_samples <- setdiff(where_good_samples, where_samples_for_removal)
+
+		if(length(where_good_samples) != 337199) {
+			return("failed - not the correct number of samples after removal of redacted samples and individuals who removed consent")
+		}
+
+		good_samples <- qc_data$eid[where_good_samples]
+
+	} else {
+		good_samples <- samples_for_inclusion
 	}
 
-	# Check that after removal of redacted samples, we have 337205.
-	where_redacted_samples <- which(qc_data$eid %in% c("-1", "-2", "-3"))
-	if(length(where_redacted_samples) != 3) {
-		return("failed - couldn't find all 3 redacted samples")
-	}
+	tsv_data <- tsv_data[tsv_data$userId %in% good_samples,]
 
-	# Check after final removal of the last 6 samples, we have 337199.
-	where_samples_for_removal <- which(qc_data$eid %in% samples_for_removal)
-
-	where_good_samples <- setdiff(where_good_samples, where_redacted_samples)
-	where_good_samples <- setdiff(where_good_samples, where_samples_for_removal)
-
-	if(length(where_good_samples) != 337199) {
+	if(dim(tsv_data)[1] != 337199) {
 		return("failed - not the correct number of samples after removal of redacted samples and individuals who removed consent")
 	}
-
-	good_samples <- qc_data$eid[where_good_samples]
-	tsv_data <- tsv_data[tsv_data$userId %in% good_samples,]
 
 	if (ncol(tsv_data) > 3) {
 		pdf(file=paste(hist_filename,".pdf",sep=""), width=5, height=5)

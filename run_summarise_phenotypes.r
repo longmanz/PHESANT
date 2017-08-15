@@ -11,7 +11,7 @@ tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
 
 qc_data <- read.table("~/results/ukb1859_qc.tsv", header=TRUE)
 
-outcome_info <- read.table("PHESANT/variable-info/outcome_info_final.tsv",
+outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final.tsv",
 					   sep='\t', quote="", comment.char="", header=TRUE)
 
 samples_for_removal <- as.character(read.table("~/results/w1859_20170726_participantwithdrawallist.csv")$V1)
@@ -19,6 +19,29 @@ samples_for_removal <- as.character(read.table("~/results/w1859_20170726_partici
 notes_for_manny_1859 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal)
 
 write.table(notes_for_manny_1859, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
+
+
+# Check against the samples you get if using Liam's collection.
+hist_filename <- "~/results/ukb1859_hist_2"
+pheno_summary <- "~/results/ukb1859_phenosummary_2.tsv"
+
+filename <- "~/results/ukb7127_output"
+tsv_filename <- paste(filename, ".tsv", sep="")
+log_file <- paste(filename, ".log", sep="")
+tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
+
+qc_data <- ""
+
+outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final.tsv",
+					   sep='\t', quote="", comment.char="", header=TRUE)
+
+samples_for_removal <- ""
+samples_for_inclusion <- as.character(read.table("~/results/ukb1859_qc.sample_list", header=TRUE)$sample
+
+notes_for_manny_1859 <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data, samples_for_removal)
+
+write.table(notes_for_manny_1859, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
+
 
 # Running Joel's application through.
 hist_filename <- "~/results/ukb1189_hist"
@@ -31,7 +54,7 @@ tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
 
 qc_data <- read.table("~/results/ukb1189_qc.tsv", header=TRUE)
 
-outcome_info <- read.table("PHESANT/variable-info/outcome_info_final.tsv",
+outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final.tsv",
 					   sep='\t', quote="", comment.char="", header=TRUE)
 
 samples_for_removal <- as.character(read.table("~/results/w1189_20170726_participantwithdrawallist.csv")$V1)
@@ -62,7 +85,7 @@ names(tsv_data)[-1] <- paste("X41202", names(tsv_data)[-1], sep="_")
 
 qc_data <- read.table("~/results/ukb1189_qc.tsv", header=TRUE)
 
-outcome_info <- read.table("PHESANT/variable-info/outcome_info_final.tsv",
+outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final.tsv",
 					   sep='\t', quote="", comment.char="", header=TRUE)
 
 samples_for_removal <- as.character(read.table("~/results/w1189_20170726_participantwithdrawallist.csv")$V1)
