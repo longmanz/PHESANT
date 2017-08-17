@@ -72,7 +72,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		pdf(file=paste(hist_filename,".pdf",sep=""), width=5, height=5)
 		par(oma=c(4,0,0,0))
 		# Create character matrix 'notes' that we will write to disk and pass to Manny.
-		notes <- matrix(nrow=(ncol(tsv_data)-3),ncol=8)
+		notes <- matrix(nrow=(ncol(tsv_data)-start_column+1),ncol=8)
 		colnames(notes) <- c("Field", "N.non.missing", "N.missing", "N.cases", "N.controls",
 			"Notes", "PHESANT.notes", "PHESANT.reassignments")
 		# Rownames are the FieldIDs
