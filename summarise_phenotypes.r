@@ -19,7 +19,7 @@ for(i in to_read) {
 get_subtype <- function(x) paste(x[2:length(x)],collapse=" ")
 
 get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data,
-	samples_for_removal, samples_for_inclusion=FALSE, check=TRUE)
+	samples_for_removal, samples_for_inclusion=FALSE, check=TRUE, start_column=4)
 {	
 	if(samples_for_inclusion == FALSE) {
 		# First, let's restrict to the samples that we want to parse.
@@ -68,7 +68,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		}
 	}
 
-	if (ncol(tsv_data) > 3) {
+	if (ncol(tsv_data) > (start_column-1)) {
 		pdf(file=paste(hist_filename,".pdf",sep=""), width=5, height=5)
 		par(oma=c(4,0,0,0))
 		# Create character matrix 'notes' that we will write to disk and pass to Manny.
@@ -76,10 +76,10 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		colnames(notes) <- c("Field", "N.non.missing", "N.missing", "N.cases", "N.controls",
 			"Notes", "PHESANT.notes", "PHESANT.reassignments")
 		# Rownames are the FieldIDs
-		rownames(notes) <- colnames(tsv_data)[4:ncol(tsv_data)]
+		rownames(notes) <- colnames(tsv_data)[start_column:ncol(tsv_data)]
 		samples <- nrow(tsv_data)
 		k <- 1
-		for(i in colnames(tsv_data)[4:ncol(tsv_data)]){
+		for(i in colnames(tsv_data)[start_column:ncol(tsv_data)]){
 			type <- class(tsv_data[i][,1])
 			if(type == "numeric") {
 				var <- substr(i,2,nchar(i))
