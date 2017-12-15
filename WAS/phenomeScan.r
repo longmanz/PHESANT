@@ -22,14 +22,10 @@ library("data.table")
 option_list <- list(
   make_option(c("-f", "--phenofile"), type="character", default=NULL,
     help="phenotype dataset file name", metavar="character"),
-  # make_option(c("-g", "--traitofinterestfile"), type="character", default=NULL,
-  #   help="trait of interest dataset file name", metavar="character"),
   make_option(c("-v", "--variablelistfile"), type="character", default=NULL,
     help="variablelistfile file name (should be tab separated)", metavar="character"),
   make_option(c("-d", "--datacodingfile"), type="character", default=NULL,
     help="datacodingfile file name (should be comma separated)", metavar="character"),
-  # make_option(c("-e", "--traitofinterest"), type="character", default=NULL,
-  #   help="traitofinterest option should specify trait of interest variable name", metavar="character"),
   make_option(c("-r", "--resDir"), type="character", default=NULL,
     help="resDir option should specify directory where results files should be stored", metavar="character"),
   make_option(c("-u", "--userId"), type="character", default="userId",
@@ -186,7 +182,7 @@ colnames(data_to_store) <- data_to_store_var
 data_to_store <- cbind.data.frame(data$userId, confounders, data_to_store)
 colnames(data_to_store)[1] <- "userId"
 
-write.table(data_to_store, sep='\t', quote=TRUE, row.names=FALSE, file=outputfile)
+fwrite(data_to_store, sep='\t', quote=TRUE, row.names=FALSE, file=outputfile)
 
 # Save counters of each path in variable flow
 saveCounts()
