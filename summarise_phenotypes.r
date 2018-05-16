@@ -18,8 +18,8 @@ for(i in to_read) {
 
 get_subtype <- function(x) paste(x[2:length(x)],collapse=" ")
 
-get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data,
-	samples_for_removal, samples_for_inclusion=FALSE, check=TRUE, start_column=4)
+get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info, codings_tables, qc_data=FALSE,
+	samples_for_removal=c(), samples_for_inclusion=FALSE, check=TRUE, start_column=4)
 {	
 	if(samples_for_inclusion == FALSE) {
 		# First, let's restrict to the samples that we want to parse.
@@ -57,11 +57,16 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		good_samples <- qc_data$eid[where_good_samples]
 
 	} else {
-		good_samples <- samples_for_inclusion
+		if(samples_for_inclusion == TRUE) {
+			# Include all the samples.
+			good_samples <- tsv_data$userId
+		} else {
+			good_samples <- samples_for_inclusion
+		}
 	}
 
 	tsv_data <- tsv_data[tsv_data$userId %in% good_samples,]
-
+	print(dim(tsv_data))
 	if(check == TRUE) {
 		if(dim(tsv_data)[1] != 337199) {
 			return("failed - not the correct number of samples after removal of redacted samples and individuals who removed consent")

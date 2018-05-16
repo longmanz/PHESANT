@@ -53,7 +53,6 @@ option_list <- list(
     help="The cutoff for exclusion for number of non-NAs in binary-variables."),
   make_option(c("-i", "--bintruecutoff"), type="integer", default=100,
     help="The cutoff for exclusion for numbers of members of a category in binary-variables.")
-
 )
 
 opt_parser <- OptionParser(option_list = option_list)
@@ -84,6 +83,7 @@ phenoStartIdx <- numPreceedingCols+1
 cat("LOADING DONE.\n")
 
 phenoVars <- colnames(data)
+
 # First and second columns are the id and snpScore, respectively, 
 # as determined in loadData.r
 phenoVars <- phenoVars[-c(1,2)] 
