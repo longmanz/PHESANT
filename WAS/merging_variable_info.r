@@ -78,7 +78,7 @@ df <- merge(df, manual_df, by="FieldID", all=TRUE)
 if (any(is.na(df$EXCLUDED.y) & is.na(df$EXCLUDED.x)))
 	print('ERROR')
 
-df$EXCLUDED.x[which(!is.na(df$EXCLUDED.y))] <- "YES-NEALELAB-ROUND2"
+df$EXCLUDED.x[which(df$EXCLUDED.y == "YES-NEALELAB-ROUND2")] <- "YES-NEALELAB-ROUND2"
 names(df)[which(names(df) == "EXCLUDED.x")] <- "EXCLUDED"
 df <- df[,-grep('\\.y', names(df))]
 names(df) <- gsub('\\.x', '', names(df))
