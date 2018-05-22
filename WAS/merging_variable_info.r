@@ -83,6 +83,8 @@ names(df)[which(names(df) == "EXCLUDED.x")] <- "EXCLUDED"
 df <- df[,-grep('\\.y', names(df))]
 names(df) <- gsub('\\.x', '', names(df))
 
+# Finally, set 'CODING' equal to the newer 'coding'
+df$DATA_CODING <- df$Coding
+
 # Write out, and make sure it's tab separated.
 fwrite(df, sep='\t', file = "variable-info/outcome_info_final_round2.tsv")
-

@@ -87,7 +87,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                 cat("\n", file=varlogfile, append=TRUE)
                 return(data_to_add)
             } else {
-                cat("VAR MISSING", currentVarShort, "\n",
+                cat("VAR MISSING - likely a 'text' field", currentVarShort, "\n",
                     file=varlogfile, append=TRUE)
                 return(NULL)
             }
