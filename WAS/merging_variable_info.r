@@ -86,5 +86,7 @@ names(df) <- gsub('\\.x', '', names(df))
 # Finally, set 'CODING' equal to the newer 'coding'
 df$DATA_CODING <- df$Coding
 
+# Also, need to fill in information for the categorical multiple variables that have been added.
+
 # Write out, and make sure it's tab separated.
 fwrite(df, sep='\t', file = "variable-info/outcome_info_final_round2.tsv")
