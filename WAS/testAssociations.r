@@ -6,7 +6,6 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
     {
         # Retrieve whether phenotype is excluded etc
         idx <- which(vl$phenoInfo$FieldID == currentVarShort)
-        
         # Check if variable info is found for this field
         if (length(idx) == 0) {
             cat(currentVar, "|| Variable could not be found in pheno info file.\n",
