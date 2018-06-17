@@ -6,6 +6,8 @@ trim <- function (x) {
 
 remove_excess_whitespace <- function(x) x <- gsub("\\s+", " ", x)
 
+remove_excess_quotes <- function(x) x <- gsub("\"+", "\"", x)
+
 # Read in all the data table codings
 to_read <- paste("~/Repositories/PHESANT/WAS/codings/",
 	dir("~/Repositories/PHESANT/WAS/codings"), sep="")
@@ -74,7 +76,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 	}
 
 	if (ncol(tsv_data) > (start_column-1)) {
-		pdf(file=paste(hist_filename,".pdf",sep=""), width=5, height=5)
+		pdf(file=paste(hist_filename,".pdf",sep=""), width=8, height=5)
 		par(oma=c(4,0,0,0))
 		# Create character matrix 'notes' that we will write to disk and pass to Manny.
 		notes <- matrix(nrow=(ncol(tsv_data)-start_column+1),ncol=9)
@@ -86,17 +88,24 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		k <- 1
 		for(i in colnames(tsv_data)[start_column:ncol(tsv_data)]){
 			type <- class(tsv_data[i][,1])
+			# print(i)
+			# print(k)
+			# print(type)
 			if(type == "numeric") {
+				# Get the variable name.
 				var <- substr(i,2,nchar(i))
 				where <- which(outcome_info$FieldID == var)
-				i_name <- paste(trim(outcome_info$Field[where]),"-",i)
-				# The first column is the Field name.
+				i_name <- paste(trim(outcome_info$Field[where]),"-", gsub("X", "", i))
+				# The first column is the Field name (not the ID).
 				notes[k,1] <- trim(outcome_info$Field[where])
 				# The sixth column is the 'Notes' field in variable-info file:
 				notes[k,6] <- remove_excess_whitespace(as.character(trim(outcome_info$Notes[where])))
+				notes[k,6] <- remove_excess_quotes(notes[k,6])
+				# print(var)
 				
 				if (log_file != FALSE){
 					# The seventh column is information about how the data is parsed using PHESANT:
+
 					matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
 					notes[k,7] <- matching_line
 
@@ -107,21 +116,35 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 					}
 				}
 
+				# Create a simple histogram of this continous data.
+				main_cex = 1
+				if(nchar(i_name) > 75) {
+					main_cex = 75/nchar(i_name)
+				}
 				hist(tsv_data[i][,1], main=i_name, col="grey", breaks=100, xlab="value")
+
 			} else if (type=="logical" | type=="integer") {
+				
+				# Get the variable name.
 				var <- strsplit(i, split="_")[[1]][1]
+				# Remove the X.
 				var <- substr(var, 2, nchar(var))
+				# Subvariable, if it exists.
 				subvar <- strsplit(i, split="_")[[1]][2]
+				# print(i)
+				# print(subvar)
 				where <- which(outcome_info$FieldID == var)
 				
 				# Add the notes:
 				# The sixth column is the 'notes' field in variable-info file:
 				notes[k,6] <- remove_excess_whitespace(as.character(trim(outcome_info$Notes[where])))
+				notes[k,6] <- remove_excess_quotes(notes[k,6])
 				
 				if (log_file != FALSE) {
 					# The seventh column is information about how the data is parsed using PHESANT:
 					matching_line <- trim(grep(paste('^', var, '_', sep=""), readLines(log_file), value=TRUE))
 					
+					# Do some cleaning up.
 					if (length(grep("^.*CAT-MULTIPLE", matching_line)) > 0) {
 						new_matching_line <- paste(gsub(paste("^(.*?)\\|.*(CAT-MUL-BINARY-VAR", subvar, ".*?)CAT.*"), "\\1 \\|\\| \\2", matching_line))
 						if(matching_line == new_matching_line){
@@ -143,42 +166,41 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 					}
 				}
 
-				i_name <- paste(trim(outcome_info$Field[where]), "-", i)
+				i_name <- paste(trim(outcome_info$Field[where]),"-", gsub("X", "", i))
+				coding <- as.character(outcome_info$Coding[where])
+				# print('hello')
+				# print(coding)
+				# print(subvar)
 
-				i_subname <- as.character(outcome_info$Coding[where])
-				if(nchar(i_subname)>0 && !is.na(subvar)) {
-					to_parse <- strsplit(i_subname, split="\\|")[[1]]
-					if(length(to_parse) > 1) {
-						where_subvar <- which(sapply(strsplit(trim(to_parse)," "), "[[",1) == subvar) 
-						i_subname <- ifelse(length(where_subvar) > 0,
-							get_subtype(strsplit(trim(to_parse[where_subvar])," ")[[1]]),
-							"PHESANT recoding")
-						# The first column is the Field name - if we've entered this if statement,
-						# we need to include the subfield (as the categorical has been split into 
-						# loads of booleans).
-						notes[k,1] <- paste(trim(outcome_info$Field[where]),": ",i_subname, sep="")
-					} else {
-						notes[k,1] <- trim(outcome_info$Field[where])
-					}
+				if(nchar(coding)>0 && !is.na(subvar)) {
+
+					if(is.null(codings_tables[coding][[1]]))
+						print(paste("Error: Data coding table for coding:", coding, "not found!"))
+
+					where_coding <- which(codings_tables[coding][[1]]$coding == subvar)
+
+					i_subname <- ifelse(
+						length(where_coding) > 0, 
+						codings_tables[coding][[1]]$meaning[where_coding],
+						"PHESANT recoding")
+
+					notes[k,1] <- paste(trim(outcome_info$Field[where]),": ",i_subname, sep="")
 				} else {
 					# The first column is the Field name.
 					notes[k,1] <- trim(outcome_info$Field[where])
+					i_subname <- ""
 				}
+				# print(i_name)
+				# print(i_subname)
+
 				colour <- "grey"
-				if(length(grep("Too many", i_subname))>0) {
-					# Then we need to look in the corresponding tsv_data-coding table to get the label.
-					coding <- trim(gsub("^.*id=","",i_subname))
-					where_coding <- which(codings_tables[coding][[1]]$coding == subvar)
-					i_subname <- codings_tables[coding][[1]]$meaning[where_coding]
-					# The first column is the Field name - if we've entered this if statement,
-					# we need to include the subfield (as the categorical has been split into 
-					# loads of booleans) - this is accessed from the associated coding table for the 
-					# phenotype.
-					notes[k,1] <- paste(trim(outcome_info$Field[where]),": ",i_subname, sep="")
-				}
 				y <- table(tsv_data[i][,1])
 				main <- ifelse(type=="logical", paste(i_name,"\n",i_subname), i_name)
-				xx <- barplot(height = y, main=main, ylim=c(0, 1.1*max(y)))
+				main_cex = 1
+				if( (nchar(i_name) > 75) | (nchar(i_subname) > 75)) {
+					main_cex = 75/max(nchar(i_name), nchar(i_subname))
+				}
+				xx <- barplot(height = y, main=main, ylim=c(0, 1.1*max(y)), cex.main=main_cex)
 				text(x = xx, y = y, label = y, pos = 3, cex = 0.8, col = "red")
 
 				# Finally, include the case and control numbers for the logical and integer phenotypes
@@ -217,6 +239,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 			colour <- ifelse(p > 0.95, "red", "darkgreen")
 			mtext(side=1, text=paste("Missing = ", n_miss, ", Proportion = ", round(p, 2), sep=""), line=0, outer=TRUE, col=colour)
 			if(type=="integer") mtext(side=1, text=i_subname, line=-1, outer=TRUE)
+			# print(i_subname)
 			k <- k+1
 		}
 		dev.off()
@@ -253,6 +276,7 @@ include_PHESANT_reassignment_names <- function(pheno_summary, outcome_info)
 					where_var <- which(outcome_info$FieldID == var)
 
 					i_subname <- as.character(outcome_info$Coding[where_var])
+					# print(i_subname)
 					subvar <- reassignments_before_after_list[[i]][j,1]
 
 					if(nchar(i_subname)>0 && !is.na(subvar)) {
