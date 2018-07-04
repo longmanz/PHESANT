@@ -87,7 +87,7 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile)
             bin1Num <- length(which(phenoBinned == 1))
             bin2Num <- length(which(phenoBinned == 2))
 
-            if (bin0Num >= 10 & bin1Num >= 10 & bin2Num >= 10) {
+            if (bin0Num >= 50 & bin1Num >= 50 & bin2Num >= 50) {
                 # Successful binning. >=10 examples in each of the 3 bins
                 incrementCounter("cont.ordcattry.ordcat")
                 thisdatanew <- cbind.data.frame(thisdata[,1:numPreceedingCols], phenoBinned)
@@ -96,15 +96,15 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile)
                 return(data_to_add)
             } else {
                 # Try to treat as binary because not enough examples in each bin
-                if (bin0Num < 10 & bin2Num < 10) {
+                if (bin0Num < 50 & bin2Num < 50) {
                     # Skip - not possible to create binary variable because first
                     # and third bins are too small ie. could merge bin1 with bin 2 
                     # but then bin3 still too small etc...
                     cat("SKIP 2 bins are too small || ", file=varlogfile, append=TRUE)
                     incrementCounter("cont.ordcattry.smallbins")
                     return(NULL)
-                } else if ((bin0Num < 10 | bin1Num < 10) &
-                          (bin0Num + bin1Num) >= 10) {
+                } else if ((bin0Num < 50 | bin1Num < 50) &
+                          (bin0Num + bin1Num) >= 50) {
                     # Combine first and second bin to create binary variable
                     incrementCounter("cont.ordcattry.binsbinary")
                     cat("Combine first two bins and treat as binary || ",
@@ -115,7 +115,7 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile)
                     data_to_add <- binaryLogisticRegression(varName, varType,
                         thisdatanew, varlogfile)
                     return(data_to_add)
-            	} else if ((bin2Num<10 | bin1Num<10) & (bin2Num+bin1Num)>=10) {
+            	} else if ((bin2Num < 50 | bin1Num < 50) & (bin2Num+bin1Num) >= 50) {
                     # Combine second and last bin to create binary variable
                     incrementCounter("cont.ordcattry.binsbinary")
                     cat("Combine last two bins and treat as binary || ",

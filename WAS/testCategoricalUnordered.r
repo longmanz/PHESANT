@@ -75,6 +75,7 @@ chooseReferenceCategory <- function(pheno, varlogfile)
             maxFreqVar <- u
         }
     }
+    
     cat("reference: ", maxFreqVar,"=",maxFreq, " || ", sep="",
         file=varlogfile, append=TRUE)
 
