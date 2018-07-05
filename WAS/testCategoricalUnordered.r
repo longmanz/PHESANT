@@ -25,7 +25,8 @@ testCategoricalUnordered <- function(varName, varType, thisdata, varlogfile) {
         }
 
         phenoFactor <- chooseReferenceCategory(pheno, varlogfile)
-        loop <- levels(phenoFactor)[-1]
+        # loop <- levels(phenoFactor)[-1]
+        loop <- levels(phenoFactor)
         varBinarymat <- as.data.frame(matrix(ncol=length(loop), nrow=numRows))
 
         j <- 1
