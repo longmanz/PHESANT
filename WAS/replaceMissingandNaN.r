@@ -35,3 +35,7 @@ replaceNaN <- function(pheno)
 
     return(phenoReplaced)
 }
+
+allNAs <- function(pheno_row) {
+    all(is.na(pheno_row))
+}

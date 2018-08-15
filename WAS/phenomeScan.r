@@ -120,8 +120,6 @@ data_to_store <- matrix(nrow = nrow(data), ncol = 0)
 data_to_store <- as.data.frame(data_to_store)
 data_to_store_var <- c()
 
-print(dim(data_to_store))
-
 for (var in phenoVars) { 
 
     varx <- gsub("^x", "", var)
@@ -131,6 +129,7 @@ for (var in phenoVars) {
 
     # Test this variable
     cat("The current variable is", currentVar, '\n')
+    cat(var, '\n')
 
     if (currentVar == varx) {
         thisCol <- data[,eval(var)]
@@ -146,6 +145,7 @@ for (var in phenoVars) {
             # Only start new variable processing if last column of it is within 
             # the idx range for this part
             if (phenoIdx >= partStart && phenoIdx <= partEnd) {
+                cat("hello")
                 next_test <- testAssociations(currentVar, currentVarShort, thisdata, varlogfile)
 
                 if (is.null(next_test) == FALSE) {
