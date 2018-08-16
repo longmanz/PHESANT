@@ -115,7 +115,7 @@ restrictSample2 <- function(varName,pheno, varIndicator, variableVal, varlogfile
         cat("ALL || ", file=varlogfile, append=TRUE)
     } else if (varIndicator != "") {
         # Remove people who have no value for indicator variable
-        indName <- grep(paste0("x", varIndicator,"_0_"), names(df), value=TRUE)
+        indName <- grep(paste0("x", varIndicator,"_0_"), names(data), value=TRUE)
 
         cat("Indicator name ", indName, " || ", sep="", file=varlogfile, append=TRUE)
         indicatorVar <- data[,indName, drop=FALSE]

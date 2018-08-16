@@ -29,8 +29,7 @@ reassignValue2 <- function(pheno, reassignments, varlogfile)
     if (!is.na(reassignments) && nchar(reassignments)>0)
     {
         reassignParts <- unlist(strsplit(reassignments, "\\|"))
-        cat("reassignments:", reassignments, "|| ",
-            file=varlogfile, append=TRUE)
+        cat("reassignments:", reassignments, "|| ", file=varlogfile, append=TRUE)
 
         # Do each reassignment
         for (i in reassignParts) {

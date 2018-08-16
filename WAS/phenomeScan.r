@@ -145,7 +145,6 @@ for (var in phenoVars) {
             # Only start new variable processing if last column of it is within 
             # the idx range for this part
             if (phenoIdx >= partStart && phenoIdx <= partEnd) {
-                cat("hello")
                 next_test <- testAssociations(currentVar, currentVarShort, thisdata, varlogfile)
 
                 if (is.null(next_test) == FALSE) {
