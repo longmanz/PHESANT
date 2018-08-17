@@ -162,6 +162,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		for(i in colnames(tsv_data)[start_column:ncol(tsv_data)]){
 			type <- class(tsv_data[i][,1])
 			if(type == "numeric") {
+				print("numeric")
 				# Get the variable name.
 				var <- substr(i,2,nchar(i))
 				where <- which(outcome_info$FieldID == var)
@@ -194,6 +195,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 
 			} else if (type=="logical" | type=="integer") {
 				
+				print("logical or integer")
 				# Get the variable name.
 				var <- strsplit(i, split="_")[[1]][1]
 				# Remove the X.
