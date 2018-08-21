@@ -79,7 +79,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                             file=varlogfile, append=TRUE)
                         incrementCounter("catSinToCatMul")
                     }
-                    
+
                     data_to_add <- testCategoricalMultiple(currentVarShort, "CAT-MUL",
                                                            thisdata, varlogfile)
                 }

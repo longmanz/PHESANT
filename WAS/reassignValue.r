@@ -19,6 +19,7 @@ reassignValue <- function(pheno, varName, varlogfile)
 
     dataDataCode <- vl$dataCodeInfo[dataCodeRow,]
     reassignments <- as.character(dataDataCode$reassignments)
+    print(reassignments)
     return(reassignValue2(pheno, reassignments, varlogfile))
 }
 
@@ -33,6 +34,16 @@ reassignValue2 <- function(pheno, reassignments, varlogfile)
 
         # Do each reassignment
         reassignment_list <- vector("list", length(reassignParts))
+
+        # Need to change to character to do matching.
+        if(!is.null(dim(pheno))) {
+            for (i in 1:ncol(pheno)) {
+                pheno[,i] <- as.character(pheno[,i])
+            }
+        } else {
+            pheno <- as.character(pheno)
+        }
+
         j <- 1
         for (i in reassignParts) {
             reassignParts <- unlist(strsplit(i,"="))
@@ -46,29 +57,26 @@ reassignValue2 <- function(pheno, reassignments, varlogfile)
             pheno[reassignment_list[[j]]$idx] <- reassignment_list[[j]]$reassignment
         }
 
-        # Do each reassignment
-        # for (i in reassignParts) {
-        #     reassignParts <- unlist(strsplit(i,"="))
-        #     # Matrix version
-        #     idx <- which(pheno == reassignParts[1], arr.ind = TRUE)
-        #     pheno[idx] <- strtoi(reassignParts[2])
-        # }
-
         if(!is.null(dim(pheno))) {
+            
+            for(i in 1:ncol(pheno)) {
+                pheno[,i] <- as.numeric(as.character(pheno[,i]))
+            }
+
             pNum <- as.data.frame(matrix(as.numeric(unlist(pheno)), ncol=ncol(pheno)))
+
             colnames(pNum) <- colnames(pheno)
         } else {
+            pheno <- as.numeric(as.character(pheno))
             pNum <- as.data.frame(as.numeric(unlist(pheno)))
         }
 
         # See if type has changed (this happens for field 216 (X changed to -1))
         # as.numeric will set non numeric to NA so we know if it's ok to do this by seeing if there are extra NA's after the conversion
-        # pNum <- as.numeric(unlist(pheno))
         isNum <- length(which(is.na(pheno), arr.ind = TRUE)) == 
                  length(which(is.na(pNum), arr.ind = TRUE))
-        print(isNum)
+
         if (isNum) pheno <- pNum
     }
-    # print("hello")
 	return(pheno)
 }

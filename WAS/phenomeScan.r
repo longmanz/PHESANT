@@ -80,6 +80,7 @@ data <- d$datax
 confounders <- d$confounders
 numPreceedingCols <- ncol(confounders)+1
 phenoStartIdx <- numPreceedingCols+1
+print(paste0('pheno start Idx: ', phenoStartIdx))
 cat("LOADING DONE.\n")
 
 phenoVars <- colnames(data)
