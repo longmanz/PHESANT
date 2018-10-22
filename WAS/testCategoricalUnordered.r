@@ -17,15 +17,14 @@ testCategoricalUnordered <- function(varName, varType, thisdata, varlogfile) {
     } else {
         # Check there are not too many levels and skip if there are.
         numUnique <- length(unique(na.omit(pheno)))
-        if (numUnique > 1000) {
-            cat("Too many levels: ", numUnique, " > 1000 || SKIP ", sep="",
-                file=varlogfile, append=TRUE)
+        if (numUnique > opt$maxunorderedcategories) {
+            cat("Too many levels: ", numUnique, " > ", opt$maxunorderedcategories,
+                " || SKIP ", sep="", file=varlogfile, append=TRUE)
             incrementCounter("unordCat.cats")
             return(NULL)
         }
 
         phenoFactor <- chooseReferenceCategory(pheno, varlogfile)
-        # loop <- levels(phenoFactor)[-1]
         loop <- levels(phenoFactor)
         varBinarymat <- as.data.frame(matrix(ncol=length(loop), nrow=numRows))
 
@@ -77,7 +76,7 @@ chooseReferenceCategory <- function(pheno, varlogfile)
         }
     }
     
-    cat("reference: ", maxFreqVar,"=",maxFreq, " || ", sep="",
+    cat("reference: ", maxFreqVar, "=", maxFreq, " || ", sep="",
         file=varlogfile, append=TRUE)
 
     # Choose reference (category with largest frequency)

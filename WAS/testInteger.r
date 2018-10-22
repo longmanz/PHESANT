@@ -36,7 +36,7 @@ testInteger <- function(varName, varType, thisdata, varlogfile) {
         incrementCounter("int.continuous")
         return(data_to_add)
     } else {
-        # Remove categories if < 10 examples
+        # Remove categories if < opt$mincategorysize examples
         phenoAvg <- testNumExamples(phenoAvg, varlogfile)
 
         # Binary if 2 distinct values, else ordered categorical

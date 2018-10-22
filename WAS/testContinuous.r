@@ -26,17 +26,17 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile)
         phenoAvg <- pheno
     }
 
-    ## Recode NaN to NA, which is generated if all cols of pheno are NA for a given person
+    # Recode NaN to NA, which is generated if all cols of pheno are NA for a given person
     idxNan <- which(is.nan(phenoAvg))
     phenoAvg[idxNan] <- NA
     numNotNA <- length(na.omit(phenoAvg))
 
-    ## Check whether > 20% examples with same value
+    # Check whether > opt$propforcontinuous examples with same value
     uniqVar <- unique(na.omit(phenoAvg))
     valid <- TRUE
     for (uniq in uniqVar) {
         numWithValue <- length(which(phenoAvg == uniq))
-        if (numWithValue / numNotNA >= 0.2) {
+        if (numWithValue / numNotNA >= opt$propforcontinuous) {
             valid <- FALSE
             break
         }
@@ -44,12 +44,12 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile)
 
     if (valid == FALSE) {
         # Treat as ordinal categorical
-        cat(">20% IN ONE CATEGORY || ", file=varlogfile, append=TRUE)
+        cat(">", opt$propforcontinuous*100, "% IN ONE CATEGORY || ", file=varlogfile, append=TRUE)
 
         # If >2 unique values then treat as ordered categorical
         numUniqueValues <- length(uniqVar)
 
-        # Straight forward case that there are two (or one) values		
+        # Straightforward case that there are two (or one) values		
         if (numUniqueValues <= 2) {
             # Treat as binary or skip (binary requires>=10 per category)
 
@@ -77,9 +77,9 @@ testContinuous2 <- function(varName, varType, thisdata, varlogfile)
             }
 
         } else {
-            ## Try to treat as ordered categorical
+            # Try to treat as ordered categorical
             incrementCounter("cont.ordcattry")
-            ## Equal sized bins
+            # Equal sized bins
             phenoBinned <- equalSizedBins(phenoAvg, varlogfile)
             
             # Check number of people in each bin

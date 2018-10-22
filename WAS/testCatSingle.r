@@ -47,7 +47,7 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
     # All categories coded as < 0 we assume are `missing' values
     pheno <- replaceMissingCodes(pheno)
 
-    # Remove categories if < 10 examples
+    # Remove categories if < opt$mincategorysize examples
     pheno <- testNumExamples(pheno, varlogfile)
 
     uniqVar <- unique(na.omit(pheno))
