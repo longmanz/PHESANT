@@ -12,7 +12,7 @@ testNumExamples <- function(pheno, varlogfile)
             cat("Removed ",u ,": ", numWithVal, "<", opt$mincategorysize, " examples || ", sep="",
                 file=varlogfile, append=TRUE)
         } else {
-            cat("Inc(>=", opt$mincategorysize"): ", u, "(", numWithVal, ") || ", sep="",
+            cat("Inc(>=", opt$mincategorysize, "): ", u, "(", numWithVal, ") || ", sep="",
                 file=varlogfile, append=TRUE)
         }
     }
