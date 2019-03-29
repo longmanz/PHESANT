@@ -29,8 +29,8 @@ testInteger <- function(varName, varType, thisdata, varlogfile) {
 
     uniqVar <- unique(na.omit(phenoAvg))
 
-    # If >=10 separate values then treat as continuous
-    if (length(uniqVar) >= 10) {
+    # If opt$inttocontcutoff separate values then treat as continuous
+    if (length(uniqVar) >= opt$inttocontcutoff) {
         thisdatanew <- cbind.data.frame(thisdata[,1:numPreceedingCols], phenoAvg)
         data_to_add <- testContinuous2(varName, varType, thisdatanew, varlogfile)
         incrementCounter("int.continuous")
@@ -55,9 +55,9 @@ testInteger <- function(varName, varType, thisdata, varlogfile) {
             return(data_to_add)
         } else {
             incrementCounter("int.catord")
-            cat("3-10 values || ", file=varlogfile, append=TRUE)
+            cat("3-", opt$inttocontcutoff, " values || ", file=varlogfile, append=TRUE)
             # We don't use equal sized bins just the original integers 
-            # (that have >=10 examples) as categories
+            # (that have >=opt$inttocontcutoff examples) as categories
             thisdatanew <- cbind.data.frame(thisdata[,1:numPreceedingCols], phenoFactor)
             # Treat as ordinal categorical
             data_to_add <- testCategoricalOrdered(varName, varType, thisdatanew, varlogfile)
