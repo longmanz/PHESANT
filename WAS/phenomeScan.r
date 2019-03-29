@@ -59,8 +59,8 @@ option_list <- list(
     help="The maximum number of categories in an unordered categorical variable."),
   make_option(c("-g", "--propforcontinuous"), type="double", default=0.2,
     help="The cutoff for proportion of samples with the same value for the variable to not be considered continuous."),
-  make_option(c("-i", "--inttocontcutoff", type="integer", default=10,
-    help="The cutoff for the number of distinct integer values to send an integer variable to a continuous variable."))
+  make_option(c("-i", "--inttocontcutoff"), type="integer", default=10,
+    help="The cutoff for the number of distinct integer values to send an integer variable to a continuous variable.")
 )
 
 opt_parser <- OptionParser(option_list = option_list)
