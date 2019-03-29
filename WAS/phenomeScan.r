@@ -37,8 +37,8 @@ option_list <- list(
     help="part index of phenotype (used to parellise)"),
   make_option(c("-b", "--numParts"), type="integer", default=NULL,
     help="number of phenotype parts (used to parellise)"),
-  make_option(c("-l", "--log"), type="character", default='log',
-    help="name of the logfile [default = %default]"),
+  # make_option(c("-l", "--log"), type="character", default='log',
+  #   help="name of the logfile [default = %default]"),
   make_option(c("-o", "--out"), type="character", default='output',
     help="name of the output .tsv file containing the parsed columns in the provided phenofile [default = %default]"),
   make_option(c("-c", "--catmultcutoff"), type="integer", default=50,
@@ -60,15 +60,14 @@ option_list <- list(
   make_option(c("-g", "--propforcontinuous", type="double", default=0.2,
     help="The cutoff for proportion of samples with the same value for the variable to not be considered continuous."),
   make_option(c("-i", "--inttocontcutoff", type="integer", default=10,
-    help="The cutoff for the number of distinct integer values to send an integer variable to a continuous variable.")))
-
+    help="The cutoff for the number of distinct integer values to send an integer variable to a continuous variable."))
 )
 
 opt_parser <- OptionParser(option_list = option_list)
 opt <- parse_args(opt_parser)
 
-varlogfile <- paste(opt$resDir, '/', opt$log, '.', opt$partIdx, '.log', sep='')
-outputfile <- paste(opt$resDir, '/', opt$log, '.', opt$partIdx, '.tsv', sep='')
+varlogfile <- paste(opt$resDir, '/', opt$out, '.', opt$partIdx, '.log', sep='')
+outputfile <- paste(opt$resDir, '/', opt$out, '.', opt$partIdx, '.tsv', sep='')
 
 source("processArgs.r")
 opt <<- opt
@@ -188,7 +187,7 @@ if (phenoIdx >= partStart && phenoIdx <= partEnd) {
 }
 
 colnames(data_to_store) <- data_to_store_var
-data_to_store <- cbind.data.frame(data$userId, confounders, data_to_store)
+data_to_store <- cbind.data.frame(data[opt$userId], confounders, data_to_store)
 colnames(data_to_store)[1] <- "userId"
 
 fwrite(data_to_store, sep='\t', quote=TRUE, row.names=FALSE, file=outputfile)

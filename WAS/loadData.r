@@ -45,7 +45,7 @@ loadData <- function()
 
     # DEV: Hack - set the userId in the trait of interest file to be 
     # the same as that in the phenotype file.
-    snpScores <- cbind.data.frame(phenotype$userId, 0)#snpScores[,idx2])
+    snpScores <- cbind.data.frame(phenotype[opt$userId], 0)#snpScores[,idx2])
     colnames(snpScores)[1] <- opt$userId
     colnames(snpScores)[2] <- "geno"
 
