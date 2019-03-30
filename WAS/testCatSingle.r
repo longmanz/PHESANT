@@ -11,7 +11,10 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
     pheno <- thisdata[,phenoStartIdx:ncol(thisdata)]
 
     # Assert variable has only one column
-    if (!is.null(dim(pheno))) stop("More than one column for categorical single")
+    if (!is.null(dim(pheno))) {
+        print(head(pheno))
+        stop(paste0("More than one column for categorical single, number of columns: ", dim(pheno)[2]))
+    }
 
     pheno <- reassignValue(pheno, varName, varlogfile)
 

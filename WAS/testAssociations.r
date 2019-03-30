@@ -22,7 +22,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                 # INTEGER
                 cat(currentVar, "|| ", sep="", file=varlogfile, append=TRUE)
                 if (excluded != "") {
-                	cat("Excluded integer:", excluded, "||\n", file=varlogfile,
+                	cat("Excluded integer:", as.character(excluded), "||\n", file=varlogfile,
                         append=TRUE)
                 	incrementCounter("excluded.int")
                     return(NULL)
@@ -37,7 +37,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                 # CONTINUOUS
                 cat(currentVar, "|| ", sep="", file=varlogfile, append=TRUE)
                 if (excluded != "") {
-                    cat("Excluded continuous:", excluded, "||\n", file=varlogfile, append=TRUE)
+                    cat("Excluded continuous:", as.character(excluded), "||\n", file=varlogfile, append=TRUE)
                     incrementCounter("excluded.cont")
                     return(NULL)
                 } else {
@@ -52,7 +52,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
         	   # CAT SINGLE
                 cat(currentVar, "|| ", sep="", file=varlogfile, append=TRUE)
                 if (excluded != "") {
-                    cat("Excluded cat-single:", excluded, "||\n", file=varlogfile,
+                    cat("Excluded cat-single:", as.character(excluded), "||\n", file=varlogfile,
                         append=TRUE)
                     incrementCounter("excluded.catSin")
                     return(NULL)
@@ -68,7 +68,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                 # CAT MULTIPLE
                 cat(currentVar, "|| ", sep="", file=varlogfile, append=TRUE)
                 if (excluded != "") {
-                    cat("Excluded cat-multiple:", excluded, "||\n",
+                    cat("Excluded cat-multiple:", as.character(excluded), "||\n",
                         file=varlogfile, append=TRUE)
                     incrementCounter("excluded.catMul")
                     return(NULL)

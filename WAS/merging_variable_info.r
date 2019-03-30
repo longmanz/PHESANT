@@ -94,3 +94,5 @@ df$DATA_CODING <- df$Coding
 
 # Write out, and make sure it's tab separated.
 fwrite(df, sep='\t', file = "variable-info/outcome_info_final_round3.tsv")
+# NOTE: Have to read in with Excel and write to .tsv to get the correct behavious with PHESANT...
+
