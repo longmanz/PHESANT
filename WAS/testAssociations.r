@@ -49,7 +49,7 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                 }   
 
             } else if (fieldType == "Categorical single" && catSinToMult == "") {
-        	   # CAT SINGLE
+        	    # CAT SINGLE
                 cat(currentVar, "|| ", sep="", file=varlogfile, append=TRUE)
                 if (excluded != "") {
                     cat("Excluded cat-single:", as.character(excluded), "||\n", file=varlogfile,
@@ -58,7 +58,10 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                     return(NULL)
                 } else {
                     incrementCounter("start.catSin")
-                    data_to_add <- testCategoricalSingle(currentVarShort, "CAT-SIN",
+                    # Changed input to below from currentVarShort to currentVar
+                    # and evaluate visit number due to small set of edge cases that 
+                    # error out due to starting at visit 2, not 0.
+                    data_to_add <- testCategoricalSingle(currentVar, "CAT-SIN",
                                                          thisdata, varlogfile)
                     cat('\n', file=varlogfile, append=TRUE)
                     return(data_to_add)

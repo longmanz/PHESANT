@@ -8,11 +8,9 @@ loadData <- function()
     cat("Loading phenotypes...\n")
 
     if (length(grep('.tsv', opt$phenofile)) == 1 | length(grep('.tab', opt$phenofile)) == 1) {
-        phenotype <- fread(opt$phenofile, header=TRUE, sep='\t')
-        phenotype <- as.data.frame(phenotype)
+        phenotype <- fread(opt$phenofile, header=TRUE, sep='\t', data.table=FALSE)
     } else if (length(grep('.csv', opt$phenofile)) == 1) {
-            phenotype <- fread(opt$phenofile, header=TRUE, sep=',')
-            phenotype <- as.data.frame(phenotype)
+            phenotype <- fread(opt$phenofile, header=TRUE, sep=',', data.table=FALSE)
     } else if (length(grep('.Rdata', opt$phenofile)) == 1) {
         load(opt$phenofile)
         phenotype <- phenotypes

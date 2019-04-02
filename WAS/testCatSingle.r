@@ -6,7 +6,10 @@
 # 5) Determine correct test to perform, either binary, ordered or unordered.
 
 testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
-{
+{   
+    visit_number <- strsplit(varName, split="_")[[1]][2]
+    varName <- strsplit(varName, split="_")[[1]][1]
+
     cat("CAT-SINGLE || ", file=varlogfile, append=TRUE)
     pheno <- thisdata[,phenoStartIdx:ncol(thisdata)]
 
@@ -45,7 +48,7 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
     # this is used where there is no zero option e.g. field 100200
     defaultValue <- dataDataCode$default_value
     defaultRelatedID <- dataDataCode$default_related_field
-    pheno <- setDefaultValue(pheno, defaultValue, defaultRelatedID, varlogfile)
+    pheno <- setDefaultValue(pheno, defaultValue, defaultRelatedID, visit_number, varlogfile)
 
     # All categories coded as < 0 we assume are `missing' values
     pheno <- replaceMissingCodes(pheno)
@@ -137,11 +140,13 @@ reorderOrderedCategory <- function(pheno, order, varlogfile)
 # Sets default value for people with no value in pheno, but with a value in the
 # field specified in the default_value_related_field column in the data coding info file.
 # the default value is specified in the default_value column in the data coding info file.
-setDefaultValue <- function(pheno, defaultValue, defaultRelatedID, varlogfile)
-{
+setDefaultValue <- function(pheno, defaultValue, defaultRelatedID, visit_number, varlogfile)
+{   
     if (!is.na(defaultValue) && nchar(defaultValue) > 0) {
         # Remove people who have no value for indicator variable
-        indName <- paste("x", defaultRelatedID, "_0_0", sep="")
+        # Altered this from initial PHESANT.
+        # indName <- paste("x", defaultRelatedID, "_0_0", sep="")
+        indName <- paste0("x", defaultRelatedID, "_", visit_number, "_0")
      	cat("Default related field:", indName, "|| ",
             file=varlogfile, append=TRUE)
     	indicatorVar <- data[,indName]

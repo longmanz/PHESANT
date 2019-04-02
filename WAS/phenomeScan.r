@@ -80,7 +80,6 @@ loadSource()
 # Load the files we write to and use
 counters <- initCounters()
 vl <- initVariableLists()
-print(head(vl))
 cat("LOADING...\n")
 
 # Load data

@@ -203,6 +203,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 				# Subvariable, if it exists.
 				subvar <- strsplit(i, split="_")[[1]][2]
 				where <- which(outcome_info$FieldID == var)
+				print(where)
 				
 				# Add the notes:
 				# The sixth column is the 'notes' field in variable-info file:
@@ -225,6 +226,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 							paste("\\1 \\|\\| CAT-SINGLE \\|\\| CAT-SINGLE-BINARY-VAR:", subvar, " \\|\\| \\2 \\|\\|"), matching_line)
 						notes[k,7] <- trim(new_matching_line)
 					} else {
+						print(matching_line)
 						notes[k,7] <- trim(matching_line)
 					}
 
