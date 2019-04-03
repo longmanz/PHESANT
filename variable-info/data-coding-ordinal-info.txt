@@ -367,7 +367,6 @@ dataCode,ordinal,ordering,reassignments,default_value,default_related_field
 6312,0,,,,
 6332,,,,,
 1990,,,0=NA,,
-500,0,,,,
 6361,,,0=NA,,
 170,,,-1=NA,,
 100298,,,-10=NA|-1=NA|-3=NA,,

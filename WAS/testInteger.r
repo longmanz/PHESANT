@@ -6,7 +6,8 @@
 
 testInteger <- function(varName, varType, thisdata, varlogfile) {
     cat("INTEGER || ", file=varlogfile, append=TRUE)
-
+    print("this is actually the current variable")
+    print(varName)
     pheno <- thisdata[,phenoStartIdx:ncol(thisdata)]
 
     if (!is.numeric(as.matrix(pheno))) {
@@ -31,29 +32,36 @@ testInteger <- function(varName, varType, thisdata, varlogfile) {
 
     # If opt$inttocontcutoff separate values then treat as continuous
     if (length(uniqVar) >= opt$inttocontcutoff) {
+        print("convert to cts")
         thisdatanew <- cbind.data.frame(thisdata[,1:numPreceedingCols], phenoAvg)
         data_to_add <- testContinuous2(varName, varType, thisdatanew, varlogfile)
         incrementCounter("int.continuous")
         return(data_to_add)
     } else {
+        print("don't convert to cts")
         # Remove categories if < opt$mincategorysize examples
         phenoAvg <- testNumExamples(phenoAvg, varlogfile)
 
         # Binary if 2 distinct values, else ordered categorical
         phenoFactor <- factor(phenoAvg)
         numLevels <- length(levels(phenoFactor))
+        print("number of levels")
+        print(numLevels)
         if (numLevels <= 1) {
             cat("SKIP (number of levels: ", numLevels, ")", sep="",
                 file=varlogfile, append=TRUE)
             incrementCounter("int.onevalue")
             return(NULL)
         } else if (numLevels==2) {
+            print("num levels: 2")
             incrementCounter("int.binary")
             # Binary so logistic regression
+            cat("INT-BINARY-VAR || ", sep="", file=varlogfile, append=TRUE)
             thisdatanew <- cbind.data.frame(thisdata[,1:numPreceedingCols], phenoFactor)
             data_to_add <- binaryLogisticRegression(varName, varType, thisdatanew, varlogfile)
             return(data_to_add)
         } else {
+            print("int cat ord")
             incrementCounter("int.catord")
             cat("3-", opt$inttocontcutoff, " values || ", file=varlogfile, append=TRUE)
             # We don't use equal sized bins just the original integers 

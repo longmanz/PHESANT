@@ -75,6 +75,12 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
         return(data_to_add)
     } else {
         # > 2 categories
+        if(length(is.na(ordered)) > 1) {
+            print("problem:")
+            print(varName)
+            print(length(is.na(ordered)))
+            print(ordered)
+        }
         if (is.na(ordered)) {
             cat(" ERROR: 'ordered' not found in data code info file")
             return(NULL)	
