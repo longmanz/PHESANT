@@ -1,3 +1,5 @@
+library(hyperSpec)
+
 trim <- function (x) {
 	x <- gsub("^\\s+|\\s+$", "", x)
 	x <- gsub("^\\\"|\"$", "", x)
@@ -140,8 +142,8 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		}
 	}
 
-	tsv_data <- tsv_data[tsv_data$userId %in% good_samples,]
-	print(dim(tsv_data))
+	tsv_data <- tsv_data[tsv_data$userId %in% good_samples,, drop=FALSE]
+
 	if(check == TRUE) {
 		if(dim(tsv_data)[1] != 337199) {
 			return("failed - not the correct number of samples after removal of redacted samples and individuals who removed consent")
