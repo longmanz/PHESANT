@@ -9,7 +9,7 @@ This page describes the steps we applied in going from the raw data provided by 
   * Restrict to the first visit (we made the assumption that the first visit contained the least missing data).
   * Prepend each column name with `x` and replace all instances of `-` and `.` with `_`, for compatibility with PHESANT.
 * Restrict to the subset of samples that are output by the genetic data QC pipeline.
-* The resulant phenotype file, restricted to the individuals for whom we have clean genetic data is then passed to PHESANT. A summary of how PHESANT parses the raw phenotype data is shown [here](https://github.com/astheeggeggs/PHESANT/blob/master/pipeline.pdf).
+* The resultant phenotype file, restricted to the individuals for whom we have clean genetic data is then passed to PHESANT. A summary of how PHESANT parses the raw phenotype data is shown [here](https://github.com/astheeggeggs/PHESANT/blob/master/pipeline.pdf).
 * PHESANT inputs
   * `variablelistfile` [outcome_info_final_round2.tsv](https://github.com/astheeggeggs/PHESANT/tree/master/variable-info/outcome_info_final_round2.tsv).
     * As described in the [README for PHESANT](https://github.com/astheeggeggs/PHESANT/), see the Variable information file heading.
