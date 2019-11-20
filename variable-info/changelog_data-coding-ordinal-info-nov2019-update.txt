@@ -5,6 +5,7 @@
 18,1,1|2|0,,, -> 18,1,0|2|1,,,
 33,-2,,,, -> 33,1,,,,
 35,-2,,,, -> 35,1,,,,
+Include 42,,,-313=NA|-818=NA,,
 74,,,,, -> 74,0,,,,
 75,,,,, -> 75,0,,,,
 76,,,,, -> 76,0,,,,
@@ -43,6 +44,8 @@ Based on codings 196, 197, 198, 199, may want to alter encoding of the biomarker
 269,,,9999=-1,, -> 269,0,,9999=-1,,
 270,,,9999=-1,, -> 270,0,,9999=-1,,
 271,,,800=NA|900=-1,, -> 271,0,,800=NA|900=-1,,
+Include 339,1,,-600=0|-601=1|-602=2,,
+Include 408,1,,,,
 494,,,-1520=1|-2030=2|-3040=3|4000=4,, -> 494,1,,-1520=1|-2030=2|-3040=3|4000=4,,
 497,,,,, -> 497,0,,,,
 498,0,,,, -> 498,1,1|2|0,,,
@@ -50,8 +53,18 @@ Based on codings 196, 197, 198, 199, may want to alter encoding of the biomarker
 526,1,,,, -> Should be 0, 1.5, (10-3)/2, (100-11)/2, 100 ?
 530,,,-919=NA|-818=NA|-121=NA,, -> 530,,,-999=NA|-818=NA|-121=NA,,
 537,1,,,, -> haven't changed this, but could potentially change to 537,1,6|5|4|3|2|1,,, (but could end up being less interpretable if people then looked at the data-showcase coding and get confused!)
+Include 548,1,,,,
+Include 616,1,,,,
+Include 620,1,,,,
 777,,,,, -> 777,0,,,,
+Include 871,1,,,,
+Include 913,1,,,,
+Include 950,1,,-500=0|-501=1|-502=2|-503=3|-504=4,,
+Include 957,,,-777=NA|-313=NA|-818=NA,,
+Include 1018,1,,-600=0|-601=1|-602=2,,
 1002,-1,,,, -> 1002,-1,,,21000,0
+Include 1021,-1,,,,
+Include 1022,-1,,,,
 1101,-1,,,, -> 1101,-1,,,22301,0
 1207,-1,,,, Useless field, but can't have default related field as that default needs to differ for the left and right eye. Implies QC step for the eye metrics though. Worth automating?
 1208,-1,,,, Useless field, but can't have default related field as that default needs to differ for the left and right eye. Implies QC step for the eye metrics though. Worth automating?
@@ -65,7 +78,12 @@ Based on codings 196, 197, 198, 199, may want to alter encoding of the biomarker
 1415,,,-818=NA,, -> 1415,0,,-818=NA,,
 1422,,,-818=NA,, -> 1422,0,,-818=NA,,
 1423,,,-818=NA,, -> 1423,0,,-818=NA,,
+Include 1506,0,,,,
+Include 1543,1,,,,
+Include 1862,0,,-701=0|-702=1|-703=2|-704=3|-705=4,,
+Include 2730,0,,-801=0|-802=1|-803=2,, Definition of control could change here.
 6332,,,,, Can't be dealt with currently (it's an array with a 'correct vector').
+Include 7310,0,,-901=0|-902=1|-903=2|-904=3|-905=4,, Definition of control could change here.
 22000,-1,,,, -> 22000,0,,-11=111|-10=110|-9=109|-8=108|-7=107|-6=106|-5=105|-4=104|-3=103|-2=102|-1=101,,
 100002,1,555|1|2|300,,0,20082 Checked that this does the right thing and ignores '111' (varied) - it does.
 100007,1,,,0,20082 -> 100007,1,1|2|3|4|5|600,,0,20082 Actually this is not fine.
@@ -109,3 +127,4 @@ Based on codings 196, 197, 198, 199, may want to alter encoding of the biomarker
 100690,,,-7=100,, -> 100690,0,,-7=100,,
 100691,,,-7=100,, -> 100691,0,,-7=100,,
 100692,,,-7=100,, -> 100692,0,,-7=100,,
+Include 100700,1,,,,
