@@ -62,10 +62,10 @@ Include 913,1,,,,
 Include 950,1,,-500=0|-501=1|-502=2|-503=3|-504=4,,
 Include 957,,,-777=NA|-313=NA|-818=NA,,
 Include 1018,1,,-600=0|-601=1|-602=2,,
-1002,-1,,,, -> 1002,-1,,,21000,0
+1002,-1,,,, -> 1002,-1,,,0,21000,
 Include 1021,-1,,,,
 Include 1022,-1,,,,
-1101,-1,,,, -> 1101,-1,,,22301,0
+1101,-1,,,, -> 1101,-1,,,0,22301,
 1207,-1,,,, Useless field, but can't have default related field as that default needs to differ for the left and right eye. Implies QC step for the eye metrics though. Worth automating?
 1208,-1,,,, Useless field, but can't have default related field as that default needs to differ for the left and right eye. Implies QC step for the eye metrics though. Worth automating?
 1209,-1,,,, Useless field, but can't have default related field as that default needs to differ for the left and right eye. Implies QC step for the eye metrics though. Worth automating?
