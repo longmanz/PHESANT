@@ -21,7 +21,7 @@ binaryLogisticRegression <- function(varName, varType, thisdata, varlogfile)
     phenoFactor_tmp <- rep.int(NA, length(phenoFactor))
     phenoFactor_tmp[idxTrue] <- TRUE
     phenoFactor_tmp[idxFalse] <- FALSE
-    phenoFactor <- factor(phenoFactor)
+    phenoFactor <- factor(phenoFactor_tmp)
 
     idxTrue <- length(idxTrue)
     idxFalse <- length(idxFalse)
@@ -46,7 +46,7 @@ binaryLogisticRegression <- function(varName, varType, thisdata, varlogfile)
             return(list(phenoFactor, varName))
             # END TRYCATCH
         }, error = function(e) {
-            print(paste("ERROR:", varName, gsub("[\r\n]", "", e)) )
+            print(paste("ERROR:", varName, gsub("[\r\n]", "", e)))
             incrementCounter("binary.error")
             return(NULL)
         })
