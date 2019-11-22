@@ -10,16 +10,6 @@ remove_excess_whitespace <- function(x) x <- gsub("\\s+", " ", x)
 
 remove_excess_quotes <- function(x) x <- gsub("\"+", "\"", x)
 
-# Read in all the data table codings
-to_read <- paste("~/Repositories/PHESANT/WAS/codings/",
-	dir("~/Repositories/PHESANT/WAS/codings"), sep="")
-codings_tables <- list()
-
-for(i in to_read) {
-	name <- gsub("~/Repositories/PHESANT/WAS/codings/coding(.*).tsv", "\\1", i)
-	codings_tables[[name]] <- read.table(i, header=TRUE, sep='\t', quote="", stringsAsFactors=FALSE)
-}
-
 get_subtype <- function(x) paste(x[2:length(x)],collapse=" ")
 
 get_barplot_numbers <- function(tsv_data, log_file, outcome_info, codings_tables, start_column=4)
