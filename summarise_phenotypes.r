@@ -222,8 +222,8 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 						notes[k,7] <- trim(matching_line)
 					}
 
-					# The eighth column is usually empty, unless there are PHESANT reassignments, in which
-					# case we detail those reassignments here:
+					# The eighth column is usually empty, unless there are PHESANT reassignments, 
+					# in which case we detail those reassignments here:
 					if (length(grep("reassignments", matching_line)) > 0) {
 						notes[k,8] <- trim(gsub("^.*(reassignments: .*?)\\|\\|.*", "\\1", matching_line))
 					}
@@ -301,7 +301,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 			k <- k+1
 		}
 		dev.off()
-		# Get rid of the X that's appended at the start of each variable.
+		# Get rid of the X that are prepended to the start of each variable.
 		rownames(notes) <- substr(rownames(notes), 2, nchar(rownames(notes)))
 		return(notes)
 	}
