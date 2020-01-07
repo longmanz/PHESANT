@@ -43,4 +43,12 @@ for (i in 1:n_chunks)
 	print(paste0("both sexes ", i))
 	summary_file <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, samples_for_inclusion=TRUE, check=FALSE, start_column=4)
 	write.table(summary_file, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
+	# Copy the intermediate summary .tsv files across to the bucket
+	system(paste0("gsutil cp ", pheno_summary, " gs://phenotype_pharma/PHESANT_intermediate_output/")
+	# Copy the PHESANT run log files across to the bucket
+	system(paste0("gsutil cp ", log_file, " gs://phenotype_pharma/PHESANT_intermediate_output/")
+	# Copy the PHESANT output files across to the bucket
+	system(paste0("gsutil cp ", tsv_filename, " gs://phenotype_pharma/PHESANT_intermediate_output/")
+	# Copy the intermediate .pdf files across to the bucket
+	system(paste0("gsutil cp ", hist_filename, " gs://phenotype_pharma/plots/")
 }

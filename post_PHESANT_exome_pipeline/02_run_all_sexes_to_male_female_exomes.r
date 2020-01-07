@@ -1,9 +1,20 @@
-source("functions_for_run_all_sexes_male_to_female.r")
+source("functions_for_run_all_sexes_male_female.r")
 # Need the phenotype summary file as well.
 # Use 01_run_summarise_phenotypes_initial_PHESANT_run.r if these have not yet been created.
 
+# Note that this currently needs to be performed locally - awk on the cluster segfaults out, I think due to differences 
+# between linux and mac versions of awk and how many columns are dealt with.
+
+n_exomes <- '200K'
+system(paste0("gsutil cp gs://phenotype_pharma/PHESANT_input/pharma_parsed_and_restricted_to_", n_exomes, "_sample_subset.tsv ../../")
 n_exomes <- '200k'
+system(paste0("gsutil cp gs://phenotype_pharma/PHESANT_intermediate_output/*", n_exomes, "*phenosummary* ../../")
+system(paste0("gsutil cp gs://phenotype_pharma/PHESANT_intermediate_output/*", n_exomes, "*tsv ../../"))
 n_chunks <- 10
+
+n_cts_min <- 5000
+n_cat_ordered <- 5000
+n_cat_min <- 100
 
 # Biomarkers
 # extra step (in biomarkers file to merge in the sex information)
@@ -111,13 +122,13 @@ names(cts_output_females) <- names(cts_columns)
 
 # Finally, need to remove all the cts variables that have less than 5000 instances of non-NAs.
 cat(paste("started with", ncol(cts_output), "cts.\n"))
-to_keep_all_sexes_cts <- apply(cts_output, 2, keep_cat_ordered)
+to_keep_all_sexes_cts <- apply(cts_output, 2, keep_cat_ordered, n_cts_min)
 cat(paste(sum(to_keep_all_sexes_cts), "cts remain for both sexes.\n"))
 to_keep_all_sexes_cts[1] <- TRUE
-to_keep_males_cts <- apply(cts_output_males, 2, keep_cat_ordered)
+to_keep_males_cts <- apply(cts_output_males, 2, keep_cat_ordered, n_cts_min)
 cat(paste(sum(to_keep_males_cts), "cts remain for males.\n"))
 to_keep_males_cts[1] <- TRUE
-to_keep_females_cts <- apply(cts_output_females, 2, keep_cat_ordered)
+to_keep_females_cts <- apply(cts_output_females, 2, keep_cat_ordered, n_cts_min)
 cat(paste(sum(to_keep_females_cts), "cts remain for females.\n"))
 to_keep_females_cts[1] <- TRUE
 
@@ -132,13 +143,13 @@ cts_output_females_raw <- cts_columns[cts_columns$userId %in% females,]
 
 # Finally, need to remove all the cts variables that have less than 5000 instances of non-NAs.
 cat(paste("started with", ncol(cts_output), "cts.\n"))
-to_keep_all_sexes_cts_raw <- apply(cts_output_raw, 2, keep_cat_ordered)
+to_keep_all_sexes_cts_raw <- apply(cts_output_raw, 2, keep_cat_ordered, n_cts_min)
 cat(paste(sum(to_keep_all_sexes_cts_raw), "cts remain for both sexes.\n"))
 to_keep_all_sexes_cts_raw[1] <- TRUE
-to_keep_males_cts_raw <- apply(cts_output_males_raw, 2, keep_cat_ordered)
+to_keep_males_cts_raw <- apply(cts_output_males_raw, 2, keep_cat_ordered, n_cts_min)
 cat(paste(sum(to_keep_males_cts_raw), "cts remain for males.\n"))
 to_keep_males_cts_raw[1] <- TRUE
-to_keep_females_cts_raw <- apply(cts_output_females_raw, 2, keep_cat_ordered)
+to_keep_females_cts_raw <- apply(cts_output_females_raw, 2, keep_cat_ordered, n_cts_min)
 cat(paste(sum(to_keep_females_cts_raw), "cts remain for females.\n"))
 to_keep_females_cts_raw[1] <- TRUE
 
@@ -162,9 +173,9 @@ for(i in 1:n_chunks) {
 	}
 }
 
-
 for(i in 1:n_chunks)
 {
+	cat(paste0('\nExamining chunk ', i, '\n'))
 	all_sexes <- fread(paste0(filename_root, i, ".tsv"), header=TRUE, sep='\t', data.table=FALSE)
 
 	# If there's just the age, sex and userId, skip to the next iteration of the loop.
@@ -196,7 +207,7 @@ for(i in 1:n_chunks)
 
 	# Check that the grepping for cat-unordered, cat-ordered, and cat-mul-unordered are disjoint.
 	if(length(c(cat_unordered, cat_ordered, cat_mul_unordered, int_unordered))!= length(unique(c(cat_unordered, cat_ordered, cat_mul_unordered, int_unordered))))
-		cat("Error: non-unique greps for CAT-ORD, CAT-SINGLE-BINARY and CAT-MUL-BINARY-VAR")
+		cat("Error: non-unique greps for CAT-ORD, CAT-SINGLE-BINARY and CAT-MUL-BINARY-VAR.\n")
 
 	cat_unordered <- c(cat_unordered, cat_mul_unordered, edge_cases_cat_unordered, int_unordered)
 
@@ -209,20 +220,20 @@ for(i in 1:n_chunks)
 	cat_ordered_females <- PHESANT_females[,which(names(PHESANT_females) %in% cat_ordered), drop=FALSE]
 
 	cat(paste("started with", ncol(cat_unordered_all_sexes), "categorical unordered.\n"))
-	to_keep_all_sexes <- apply(cat_unordered_all_sexes, 2, minimum_bin)
+	to_keep_all_sexes <- apply(cat_unordered_all_sexes, 2, minimum_bin, n_cat_min)
 	cat(paste(sum(to_keep_all_sexes), "categorical unordered remain for both sexes.\n"))
-	to_keep_male <-  apply(cat_unordered_males, 2, minimum_bin)
+	to_keep_male <-  apply(cat_unordered_males, 2, minimum_bin, n_cat_min)
 	cat(paste(sum(to_keep_male), "categorical unordered remain for males.\n"))
-	to_keep_female <- apply(cat_unordered_females, 2, minimum_bin)
+	to_keep_female <- apply(cat_unordered_females, 2, minimum_bin, n_cat_min)
 	cat(paste(sum(to_keep_female), "categorical unordered remain for females.\n"))
 
 	# Finally, need to remove ordered variables that are categorical ordered and have less that 5000 (the default in PHESANT) non-NA values.
 	cat(paste("started with", ncol(cat_ordered_all_sexes), "categorical ordered.\n"))
-	to_keep_all_sexes_ordered <- apply(cat_ordered_all_sexes, 2, keep_cat_ordered)
+	to_keep_all_sexes_ordered <- apply(cat_ordered_all_sexes, 2, keep_cat_ordered, n_cat_ordered)
 	cat(paste(sum(to_keep_all_sexes_ordered), "categorical ordered remain for both sexes.\n"))
-	to_keep_males_ordered <- apply(cat_ordered_males, 2, keep_cat_ordered)
+	to_keep_males_ordered <- apply(cat_ordered_males, 2, keep_cat_ordered, n_cat_ordered)
 	cat(paste(sum(to_keep_males_ordered), "categorical ordered remain for males.\n"))
-	to_keep_females_ordered <- apply(cat_ordered_females, 2, keep_cat_ordered)
+	to_keep_females_ordered <- apply(cat_ordered_females, 2, keep_cat_ordered, n_cat_ordered)
 	cat(paste(sum(to_keep_females_ordered), "categorical ordered remain for females.\n"))
 
 	fwrite(cbind(all_sexes$userId, cat_ordered_all_sexes[, to_keep_all_sexes_ordered, drop=FALSE], cat_unordered_all_sexes[, to_keep_all_sexes, drop=FALSE]),
