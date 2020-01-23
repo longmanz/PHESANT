@@ -58,3 +58,8 @@ Rscript phenomeScan.r \
 		--partIdx="$i" \
 		--numParts="${NUMPARTS}"
 done
+
+for i in `seq 1$NUMPARTS`;
+do
+	gzip -k "multi_ancestry_jan_2020.$i.tsv" 
+done
