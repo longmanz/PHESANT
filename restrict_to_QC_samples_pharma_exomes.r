@@ -21,11 +21,10 @@ if(n_exomes == '100K') {
 	cat('number of exomes not recognised!\n')
 }
 
-df_restrict <- df_restrict$eid_26041
-df_restrict <- data.frame(userId = df_restrict)
-
 print(nrow(df))
 if (n_exomes != '500K') {
+	df_restrict <- df_restrict$eid_26041
+	df_restrict <- data.frame(userId = df_restrict)
 	df <- merge(df, df_restrict, by='userId')
 }
 
