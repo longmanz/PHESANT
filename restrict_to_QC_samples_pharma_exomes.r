@@ -1,6 +1,6 @@
 library('data.table')
 
-n_exomes <- '300K'
+n_exomes <- '500K'
 
 df <- fread("pharma_exomes_parsed.tsv", header=TRUE, sep='\t', na.strings=c("NA", ""), data.table=FALSE)
 df_biomarkers <- fread("pharma_biomarkers_parsed.tsv", header=TRUE, sep='\t', na.strings=c("NA", ""), data.table=FALSE)
