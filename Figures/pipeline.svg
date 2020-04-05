@@ -273,8 +273,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="869.07267"
-     inkscape:cy="229.00506"
+     inkscape:cx="1127.8738"
+     inkscape:cy="455.27923"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -282,10 +282,10 @@
      inkscape:snap-bbox-edge-midpoints="true"
      inkscape:snap-nodes="true"
      inkscape:snap-global="true"
-     inkscape:window-width="1921"
-     inkscape:window-height="1156"
-     inkscape:window-x="1282"
-     inkscape:window-y="77"
+     inkscape:window-width="1280"
+     inkscape:window-height="756"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="0"
      fit-margin-left="10"
      fit-margin-right="10"
@@ -299,7 +299,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -886,7 +886,7 @@
            x="537.85938"
            sodipodi:role="line">&lt; 5000 participants <tspan
    style="font-style:italic"
-   id="tspan1493">(-w)</tspan> </tspan><tspan
+   id="tspan1493">(-w)</tspan></tspan><tspan
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.25;font-family:'Helvetica Neue';-inkscape-font-specification:'Helvetica Neue';text-align:center;text-anchor:middle"
            y="268.64893"
            x="535.7793"
@@ -1336,11 +1336,11 @@
              sodipodi:role="line"
              x="1058.8594"
              y="-5.2860069"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.25;font-family:'Helvetica Neue';-inkscape-font-specification:'Helvetica Neue';text-align:center;text-anchor:middle">&lt; 50 participants in </tspan><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.25;font-family:'Helvetica Neue';-inkscape-font-specification:'Helvetica Neue';text-align:center;text-anchor:middle">&lt; 100 participants in </tspan><tspan
              id="tspan26175"
              sodipodi:role="line"
              x="1056.7793"
-             y="13.463993"
+             y="13.475713"
              style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;line-height:1.25;font-family:'Helvetica Neue';-inkscape-font-specification:'Helvetica Neue';text-align:center;text-anchor:middle">a category <tspan
    style="font-style:italic"
    id="tspan1481">(-c)</tspan></tspan></text>
