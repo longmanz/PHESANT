@@ -18,18 +18,23 @@ if(n_exomes == '100K') {
 	# 300k exomes
 	df_restrict <- fread("linking_file_300K_withbatch.csv", header=TRUE, data.table=FALSE)
 } else {
-	cat('number of exomes not recognised!\n'))
+	cat('number of exomes not recognised!\n')
 }
 
 df_restrict <- df_restrict$eid_26041
 df_restrict <- data.frame(userId = df_restrict)
 
 print(nrow(df))
-df <- merge(df, df_restrict, by='userId')
+if (n_exomes != '500K') {
+	df <- merge(df, df_restrict, by='userId')
+}
+
 df <- merge(df, df_biomarkers, by='userId')
 
 # Check
-print(nrow(df_restrict))
+if (n_exomes != '500K') {
+	print(nrow(df_restrict))
+}
 print(nrow(df))
 
 fwrite(df, file=paste0("pharma_parsed_and_restricted_to_", n_exomes, "_sample_subset.tsv"), row.names=FALSE, quote=FALSE, sep='\t')
