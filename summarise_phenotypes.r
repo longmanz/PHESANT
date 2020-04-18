@@ -1,4 +1,4 @@
-library(hyperSpec)
+# library(hyperSpec)
 
 trim <- function (x) {
 	x <- gsub("^\\s+|\\s+$", "", x)
@@ -55,7 +55,8 @@ get_barplot_numbers <- function(tsv_data, log_file, outcome_info, codings_tables
 					i_subname <- ifelse(
 						length(where_coding) > 0, 
 						codings_tables[coding][[1]]$meaning[where_coding],
-						"PHESANT recoding")
+						"PHESANT recoding"
+						)
 
 					notes[k,1] <- paste(trim(outcome_info$Field[where]),": ",i_subname, sep="")
 				} else {

@@ -1,7 +1,6 @@
 library(data.table)
 library(dplyr)
 
-
 # Move relevant files to the cloud if running out of RAM locally
 # for(i in c("both_sexes") {#, "male", "female")) {
 # 	for(j in 1:n_chunks) {

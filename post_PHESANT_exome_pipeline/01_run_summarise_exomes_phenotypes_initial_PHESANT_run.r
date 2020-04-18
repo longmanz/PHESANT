@@ -1,21 +1,18 @@
 library(data.table)
 source("../summarise_phenotypes.r")
 
-# Biomarkers for first 100K run
-# n_chunks <- 1
-# filename_root <- "biomarkers/pharma_exomes_biomarkers_parsed_output_100k_chunk."
-# variable_info <- "variable-info/outcome_info_final_round3.tsv"
-# coding_info_file <- "variable-info/data-coding-ordinal-info.txt"
+# Before running this, need to ensure that the output files are gzipped and moved to the appropriate bucket.
+# This is currently performed in the parsing_raw_pheno_initiation_script_pharma_exomes.sh
 
-# Note: coding info file for the first 100K run was the following file, rather than the recently updated file referred to below.
-# coding_info_file <- "variable-info/data-coding-ordinal-info.txt"
-
-n_exomes <- '200k'
-n_chunks <- 10
-
-variable_info <- "../variable-info/outcome_info_final_pharma_nov2019.tsv"
-filename_root <- paste0("../../pharma_exomes_parsed_output_", n_exomes, "_chunk.")
-coding_info_file <- "../variable-info/data-coding-ordinal-info-nov2019-update.txt"
+# Only copy if the file isn't there already
+if (!file.exists(paste0(filename_root, "1.tsv"))) {
+	system(paste0("gsutil cp ", cloud_filename_root,"*tsv.gz ../../"))
+	system(paste0("gsutil cp ", cloud_filename_root,"*log ../../"))
+	# Decompress the bgzipped files.
+	# system(paste0('for i in {1..', n_chunks, '}; do bgzip -d ', filename_root, '$i.tsv.gz ;done'))
+	# Decompress the gzipped files.
+	system(paste0('for i in {1..', n_chunks, '}; do gzip -d ', filename_root, '$i.tsv.gz ;done'))
+}
 
 # Read in all the data table codings
 to_read <- paste("../WAS/codings/", dir("../WAS/codings"), sep="")
@@ -44,11 +41,7 @@ for (i in 1:n_chunks)
 	summary_file <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, samples_for_inclusion=TRUE, check=FALSE, start_column=4)
 	write.table(summary_file, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
 	# Copy the intermediate summary .tsv files across to the bucket
-	system(paste0("gsutil cp ", pheno_summary, " gs://phenotype_pharma/PHESANT_intermediate_output/")
-	# Copy the PHESANT run log files across to the bucket
-	system(paste0("gsutil cp ", log_file, " gs://phenotype_pharma/PHESANT_intermediate_output/")
-	# Copy the PHESANT output files across to the bucket
-	system(paste0("gsutil cp ", tsv_filename, " gs://phenotype_pharma/PHESANT_intermediate_output/")
+	system(paste0("gsutil cp ", pheno_summary, " ", intermediate_output_location))
 	# Copy the intermediate .pdf files across to the bucket
-	system(paste0("gsutil cp ", hist_filename, " gs://phenotype_pharma/plots/")
+	system(paste0("gsutil cp ", hist_filename, ".pdf ", plot_location))
 }

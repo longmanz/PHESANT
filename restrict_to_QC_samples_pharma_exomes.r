@@ -17,6 +17,8 @@ if(n_exomes == '100K') {
 } else if (n_exomes == '300K') {
 	# 300k exomes
 	df_restrict <- fread("linking_file_300K_withbatch.csv", header=TRUE, data.table=FALSE)
+} else if (n_exomes == '500K') {
+	# 500K exomes (do nothing)
 } else {
 	cat('number of exomes not recognised!\n')
 }

@@ -1,26 +1,12 @@
 library(data.table)
-library(hyperSpec)
 
 source("../summarise_phenotypes.r")
 source("functions_for_run_all_sexes_male_female.r")
 
-n_chunks <- 10
-n_exomes <- "200k"
-
-# Get the log file information, required to obtain the summary files.
-# system(paste0("gsutil cp gs://phenotype_pharma/PHESANT_intermediate_output/*", n_exomes, "*log ../../"))
-
-variable_info <- "../variable-info/outcome_info_final_pharma_nov2019.tsv"
-filename_root <- paste0("../../pharma_exomes_parsed_output_", n_exomes, "_chunk")
-coding_info_file <- "../variable-info/data-coding-ordinal-info-nov2019-update.txt"
-QCed_io_name <- '../../pharma_parsed_and_restricted_to_200K_sample_subset'
-
-only_males_file <- "../should_only_be_in_males.tsv"
-only_females_file <- "../should_only_be_in_females.tsv"
-
 # Read in all the data table codings
 to_read <- paste("../WAS/codings/", dir("../WAS/codings"), sep="")
 codings_tables <- list()
+filename_root <- gsub("\\.$", "", filename_root)
 
 for(i in to_read) {
 	name <- gsub("../WAS/codings/coding(.*).tsv", "\\1", i)
@@ -45,7 +31,7 @@ for (i in 1:n_chunks)
 	names(tsv_data)[1] <- "userId"
 
 	outcome_info <- read.table(variable_info, sep='\t', quote="", comment.char="", header=TRUE)
-	print(paste0("both sexes ", i))
+	cat(paste0("both sexes ", i, '\n'))
 	summary <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, samples_for_inclusion=TRUE, check=FALSE, start_column=2)
 	write.table(summary, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
 
@@ -64,7 +50,7 @@ for (i in 1:n_chunks)
 		names(tsv_data)[1] <- "userId"
 
 		outcome_info <- read.table(variable_info, sep='\t', quote="", comment.char="", header=TRUE)
-		print(paste0("males ", i))
+		cat(paste0("males ", i, '\n'))
 		summary <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, samples_for_inclusion=TRUE, check=FALSE, start_column=2)
 		write.table(summary, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
 	}
@@ -84,7 +70,7 @@ for (i in 1:n_chunks)
 		names(tsv_data)[1] <- "userId"
 
 		outcome_info <- read.table(variable_info, sep='\t', quote="", comment.char="", header=TRUE)
-		print(paste0("females ", i))
+		cat(paste0("females ", i, '\n'))
 		summary <-  get_hists_and_notes(hist_filename, tsv_data, log_file, outcome_info, codings_tables, samples_for_inclusion=TRUE, check=FALSE, start_column=2)
 		write.table(summary, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
 	}
@@ -235,27 +221,3 @@ for (i in 1:n_chunks)
 	}
 
 }
-
-# for (i in 1:n_chunks)
-# {
-# 	filename <- paste0(filename_root, ".", i)
-# 	tsv_filename <- paste(filename, ".tsv", sep="")
-# 	log_file <- paste(filename, ".log", sep="")
-# 	tsv_data <- read.table(tsv_filename, header=TRUE, sep='\t')
-
-# 	outcome_info <- read.table("~/Repositories/PHESANT/variable-info/outcome_info_final_round2.tsv",
-# 						   sep='\t', quote="", comment.char="", header=TRUE)
-
-# 	categorical_11214 <-  get_barplot_numbers(tsv_data, log_file, outcome_info, codings_tables)
-
-# 	if(i == 1) {
-# 		categorical_full <- categorical_11214
-# 	} else {
-# 		categorical_full <- rbind(categorical_full, categorical_11214)
-# 	}
-
-# 	print(dim(categorical_full))
-# }
-
-# write.table(categorical_full, file="~/Repositories/PHESANT/variable-info/PHESANT_categoricals.tsv",
-# 	col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)

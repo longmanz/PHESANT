@@ -1,5 +1,4 @@
 library(data.table)
-
 source("../summarise_phenotypes.r")
 
 # Only copy if the file isn't there already
@@ -40,10 +39,6 @@ for (i in 1:n_chunks)
 	write.table(summary_file, file=pheno_summary, col.names=TRUE, row.names=TRUE, sep='\t', quote=FALSE)
 	# Copy the intermediate summary .tsv files across to the bucket
 	system(paste0("gsutil cp ", pheno_summary, " ", intermediate_output_location))
-	# Copy the PHESANT run log files across to the bucket
-	system(paste0("gsutil cp ", log_file, " ", intermediate_output_location))
-	# Copy the PHESANT output files across to the bucket
-	system(paste0("gsutil cp ", tsv_filename, " ", intermediate_output_location))
 	# Copy the intermediate .pdf files across to the bucket
 	system(paste0("gsutil cp ", hist_filename, ".pdf ", plot_location))
 }

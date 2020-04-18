@@ -5,39 +5,23 @@ source("functions_for_run_all_sexes_male_female.r")
 # Note that this currently needs to be performed locally - awk on the cluster segfaults out, I think due to differences 
 # between linux and mac versions of awk and how many columns are dealt with.
 
-n_exomes <- '200K'
-system(paste0("gsutil cp gs://phenotype_pharma/PHESANT_input/pharma_parsed_and_restricted_to_", n_exomes, "_sample_subset.tsv ../../")
-n_exomes <- '200k'
-system(paste0("gsutil cp gs://phenotype_pharma/PHESANT_intermediate_output/*", n_exomes, "*phenosummary* ../../")
-system(paste0("gsutil cp gs://phenotype_pharma/PHESANT_intermediate_output/*", n_exomes, "*tsv ../../"))
-n_chunks <- 10
-
-n_cts_min <- 5000
-n_cat_ordered <- 5000
-n_cat_min <- 100
-
-# Biomarkers
-# extra step (in biomarkers file to merge in the sex information)
-# filename_root <- "pharma_exomes_biomarkers_parsed_output_100k_chunk."
-# QCed_io_name <- 'pharma_biomarkers_parsed_and_restricted_to_100K_sample_subset_sex_added'
-# n_chunks <- 1
-
-# used for 100k:
-# variable_info <- "../variable-info/outcome_info_final_round3.tsv"
-# coding_info_file <- "../variable-info/data-coding-ordinal-info.txt"
-# QCed_io_name <- '../../pharma_parsed_and_restricted_to_100K_sample_subset'
-
-variable_info <- "../variable-info/outcome_info_final_pharma_nov2019.tsv"
-filename_root <- paste0("../../pharma_exomes_parsed_output_", n_exomes, "_chunk.")
-coding_info_file <- "../variable-info/data-coding-ordinal-info-nov2019-update.txt"
-QCed_io_name <- '../../pharma_parsed_and_restricted_to_200K_sample_subset'
+if (!file.exists(paste0(QCed_io_name, ".tsv"))) {
+	system(paste0("gsutil cp ", QCed_io_name_cloud, " ../../"))
+}
 
 # Pull out the make and female userIds for our application. Do this using the initially create file (paste0(QCed_io_name, "tsv")).
 sex_column <- grep("x31_", strsplit(system(paste0("head -1 ", QCed_io_name, ".tsv"), intern=TRUE), split='\t')[[1]])
 userID_column <- grep("userId", strsplit(system(paste0("head -1 ", QCed_io_name, ".tsv"), intern=TRUE), split='\t')[[1]])
 
-sex_df <- data.table(userID = system(paste0("awk 'BEGIN { FS=\"\t\" } { print $", userID_column, " }' ", QCed_io_name, ".tsv"), intern=TRUE)[-1],
-					 sex = system(paste0("awk 'BEGIN { FS=\"\t\" } { print $", sex_column, " }' ", QCed_io_name, ".tsv"), intern=TRUE)[-1])
+if (!file.exists(sex_df_path)) {
+	cat('Creating data table containing the sexes of samples in the entire data set to restrict to...\n')
+	sex_df <- data.table(userID = system(paste0("awk 'BEGIN { FS=\"\t\" } { print $", userID_column, " }' ", QCed_io_name, ".tsv"), intern=TRUE)[-1],
+						 sex = system(paste0("awk 'BEGIN { FS=\"\t\" } { print $", sex_column, " }' ", QCed_io_name, ".tsv"), intern=TRUE)[-1])
+	cat('Created data table containing the sexes of samples in the entire data set to restrict to...\n')
+	fwrite(sex_df, file = sex_df_path, sep='\t')
+} else {
+	sex_df <- fread(sex_df_path)
+}
 
 males <- (sex_df %>% filter(sex == "1") %>% select('userID'))$userID
 females <- (sex_df %>% filter(sex == "0") %>% select('userID'))$userID
@@ -67,9 +51,14 @@ for(i in 1:n_chunks) {
 single_cts_columns <- c(1, single_cts_columns)
 multi_cts_columns <- c(1, multi_cts_columns)
 outfile_single <- paste0(QCed_io_name , "_cts_single.tsv")
-system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", single_cts_columns, collapse=","), "}' ", file, " > ", outfile_single))
+
+if (!file.exists(outfile_single)) 
+	system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", single_cts_columns, collapse=","), "}' ", file, " > ", outfile_single))
+
 outfile_multi <- paste0(QCed_io_name , "_cts_multi.tsv")
-system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", multi_cts_columns, collapse=","), "}' ", file, " > ", outfile_multi))
+
+if (!file.exists(outfile_multi)) 
+	system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", multi_cts_columns, collapse=","), "}' ", file, " > ", outfile_multi))
 
 # Now, create the average columns for the other cts variables...
 # Get the names of the variables, and then grep for them and take the average.
@@ -82,7 +71,7 @@ if(length(codings) > 0) {
 	new_codings <- list()
 	for(i in 1:length(codings)) {
 		for(j in 1:length(codings[[i]])) {
-			if(j ==1) {
+			if(j == 1) {
 				new_codings[[i]] <- names(cts_multi)[grep(paste0("x", codings[[i]][j]), names(cts_multi))]
 			} else {
 				new_codings[[i]] <- c(new_codings[[i]], names(cts_multi)[grep(paste0("x", codings[[i]][j]), names(cts_multi))])
@@ -109,68 +98,89 @@ if(length(codings) > 0)
 
 cts_columns <- merge(cts_multi, cts_columns, by='userId')
 
-# As a check, I want to IRNT the cts variables in all sexes, this should be the same as before.
-# Not anymore - as we've made some changes to the encodings and PHESANT!
-# The male and female IRNT should be different.
-cts_output <- data.frame(sapply(cts_columns, irnt))
-cts_output_males <- data.frame(sapply(cts_columns[cts_columns$userId %in% males,], irnt))
-cts_output_females <- data.frame(sapply(cts_columns[cts_columns$userId %in% females,], irnt))
+if(	!file.exists(paste0(QCed_io_name , "_cts_irnt.tsv")) |
+	!file.exists(paste0(QCed_io_name , "_cts_irnt_males.tsv")) |
+	!file.exists(paste0(QCed_io_name , "_cts_irnt_females.tsv")) )
+{
+	cat('Continuous IRNT variables...\n')
 
-names(cts_output) <- names(cts_columns)
-names(cts_output_males) <- names(cts_columns)
-names(cts_output_females) <- names(cts_columns)
+	# As a check, I want to IRNT the cts variables in all sexes, this should be the same as before.
+	# Not anymore - as we've made some changes to the encodings and PHESANT!
+	# The male and female IRNT should be different.
 
-# Finally, need to remove all the cts variables that have less than 5000 instances of non-NAs.
-cat(paste("started with", ncol(cts_output), "cts.\n"))
-to_keep_all_sexes_cts <- apply(cts_output, 2, keep_cat_ordered, n_cts_min)
-cat(paste(sum(to_keep_all_sexes_cts), "cts remain for both sexes.\n"))
-to_keep_all_sexes_cts[1] <- TRUE
-to_keep_males_cts <- apply(cts_output_males, 2, keep_cat_ordered, n_cts_min)
-cat(paste(sum(to_keep_males_cts), "cts remain for males.\n"))
-to_keep_males_cts[1] <- TRUE
-to_keep_females_cts <- apply(cts_output_females, 2, keep_cat_ordered, n_cts_min)
-cat(paste(sum(to_keep_females_cts), "cts remain for females.\n"))
-to_keep_females_cts[1] <- TRUE
+	cts_output <- data.frame(sapply(cts_columns, irnt))
+	cts_output_males <- data.frame(sapply(cts_columns[cts_columns$userId %in% males,], irnt))
+	cts_output_females <- data.frame(sapply(cts_columns[cts_columns$userId %in% females,], irnt))
 
-fwrite(cts_output[,to_keep_all_sexes_cts], file=paste0(QCed_io_name , "_cts_irnt.tsv") , sep='\t')
-fwrite(cts_output_males[, to_keep_males_cts], file=paste0(QCed_io_name , "_cts_irnt_males.tsv") , sep='\t')
-fwrite(cts_output_females[, to_keep_females_cts], file=paste0(QCed_io_name , "_cts_irnt_females.tsv") , sep='\t')
+	names(cts_output) <- names(cts_columns)
+	names(cts_output_males) <- names(cts_columns)
+	names(cts_output_females) <- names(cts_columns)
 
-# Now create the raw cts files.
-cts_output_raw <- cts_columns
-cts_output_males_raw <- cts_columns[cts_columns$userId %in% males,]
-cts_output_females_raw <- cts_columns[cts_columns$userId %in% females,]
+	# Finally, need to remove all the cts variables that have less than 5000 instances of non-NAs.
+	cat(paste("Started with", ncol(cts_output), "cts.\n"))
+	to_keep_all_sexes_cts <- apply(cts_output, 2, keep_cat_ordered, n_cts_min)
+	cat(paste(sum(to_keep_all_sexes_cts), "cts remain for both sexes.\n"))
+	to_keep_all_sexes_cts[1] <- TRUE
+	to_keep_males_cts <- apply(cts_output_males, 2, keep_cat_ordered, n_cts_min)
+	cat(paste(sum(to_keep_males_cts), "cts remain for males.\n"))
+	to_keep_males_cts[1] <- TRUE
+	to_keep_females_cts <- apply(cts_output_females, 2, keep_cat_ordered, n_cts_min)
+	cat(paste(sum(to_keep_females_cts), "cts remain for females.\n"))
+	to_keep_females_cts[1] <- TRUE
 
-# Finally, need to remove all the cts variables that have less than 5000 instances of non-NAs.
-cat(paste("started with", ncol(cts_output), "cts.\n"))
-to_keep_all_sexes_cts_raw <- apply(cts_output_raw, 2, keep_cat_ordered, n_cts_min)
-cat(paste(sum(to_keep_all_sexes_cts_raw), "cts remain for both sexes.\n"))
-to_keep_all_sexes_cts_raw[1] <- TRUE
-to_keep_males_cts_raw <- apply(cts_output_males_raw, 2, keep_cat_ordered, n_cts_min)
-cat(paste(sum(to_keep_males_cts_raw), "cts remain for males.\n"))
-to_keep_males_cts_raw[1] <- TRUE
-to_keep_females_cts_raw <- apply(cts_output_females_raw, 2, keep_cat_ordered, n_cts_min)
-cat(paste(sum(to_keep_females_cts_raw), "cts remain for females.\n"))
-to_keep_females_cts_raw[1] <- TRUE
+	fwrite(cts_output[,to_keep_all_sexes_cts], file=paste0(QCed_io_name , "_cts_irnt.tsv") , sep='\t')
+	fwrite(cts_output_males[, to_keep_males_cts], file=paste0(QCed_io_name , "_cts_irnt_males.tsv") , sep='\t')
+	fwrite(cts_output_females[, to_keep_females_cts], file=paste0(QCed_io_name , "_cts_irnt_females.tsv") , sep='\t')
 
-fwrite(cts_output_raw[,to_keep_all_sexes_cts_raw], file=paste0(QCed_io_name , "_cts_raw.tsv"), sep='\t')
-fwrite(cts_output_males_raw[, to_keep_males_cts_raw], file=paste0(QCed_io_name , "_cts_raw_males.tsv") , sep='\t')
-fwrite(cts_output_females_raw[, to_keep_females_cts_raw], file=paste0(QCed_io_name , "_cts_raw_females.tsv") , sep='\t')
-
-# Perform the check
-for(i in 1:n_chunks) {
-	all_sexes <- fread(paste0(filename_root, i, ".tsv"), header=TRUE, sep='\t', data.table=FALSE)
-	to_look <- names(all_sexes)[names(all_sexes) %in% names(cts_output)]
-	all_sexes_check <- all_sexes[,names(all_sexes) %in% names(cts_output)]
-	if(length(to_look) > 1) {
-		for(j in 2:ncol(all_sexes_check)){
-			damn <- max(abs(cts_output[,to_look[j]] - all_sexes_check[,j]),na.rm=TRUE)
-			if(damn > 1e-14) {
-				print(paste(to_look[j], names(all_sexes_check)[j]))
-				print(damn)
+	# Perform the check
+	for(i in 1:n_chunks) {
+		all_sexes <- fread(paste0(filename_root, i, ".tsv"), header=TRUE, sep='\t', data.table=FALSE)
+		to_look <- names(all_sexes)[names(all_sexes) %in% names(cts_output)]
+		all_sexes_check <- all_sexes[,names(all_sexes) %in% names(cts_output)]
+		if(length(to_look) > 1) {
+			for(j in 2:ncol(all_sexes_check)){
+				damn <- max(abs(cts_output[,to_look[j]] - all_sexes_check[,j]),na.rm=TRUE)
+				if(damn > 1e-14) {
+					print(paste(to_look[j], names(all_sexes_check)[j]))
+					print(damn)
+				}
 			}
 		}
 	}
+
+	rm("cts_output", "cts_output_males", "cts_output_females")
+}
+
+if(	!file.exists(paste0(QCed_io_name , "_cts_raw.tsv")) |
+	!file.exists(paste0(QCed_io_name , "_cts_raw_males.tsv")) |
+	!file.exists(paste0(QCed_io_name , "_cts_raw_females.tsv")) ) {
+	
+	cat('Continuous raw variables...\n')
+
+	# Now create the raw cts files.
+
+	cts_output_raw <- cts_columns
+	cts_output_males_raw <- cts_columns[cts_columns$userId %in% males,]
+	cts_output_females_raw <- cts_columns[cts_columns$userId %in% females,]
+
+	# Finally, need to remove all the cts variables that have less than 5000 instances of non-NAs.
+	cat(paste("Started with", ncol(cts_output_raw), "cts.\n"))
+	to_keep_all_sexes_cts_raw <- apply(cts_output_raw, 2, keep_cat_ordered, n_cts_min)
+	cat(paste(sum(to_keep_all_sexes_cts_raw), "cts remain for both sexes.\n"))
+	to_keep_all_sexes_cts_raw[1] <- TRUE
+	to_keep_males_cts_raw <- apply(cts_output_males_raw, 2, keep_cat_ordered, n_cts_min)
+	cat(paste(sum(to_keep_males_cts_raw), "cts remain for males.\n"))
+	to_keep_males_cts_raw[1] <- TRUE
+	to_keep_females_cts_raw <- apply(cts_output_females_raw, 2, keep_cat_ordered, n_cts_min)
+	cat(paste(sum(to_keep_females_cts_raw), "cts remain for females.\n"))
+	to_keep_females_cts_raw[1] <- TRUE
+
+	fwrite(cts_output_raw[,to_keep_all_sexes_cts_raw], file=paste0(QCed_io_name , "_cts_raw.tsv"), sep='\t')
+	fwrite(cts_output_males_raw[, to_keep_males_cts_raw], file=paste0(QCed_io_name , "_cts_raw_males.tsv") , sep='\t')
+	fwrite(cts_output_females_raw[, to_keep_females_cts_raw], file=paste0(QCed_io_name , "_cts_raw_females.tsv") , sep='\t')
+
+	rm("cts_output_raw", "cts_output_males_raw", "cts_output_females_raw")
+
 }
 
 for(i in 1:n_chunks)
@@ -219,7 +229,7 @@ for(i in 1:n_chunks)
 	cat_ordered_males <- PHESANT_males[,which(names(PHESANT_males) %in% cat_ordered), drop=FALSE]
 	cat_ordered_females <- PHESANT_females[,which(names(PHESANT_females) %in% cat_ordered), drop=FALSE]
 
-	cat(paste("started with", ncol(cat_unordered_all_sexes), "categorical unordered.\n"))
+	cat(paste("Started with", ncol(cat_unordered_all_sexes), "categorical unordered.\n"))
 	to_keep_all_sexes <- apply(cat_unordered_all_sexes, 2, minimum_bin, n_cat_min)
 	cat(paste(sum(to_keep_all_sexes), "categorical unordered remain for both sexes.\n"))
 	to_keep_male <-  apply(cat_unordered_males, 2, minimum_bin, n_cat_min)
@@ -228,7 +238,7 @@ for(i in 1:n_chunks)
 	cat(paste(sum(to_keep_female), "categorical unordered remain for females.\n"))
 
 	# Finally, need to remove ordered variables that are categorical ordered and have less that 5000 (the default in PHESANT) non-NA values.
-	cat(paste("started with", ncol(cat_ordered_all_sexes), "categorical ordered.\n"))
+	cat(paste("Started with", ncol(cat_ordered_all_sexes), "categorical ordered.\n"))
 	to_keep_all_sexes_ordered <- apply(cat_ordered_all_sexes, 2, keep_cat_ordered, n_cat_ordered)
 	cat(paste(sum(to_keep_all_sexes_ordered), "categorical ordered remain for both sexes.\n"))
 	to_keep_males_ordered <- apply(cat_ordered_males, 2, keep_cat_ordered, n_cat_ordered)
@@ -244,8 +254,11 @@ for(i in 1:n_chunks)
 		sep='\t', file=paste0(QCed_io_name, "_cat_variables_females.", i, '.tsv'))
 
 	all_sexes_check <- all_sexes[,-c(1,which(names(all_sexes) %in% c(cat_unordered, cat_ordered, cat_mul_unordered)))]
-	if(ncol(all_sexes_check)!=0) {
+	if(ncol(all_sexes_check) != 0) {
 		cat("Error: there are variables that have not been accounted for!\n")
 		cat(names(all_sexes_check), "\n")
 	}
+
+	rm("all_sexes", "PHESANT_males", "PHESANT_females")
+
 }
