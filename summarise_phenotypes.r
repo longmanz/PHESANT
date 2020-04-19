@@ -16,7 +16,7 @@ get_barplot_numbers <- function(tsv_data, log_file, outcome_info, codings_tables
 	good_samples <- tsv_data$userId
 	tsv_data <- tsv_data[tsv_data$userId %in% good_samples,]
 
-	cat(paste0("Size of tsv data.table: ", dim(tsv_data)[1], " rows, " dim(tsv_data)[2], " columns.\n"))
+	cat(paste0("Size of tsv data.table: ", dim(tsv_data)[1], " rows, ", dim(tsv_data)[2], " columns.\n"))
 
 	if (ncol(tsv_data) > (start_column-1)) {
 		# Create character matrix 'notes' that we will write to disk.
