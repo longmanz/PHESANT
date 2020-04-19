@@ -1,4 +1,5 @@
 source("functions_for_run_all_sexes_male_female.r")
+
 # Need the phenotype summary file as well.
 # Use 01_run_summarise_phenotypes_initial_PHESANT_run.r if these have not yet been created.
 
@@ -67,12 +68,12 @@ if (!file.exists(outfile_single)) {
 		system(paste0("gsutil cp ", outfile_single, " ", intermediate_output_location))
 	} else {
 		cat("Need to run locally to use awk script, before copying result to the cloud for the remainder of this script.\n")
+		cat(paste0("Copy across using:\n", "gsutil cp ", intermediate_output_location, "*_cts_single.tsv ../../"))
+		system(paste0("gsutil cp ", intermediate_output_location, "*_cts_single.tsv ", "../../"))
 		stop()
 	}
 
 }
-
-system(paste0("gsutil cp ", intermediate_output_location, "*_cts_single.tsv ", "../../"))
 
 outfile_multi <- paste0(QCed_io_name , "_cts_multi.tsv")
 
@@ -83,11 +84,11 @@ if (!file.exists(outfile_multi)) {
 		system(paste0("gsutil cp ", outfile_multi, " ", intermediate_output_location))
 	} else {
 		cat("Need to run locally to use awk script, before copying result to the cloud for the remainder of this script.\n")
+		cat(paste0("Copy across using:\n", "gsutil cp ", intermediate_output_location, "*_cts_multi.tsv ../../"))
+		system(paste0("gsutil cp ", intermediate_output_location, "*_cts_multi.tsv ", "../../"))
 		stop()
 	}
 }
-
-system(paste0("gsutil cp ", intermediate_output_location, "*_cts_multi.tsv ", "../../"))
 
 # Now, create the average columns for the other cts variables...
 # Get the names of the variables, and then grep for them and take the average.

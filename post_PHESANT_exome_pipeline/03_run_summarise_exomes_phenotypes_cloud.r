@@ -81,10 +81,10 @@ only_males <- fread(only_males_file, header=FALSE, sep='\t')
 only_females <- fread(only_females_file, header=FALSE, sep='\t')
 names(only_males) <- c("FullFieldID_rowname","FullFieldID", "FieldID", "Field", "SubFieldID", "SubField",
 	"N.non.missing.males", "N.missing.males", "N.controls.males", "N.cases.males",
-	 "N.non.missing", "N.missing", "N.controls", "N.cases")
+	"N.non.missing", "N.missing", "N.controls", "N.cases")
 names(only_females) <- c("FullFieldID_rowname", "FullFieldID", "FieldID", "Field", "SubFieldID", "SubField",
 	"N.non.missing.females", "N.missing.females", "N.controls.females", "N.cases.females",
-	 "N.non.missing", "N.missing", "N.controls", "N.cases")
+	"N.non.missing", "N.missing", "N.controls", "N.cases")
 
 # We also need to do the cts phenotypes - new format now because of how I parsed them.
 system(paste0("awk 'FNR==1 && NR!=1 { while (/^<header>/) getline; } 1 {print}' ", filename_root, ".*.log > ", filename_root, "_all.log"))

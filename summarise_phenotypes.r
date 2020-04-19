@@ -1,4 +1,3 @@
-# library(hyperSpec)
 
 trim <- function (x) {
 	x <- gsub("^\\s+|\\s+$", "", x)
@@ -17,7 +16,7 @@ get_barplot_numbers <- function(tsv_data, log_file, outcome_info, codings_tables
 	good_samples <- tsv_data$userId
 	tsv_data <- tsv_data[tsv_data$userId %in% good_samples,]
 
-	print(dim(tsv_data))
+	cat(paste0("Size of tsv data.table: ", dim(tsv_data)[1], " rows, " dim(tsv_data)[2], " columns.\n")
 
 	if (ncol(tsv_data) > (start_column-1)) {
 		# Create character matrix 'notes' that we will write to disk.
@@ -48,7 +47,7 @@ get_barplot_numbers <- function(tsv_data, log_file, outcome_info, codings_tables
 				if(nchar(coding)>0 && !is.na(subvar)) {
 
 					if(is.null(codings_tables[coding][[1]]))
-						print(paste("Error: Data coding table for coding:", coding, "not found!"))
+						cat(paste0("Error: Data coding table for coding: ", coding, " not found!\n"))
 
 					where_coding <- which(codings_tables[coding][[1]]$coding == subvar)
 
@@ -74,8 +73,8 @@ get_barplot_numbers <- function(tsv_data, log_file, outcome_info, codings_tables
 				notes[k,4] <- dist_y
 
 			} else {
-				print("Error: not one of the specified types!")
-				print(type)
+				cat("Error: not one of the specified types!\n")
+				cat(paste0(type, "\n"))
 			}
 
 			k <- k+1
@@ -155,7 +154,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 		for(i in colnames(tsv_data)[start_column:ncol(tsv_data)]){
 			type <- class(tsv_data[i][,1])
 			if(type == "numeric") {
-				print("numeric")
+				cat("numeric\n")
 				# Get the variable name.
 				var <- substr(i,2,nchar(i))
 				where <- which(outcome_info$FieldID == var)
@@ -188,7 +187,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 
 			} else if (type=="logical" | type=="integer") {
 				
-				print("logical or integer")
+				cat("logical or integer\n")
 				# Get the variable name.
 				var <- strsplit(i, split="_")[[1]][1]
 				# Remove the X.
@@ -196,7 +195,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 				# Subvariable, if it exists.
 				subvar <- strsplit(i, split="_")[[1]][2]
 				where <- which(outcome_info$FieldID == var)
-				print(where)
+				cat(paste0(outcome_info$FieldID[where], '\n'))
 				
 				# Add the notes:
 				# The sixth column is the 'notes' field in variable-info file:
@@ -219,7 +218,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 							paste("\\1 \\|\\| CAT-SINGLE \\|\\| CAT-SINGLE-BINARY-VAR:", subvar, " \\|\\| \\2 \\|\\|"), matching_line)
 						notes[k,7] <- trim(new_matching_line)
 					} else {
-						print(matching_line)
+						cat(paste0(matching_line, "\n"))
 						notes[k,7] <- trim(matching_line)
 					}
 
@@ -236,7 +235,7 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 				if(nchar(coding)>0 && !is.na(subvar)) {
 
 					if(is.null(codings_tables[coding][[1]]))
-						print(paste("Error: Data coding table for coding:", coding, "not found!"))
+						cat(paste0("Error: Data coding table for coding: ", coding, " not found!\n"))
 
 					where_coding <- which(codings_tables[coding][[1]]$coding == subvar)
 
@@ -286,7 +285,8 @@ get_hists_and_notes <- function(hist_filename, tsv_data, log_file, outcome_info,
 				}
 
 			} else {
-				print("Error: not one of the specified types!")
+				cat("Error: not one of the specified types!\n")
+				cat(paste0(type, "\n"))
 			}
 			# The third column is the number of missing data for this phenotype.
 			n_miss <- sum(is.na(tsv_data[i][,1]))
@@ -344,15 +344,15 @@ include_PHESANT_reassignment_names <- function(pheno_summary_file, outcome_info)
 						if(nchar(coding)>0 && !is.na(subvar)) {
 
 							if(is.null(codings_tables[coding][[1]]))
-								print(paste("Error: Data coding table for coding:", coding, "not found!"))
+								cat(paste0("Error: Data coding table for coding: ", coding, " not found!\n"))
 
 							where_coding <- which(codings_tables[coding][[1]]$coding == subvar)
 
 							i_subname <- ifelse(length(where_coding) > 0, 
 								codings_tables[coding][[1]]$meaning[where_coding],
 								"PHESANT recoding")
-							print(pheno_summary[where_reassignment[i],1])
-							print(gsub("PHESANT recoding", i_subname, pheno_summary[where_reassignment[i],1]))
+							cat(paste0(pheno_summary[where_reassignment[i],1], '\n'))
+							cat(paste0(gsub("PHESANT recoding", i_subname, pheno_summary[where_reassignment[i],1]), '\n'))
 							pheno_summary[where_reassignment[i],1] <- gsub("PHESANT recoding", i_subname, pheno_summary[where_reassignment[i],1])
 							
 						}				
