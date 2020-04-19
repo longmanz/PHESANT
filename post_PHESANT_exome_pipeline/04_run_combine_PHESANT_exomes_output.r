@@ -27,13 +27,16 @@ library(dplyr)
 
 # If the file doesn't exists, then in that chunk, no cat phenotypes made it through PHESANT.
 pheno_file <- paste0(QCed_io_name, "_cat_variables_both_sexes.1.tsv")
-
+cat('Combining and checking cat variables...\n')
+cat('Chunk 1...\n')
 if(file.exists(pheno_file))
 	pheno <- fread(pheno_file, sep='\t', data.table=FALSE, header=TRUE)
+
 
 if(n_chunks > 1) {
 	for(i in 2:n_chunks)
 	{	
+		cat(paste0('Chunk ', i, '...\n'))
 		pheno_file <- paste0(QCed_io_name, "_cat_variables_both_sexes.", i, ".tsv")
 		
 		if(!file.exists(pheno_file))
@@ -55,6 +58,7 @@ if(exists("pheno"))
 	pheno <- pheno[,-which(colnames(pheno) %in% c(males_only, females_only))]
 
 # Next the cts raw
+cat('Combining and checking cts raw variables...\n')
 if(file.exists(paste0(QCed_io_name, "_cts_raw.tsv")))
 {
 	pheno_tmp <- fread(paste0(QCed_io_name, "_cts_raw.tsv"), sep='\t', data.table=FALSE, header=TRUE)
@@ -77,6 +81,7 @@ if(file.exists(paste0(QCed_io_name, "_cts_raw.tsv")))
 if(!exists("pheno")) 
 	cat("No phenotype output files exist!\n")
 
+cat('Combining and checking cts irnt variables...\n')
 if(file.exists(paste0(QCed_io_name, "_cts_irnt.tsv")))
 {
 	pheno_tmp <- fread(paste0(QCed_io_name, "_cts_irnt.tsv"), sep='\t', data.table=FALSE, header=TRUE)
@@ -98,6 +103,8 @@ if(file.exists(paste0(QCed_io_name, "_cts_irnt.tsv")))
 colnames(pheno)[1] <- 'userId'
 
 # Combine the phenotype summary files (these have already been restricted to sex-specific).
+cat('Next the summary files...\nCombining and checking cat variables...\n')
+cat('Chunk 1...\n')
 pheno_summary_file <- paste0(QCed_io_name, "_cat_variables_both_sexes_phesant_recodings_remove_sex_specific.1_phenosummary.tsv")
 if(file.exists(pheno_summary_file))
 	pheno_summary <- read.table(pheno_summary_file, sep='\t', quote="", comment.char="", header=TRUE, stringsAsFactors=FALSE)
@@ -105,6 +112,7 @@ if(file.exists(pheno_summary_file))
 if(n_chunks > 1) {
 	for(i in 2:n_chunks)
 	{
+		cat(paste0('Chunk ', i, '...\n'))
 		pheno_summary_file <- paste0(QCed_io_name, "_cat_variables_both_sexes_phesant_recodings_remove_sex_specific.", i, "_phenosummary.tsv")
 
 		if(!file.exists(pheno_summary_file))
@@ -114,6 +122,7 @@ if(n_chunks > 1) {
 	}
 }
 
+cat('Combining and checking cts variables...\n')
 pheno_summary_file <- paste0(QCed_io_name, "_cts_both_sexes_phenosummary.tsv")
 if(file.exists(pheno_summary_file)) {
 	pheno_summary_cts <- read.table(pheno_summary_file, sep='\t', quote="", comment.char="", header=TRUE, stringsAsFactors=FALSE)
@@ -128,6 +137,7 @@ if(file.exists(pheno_summary_file)) {
 colnames(pheno)[which(!(colnames(pheno) %in% rownames(pheno_summary)))]
 rownames(pheno_summary)[which(!(rownames(pheno_summary) %in% colnames(pheno)))]
 
+cat('Writing the results...\n')
 fwrite(pheno_summary, file=paste0(final_output, 'combined_both_sexes_no_sex_specific_summary.tsv'), quote=FALSE, sep='\t', row.names=TRUE)
 fwrite(pheno, file=paste0(final_output, 'combined_both_sexes_no_sex_specific.tsv'), quote=FALSE, sep='\t')
 
@@ -135,6 +145,8 @@ rm("pheno")
 rm("pheno_summary")
 
 # Males
+cat('Next for males...\nCombining and checking cat variables...\n')
+cat('Chunk 1...\n')
 pheno_file <- paste0(QCed_io_name, "_cat_variables_males.1.tsv")
 
 if(file.exists(pheno_file))
@@ -143,6 +155,7 @@ if(file.exists(pheno_file))
 if(n_chunks > 1) {
 	for(i in 2:n_chunks)
 	{
+		cat(paste0('Chunk ', i, '...\n'))
 		pheno_file <- paste0(QCed_io_name, "_cat_variables_males.", i, ".tsv")
 		
 		if(!file.exists(pheno_file))
@@ -157,6 +170,7 @@ if(n_chunks > 1) {
 }
 
 # Next the cts raw
+cat('Combining and checking cts raw variables...\n')
 if(file.exists(paste0(QCed_io_name, "_cts_raw_males.tsv")))
 {
 	pheno_tmp <- fread(paste0(QCed_io_name, "_cts_raw_males.tsv"), sep='\t', data.table=FALSE, header=TRUE)
@@ -173,6 +187,7 @@ if(file.exists(paste0(QCed_io_name, "_cts_raw_males.tsv")))
 }
 
 # Finally, cts IRNT
+cat('Combining and checking cts raw variables...\n')
 if(file.exists(paste0(paste0(QCed_io_name, "_cts_irnt_males.tsv"))))
 {
 	pheno_tmp <- fread(paste0(QCed_io_name, "_cts_irnt_males.tsv"), sep='\t', data.table=FALSE, header=TRUE)
@@ -192,6 +207,8 @@ if(exists("pheno"))
 	colnames(pheno)[1] <- 'userId'
 
 # Now, check what's in this file that isn't in the summary files...
+cat('Next the summary files...\nCombining and checking cat variables...\n')
+cat('Chunk 1...\n')
 pheno_summary_file <- paste0(QCed_io_name, "_cat_variables_males_phesant_recodings_remove_sex_specific.1_phenosummary.tsv")
 if(file.exists(pheno_summary_file))
 	pheno_summary <- read.table(pheno_summary_file, sep='\t', quote="", comment.char="", header=TRUE, stringsAsFactors=FALSE)
@@ -199,6 +216,7 @@ if(file.exists(pheno_summary_file))
 if(n_chunks > 1) {
 	for(i in 2:n_chunks)
 	{
+		cat(paste0('Chunk ', i, '...\n'))
 		pheno_summary_file <- paste0(QCed_io_name, "_cat_variables_males_phesant_recodings_remove_sex_specific.", i, "_phenosummary.tsv")
 
 		if (!file.exists(pheno_summary_file))
@@ -208,6 +226,7 @@ if(n_chunks > 1) {
 	}
 }
 
+cat('Combining and checking cts variables...\n')
 pheno_summary_file <- paste0(QCed_io_name, "_cts_males_phenosummary.tsv")
 if(file.exists(pheno_summary_file)) {
 	pheno_summary_cts <- read.table(pheno_summary_file, sep='\t', quote="", comment.char="", header=TRUE, stringsAsFactors=FALSE)
@@ -221,6 +240,7 @@ if(file.exists(pheno_summary_file)) {
 colnames(pheno)[which(!(colnames(pheno) %in% rownames(pheno_summary)))]
 rownames(pheno_summary)[which(!(rownames(pheno_summary) %in% colnames(pheno)))]
 
+cat('Writing the results...\n')
 fwrite(pheno_summary, file=paste0(final_output, 'combined_males_summary.tsv'), quote=FALSE, sep='\t', row.names=TRUE)
 fwrite(pheno, file=paste0(final_output, 'combined_males.tsv'), quote=FALSE, sep='\t')
 
@@ -228,6 +248,8 @@ rm("pheno")
 rm("pheno_summary")
 
 # Females
+cat('Next for females...\nCombining and checking cat variables...\n')
+cat('Chunk 1...\n')
 pheno_file <- paste0(QCed_io_name, "_cat_variables_females.1.tsv")
 
 if(file.exists(pheno_file))
@@ -236,6 +258,7 @@ if(file.exists(pheno_file))
 if(n_chunks > 1) {
 	for(i in 2:n_chunks)
 	{
+		cat(paste0('Chunk ', i, '...\n'))
 		pheno_file <- paste0(QCed_io_name, "_cat_variables_females.", i, ".tsv")
 		
 		if(!file.exists(pheno_file))
@@ -250,6 +273,7 @@ if(n_chunks > 1) {
 }
 
 # Next the cts raw
+cat('Combining and checking cts raw variables...\n')
 if(file.exists(paste0(QCed_io_name, "_cts_raw_females.tsv")))
 {
 	pheno_tmp <- fread(paste0(QCed_io_name, "_cts_raw_females.tsv"), sep='\t', data.table=FALSE, header=TRUE)
@@ -266,6 +290,7 @@ if(file.exists(paste0(QCed_io_name, "_cts_raw_females.tsv")))
 }
 
 # Finally, cts IRNT
+cat('Combining and checking cts irnt variables...\n')
 if(file.exists(paste0(paste0(QCed_io_name, "_cts_irnt_females.tsv"))))
 {
 	pheno_tmp <- fread(paste0(QCed_io_name, "_cts_irnt_females.tsv"), sep='\t', data.table=FALSE, header=TRUE)
@@ -285,6 +310,8 @@ if(exists("pheno"))
 	colnames(pheno)[1] <- 'userId'
 
 # Now, check what's in this file that isn't in the summary files...
+cat('Next the summary files...\nCombining and checking cat variables...\n')
+cat('Chunk 1...\n')
 pheno_summary_file <- paste0(QCed_io_name, "_cat_variables_females_phesant_recodings_remove_sex_specific.1_phenosummary.tsv")
 if(file.exists(pheno_summary_file))
 	pheno_summary <- read.table(pheno_summary_file, sep='\t', quote="", comment.char="", header=TRUE, stringsAsFactors=FALSE)
@@ -292,6 +319,7 @@ if(file.exists(pheno_summary_file))
 if(n_chunks > 1) {
 	for(i in 2:n_chunks)
 	{
+		cat(paste0('Chunk ', i, '...\n'))
 		pheno_summary_file <- paste0(QCed_io_name, "_cat_variables_females_phesant_recodings_remove_sex_specific.", i, "_phenosummary.tsv")
 
 		if (!file.exists(pheno_summary_file))
@@ -301,6 +329,7 @@ if(n_chunks > 1) {
 	}
 }
 
+cat('Combining and checking cts variables...\n')
 pheno_summary_file <- paste0(QCed_io_name, "_cts_females_phenosummary.tsv")
 if(file.exists(pheno_summary_file)) {
 	pheno_summary_cts <- read.table(pheno_summary_file, sep='\t', quote="", comment.char="", header=TRUE, stringsAsFactors=FALSE)
@@ -314,6 +343,7 @@ if(file.exists(pheno_summary_file)) {
 colnames(pheno)[which(!(colnames(pheno) %in% rownames(pheno_summary)))]
 rownames(pheno_summary)[which(!(rownames(pheno_summary) %in% colnames(pheno)))]
 
+cat('Writing the results...\n')
 fwrite(pheno_summary, file=paste0(final_output, 'combined_females_summary.tsv'), quote=FALSE, sep='\t', row.names=TRUE)
 fwrite(pheno, file=paste0(final_output, 'combined_females.tsv'), quote=FALSE, sep='\t')
 
