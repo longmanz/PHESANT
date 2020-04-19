@@ -1,6 +1,30 @@
 library(data.table)
 library(dplyr)
 
+# Move relevant files to the cloud if running out of RAM locally
+# for (i in c("both_sexes", "male", "female")) {
+# 	for (j in 1:n_chunks) {
+# 		system(paste0("gzip ", QCed_io_name, "_cat_variables_", i, ".", j, ".tsv"))
+# 	}
+# 	system(paste0("gzip ", QCed_io_name, "_cts_irnt.tsv"))
+# 	system(paste0("gzip ", QCed_io_name, "_cts_raw.tsv"))
+
+# 	system(paste0("gsutil cp ", QCed_io_name, "_cat_variables_", i, "*gz gs://ukb-diverse-pops/Phenotypes/Everyone/PHESANT_intermediate_output/jan_2020/to_combine/"))
+# 	system(paste0("gsutil cp ", QCed_io_name, "_cts_*gz gs://ukb-diverse-pops/Phenotypes/Everyone/PHESANT_intermediate_output/jan_2020/to_combine/"))
+# 	system(paste0("gsutil cp ", QCed_io_name, "_cat_variables_", i, "_phesant_recodings_remove_sex_specific", "*_phenosummary.tsv gs://ukb-diverse-pops/Phenotypes/Everyone/PHESANT_intermediate_output/jan_2020/to_combine/"))
+# 	system(paste0("gsutil cp ", QCed_io_name, "_cts_", i, "_phenosummary.tsv gs://ukb-diverse-pops/Phenotypes/Everyone/PHESANT_intermediate_output/jan_2020/to_combine/"))
+# }
+# Now, need to load a VM and move it across. 
+# Navigate to the repo/post_PHESANT_multi_ancestry_pipeline/ and run
+# gsutil cp gs://ukb-diverse-pops/Phenotypes/Everyone/PHESANT_intermediate_output/jan_2020/to_combine/* ../../
+# for(i in c("both_sexes")) {#, "male", "female")) {
+# 	for(j in 1:n_chunks) {
+# 		system(paste0("gzip -d ", QCed_io_name, "_cat_variables_", i, ".", j, ".tsv.gz"))
+# 	}
+# }
+# system(paste0("gzip -d ", QCed_io_name, "_cts_irnt.tsv.gz"))
+# system(paste0("gzip -d ", QCed_io_name, "_cts_raw.tsv.gz"))
+
 # If the file doesn't exists, then in that chunk, no cat phenotypes made it through PHESANT.
 pheno_file <- paste0(QCed_io_name, "_cat_variables_both_sexes.1.tsv")
 

@@ -6,6 +6,7 @@ source("functions_for_run_all_sexes_male_female.r")
 # between linux and mac versions of awk and how many columns are dealt with.
 
 # Ensure that the cts_single and cts_multi tsv files are created locally and copied up to the cloud.
+{
 
 if (!file.exists(paste0(QCed_io_name, ".tsv"))) {
 	system(paste0("gsutil cp ", QCed_io_name_cloud, " ../../"))
@@ -56,8 +57,14 @@ outfile_single <- paste0(QCed_io_name , "_cts_single.tsv")
 
 # This is the part that can't be run on the cloud due to awk differences between OS X and linux
 if (!file.exists(outfile_single)) {
-	system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", single_cts_columns, collapse=","), "}' ", file, " > ", outfile_single))
-	system(paste0("gsutil cp ", outfile_single, " ", intermediate_output_location))
+	if (local = TRUE) {
+		system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", single_cts_columns, collapse=","), "}' ", file, " > ", outfile_single))
+		system(paste0("gsutil cp ", outfile_single, " ", intermediate_output_location))
+	} else {
+		cat("Need to run locally to use awk script, before copying result to the cloud for the remainder of this script.\n")
+		stop()
+	}
+
 }
 
 system(paste0("gsutil cp ", intermediate_output_location, "*_cts_single.tsv ", "../../"))
@@ -66,7 +73,13 @@ outfile_multi <- paste0(QCed_io_name , "_cts_multi.tsv")
 
 # and this too
 if (!file.exists(outfile_multi)) { 
-	system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", multi_cts_columns, collapse=","), "}' ", file, " > ", outfile_multi))
+	if (local = TRUE) {
+		system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", multi_cts_columns, collapse=","), "}' ", file, " > ", outfile_multi))
+		system(paste0("gsutil cp ", outfile_multi, " ", intermediate_output_location))
+	} else {
+		cat("Need to run locally to use awk script, before copying result to the cloud for the remainder of this script.\n")
+		stop()
+	}
 }
 
 system(paste0("gsutil cp ", intermediate_output_location, "*_cts_multi.tsv ", "../../"))
@@ -272,4 +285,5 @@ for(i in 1:n_chunks)
 
 	rm("all_sexes", "PHESANT_males", "PHESANT_females")
 
+}
 }
