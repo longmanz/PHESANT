@@ -42,6 +42,11 @@ multi_cts_columns <- c()
 
 for(i in 1:n_chunks) {
 	pheno_summary <- paste0(filename_root, i, "_phenosummary.tsv")
+	
+	if(!file.exists(pheno_summary)) {
+		system("gsutil cp ", intermediate_output_location, "*", i, "_phenosummary.tsv", " ../../")
+	}
+
 	cts_variables <- system(paste("grep IRNT", pheno_summary, "| cut -f1 -d'\t'"), intern=TRUE)
 
 	# These columns can be written to a new file as is (no need to perform any averaging)
