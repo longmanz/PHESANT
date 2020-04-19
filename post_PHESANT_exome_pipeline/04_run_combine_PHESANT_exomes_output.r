@@ -1,17 +1,5 @@
-rm(list=ls())
-
 library(data.table)
 library(dplyr)
-
-only_males_file <- "../should_only_be_in_males.tsv"
-only_females_file <- "../should_only_be_in_females.tsv"
-
-n_chunks <- 10
-n_exomes <- '200k'
-date <- 'November_2019'
-
-QCed_io_name <- '../../pharma_parsed_and_restricted_to_200K_sample_subset'
-final_output <- '../../phesant_output_'
 
 # If the file doesn't exists, then in that chunk, no cat phenotypes made it through PHESANT.
 pheno_file <- paste0(QCed_io_name, "_cat_variables_both_sexes.1.tsv")
@@ -29,7 +17,8 @@ if(n_chunks > 1) {
 		
 		pheno_tmp <- fread(pheno_file, sep='\t', data.table=FALSE, header=TRUE)
 		# check 
-		print(all(pheno_tmp[,1] == pheno[,1]))
+		cat('Checking:\n')
+		cat(paste0(all(pheno_tmp[,1] == pheno[,1]), '\n'))
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
 }
@@ -53,7 +42,8 @@ if(file.exists(paste0(QCed_io_name, "_cts_raw.tsv")))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_raw')
 		pheno <- pheno_tmp
 	} else {
-		print(all(order(pheno_tmp[,1] == pheno[,1])))
+		cat('Checking:\n')
+		cat(paste0(all(order(pheno_tmp[,1] == pheno[,1])), '\n'))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_raw')
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
@@ -61,7 +51,7 @@ if(file.exists(paste0(QCed_io_name, "_cts_raw.tsv")))
 
 # Finally, cts IRNT
 if(!exists("pheno")) 
-	print("no phenotype output files exist!")
+	cat("No phenotype output files exist!\n")
 
 if(file.exists(paste0(QCed_io_name, "_cts_irnt.tsv")))
 {
@@ -74,7 +64,8 @@ if(file.exists(paste0(QCed_io_name, "_cts_irnt.tsv")))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_irnt')
 		pheno <- pheno_tmp
 	} else {
-		print(all(order(pheno_tmp[,1]) == order(pheno[,1])))
+		cat('Checking:\n')
+		cat(paste0(all(order(pheno_tmp[,1]) == order(pheno[,1])), '\n'))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_irnt')
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
@@ -135,7 +126,8 @@ if(n_chunks > 1) {
 		
 		pheno_tmp <- fread(pheno_file, sep='\t', data.table=FALSE, header=TRUE)
 		# check 
-		print(all(pheno_tmp[,1] == pheno[,1]))
+		cat('Checking:\n')
+		cat(paste0(all(pheno_tmp[,1] == pheno[,1]), '\n'))
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
 }
@@ -149,7 +141,8 @@ if(file.exists(paste0(QCed_io_name, "_cts_raw_males.tsv")))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_raw')
 		pheno <- pheno_tmp
 	} else {
-		print(all(order(pheno_tmp[,1]) == order(pheno[,1])))
+		cat('Checking:\n')
+		cat(paste0(all(order(pheno_tmp[,1]) == order(pheno[,1])), '\n'))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_raw')
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
@@ -164,7 +157,8 @@ if(file.exists(paste0(paste0(QCed_io_name, "_cts_irnt_males.tsv"))))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_irnt')
 		pheno <- pheno_tmp
 	} else {
-		print(all(order(pheno_tmp[,1]) == order(pheno[,1])))
+		cat('Checking:\n')
+		cat(paste0(all(order(pheno_tmp[,1]) == order(pheno[,1])), '\n'))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_irnt')
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
@@ -225,7 +219,8 @@ if(n_chunks > 1) {
 		
 		pheno_tmp <- fread(pheno_file, sep='\t', data.table=FALSE, header=TRUE)
 		# check 
-		print(all(pheno_tmp[,1] == pheno[,1]))
+		cat('Checking:\n')
+		cat(paste0(all(pheno_tmp[,1] == pheno[,1])), '\n')
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
 }
@@ -239,7 +234,8 @@ if(file.exists(paste0(QCed_io_name, "_cts_raw_females.tsv")))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_raw')
 		pheno <- pheno_tmp
 	} else {
-		print(all(order(pheno_tmp[,1]) == order(pheno[,1])))
+		cat('Checking:\n')
+		cat(paste0(all(order(pheno_tmp[,1]) == order(pheno[,1])), '\n'))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_raw')
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
@@ -254,7 +250,8 @@ if(file.exists(paste0(paste0(QCed_io_name, "_cts_irnt_females.tsv"))))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_irnt')
 		pheno <- pheno_tmp
 	} else {
-		print(all(order(pheno_tmp[,1]) == order(pheno[,1])))
+		cat('Checking:\n')
+		cat(paste0(all(order(pheno_tmp[,1]) == order(pheno[,1])), '\n'))
 		names(pheno_tmp) <- paste0(names(pheno_tmp), '_irnt')
 		pheno <- cbind(pheno, pheno_tmp[,-1, drop=FALSE])
 	}
@@ -299,4 +296,13 @@ fwrite(pheno, file=paste0(final_output, 'combined_females.tsv'), quote=FALSE, se
 rm("pheno")
 rm("pheno_summary")
 
-system(paste0("gsutil cp ", final_output, '*combined* gs://phenotype_pharma/PHESANT_output/', n_exomes, "/", date, "/"))
+system(paste0("bgzip ", final_output, 'combined_both_sexes_no_sex_specific.tsv'))
+system(paste0("bgzip ", final_output, 'combined_males.tsv'))
+system(paste0("bgzip ", final_output, 'combined_females.tsv'))
+
+system(paste0("gsutil cp ", final_output, '*combined*gz ', final_output_location, date, "/"))
+system(paste0("gsutil cp ", final_output, '*_both_sexes_no_sex_specific_summary.tsv ', final_output_location, date, "/"))
+system(paste0("gsutil cp ", final_output, '*_males_summary.tsv ', final_output_location, date, "/"))
+system(paste0("gsutil cp ", final_output, '*_females_summary.tsv ', final_output_location, date, "/"))
+
+# system(paste0("gsutil cp ", final_output, '*combined* gs://phenotype_pharma/PHESANT_output/', n_exomes, "/", date, "/"))

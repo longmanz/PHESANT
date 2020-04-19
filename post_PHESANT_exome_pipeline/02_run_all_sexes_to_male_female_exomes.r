@@ -5,6 +5,8 @@ source("functions_for_run_all_sexes_male_female.r")
 # Note that this currently needs to be performed locally - awk on the cluster segfaults out, I think due to differences 
 # between linux and mac versions of awk and how many columns are dealt with.
 
+# Ensure that the cts_single and cts_multi tsv files are created locally and copied up to the cloud.
+
 if (!file.exists(paste0(QCed_io_name, ".tsv"))) {
 	system(paste0("gsutil cp ", QCed_io_name_cloud, " ../../"))
 }
@@ -52,13 +54,22 @@ single_cts_columns <- c(1, single_cts_columns)
 multi_cts_columns <- c(1, multi_cts_columns)
 outfile_single <- paste0(QCed_io_name , "_cts_single.tsv")
 
-if (!file.exists(outfile_single)) 
+# This is the part that can't be run on the cloud due to awk differences between OS X and linux
+if (!file.exists(outfile_single)) {
 	system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", single_cts_columns, collapse=","), "}' ", file, " > ", outfile_single))
+	system(paste0("gsutil cp ", outfile_single, " ", intermediate_output_location))
+}
+
+system(paste0("gsutil cp ", intermediate_output_location, "*_cts_single.tsv ", "../../"))
 
 outfile_multi <- paste0(QCed_io_name , "_cts_multi.tsv")
 
-if (!file.exists(outfile_multi)) 
+# and this too
+if (!file.exists(outfile_multi)) { 
 	system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", multi_cts_columns, collapse=","), "}' ", file, " > ", outfile_multi))
+}
+
+system(paste0("gsutil cp ", intermediate_output_location, "*_cts_multi.tsv ", "../../"))
 
 # Now, create the average columns for the other cts variables...
 # Get the names of the variables, and then grep for them and take the average.

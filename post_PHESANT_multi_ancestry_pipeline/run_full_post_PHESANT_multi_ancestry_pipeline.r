@@ -33,6 +33,7 @@ QCed_io_name_cloud <- 'gs://ukb-diverse-pops/Phenotypes/Everyone/neale_lab_parse
 source("02_run_all_sexes_to_male_female_multi_ancestry.r")
 
 # 03_run_summarise_multi_ancestry_phenotypes_cloud.r
+# This is performed locally
 
 only_males_file <- "../should_only_be_in_males.tsv"
 only_females_file <- "../should_only_be_in_females.tsv"
