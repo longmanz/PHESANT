@@ -350,13 +350,6 @@ fwrite(pheno, file=paste0(final_output, 'combined_females.tsv'), quote=FALSE, se
 rm("pheno")
 rm("pheno_summary")
 
-system(paste0("bgzip ", final_output, 'combined_both_sexes_no_sex_specific.tsv'))
-system(paste0("bgzip ", final_output, 'combined_males.tsv'))
-system(paste0("bgzip ", final_output, 'combined_females.tsv'))
-
-system(paste0("gsutil cp ", final_output, '*combined*gz ', final_output_location, date, "/"))
-system(paste0("gsutil cp ", final_output, '*_both_sexes_no_sex_specific_summary.tsv ', final_output_location, date, "/"))
-system(paste0("gsutil cp ", final_output, '*_males_summary.tsv ', final_output_location, date, "/"))
-system(paste0("gsutil cp ", final_output, '*_females_summary.tsv ', final_output_location, date, "/"))
+system(paste0("gsutil cp ", final_output, '*combined*tsv ', final_output_location, date, "/"))
 
 # system(paste0("gsutil cp ", final_output, '*combined* gs://phenotype_pharma/PHESANT_output/', n_exomes, "/", date, "/"))
