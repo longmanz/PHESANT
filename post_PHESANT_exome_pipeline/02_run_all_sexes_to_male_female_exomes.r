@@ -57,7 +57,7 @@ outfile_single <- paste0(QCed_io_name , "_cts_single.tsv")
 
 # This is the part that can't be run on the cloud due to awk differences between OS X and linux
 if (!file.exists(outfile_single)) {
-	if (local = TRUE) {
+	if (local == TRUE) {
 		system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", single_cts_columns, collapse=","), "}' ", file, " > ", outfile_single))
 		system(paste0("gsutil cp ", outfile_single, " ", intermediate_output_location))
 	} else {
@@ -73,7 +73,7 @@ outfile_multi <- paste0(QCed_io_name , "_cts_multi.tsv")
 
 # and this too
 if (!file.exists(outfile_multi)) { 
-	if (local = TRUE) {
+	if (local == TRUE) {
 		system(paste0("awk -F $'\t' -v OFS=$'\t' '{print ", paste0("$", multi_cts_columns, collapse=","), "}' ", file, " > ", outfile_multi))
 		system(paste0("gsutil cp ", outfile_multi, " ", intermediate_output_location))
 	} else {
