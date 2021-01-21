@@ -122,7 +122,17 @@ restrictSample2 <- function(varName,pheno, varIndicator, variableVal, varlogfile
         indicatorVar <- data[,indName, drop=FALSE]
 
         # Remove participants with all NAs in this related field
-        where_change <- which(sapply(indicatorVar, is.nan) | indicatorVar == "NaN" | indicatorVar == "", arr.ind=TRUE)
+        
+        ### Start of modification by Longmanz ###
+        ## Use try() to catch the errors when processing some strange phenos in the UKB. 
+        error_status <- try(which(sapply(indicatorVar, is.nan) | indicatorVar == "NaN" | indicatorVar == "", arr.ind=TRUE))
+        
+        if(class(error_status) == "try-error"){
+            stop("An \'sapply\' error occurs, please check!", call.=FALSE)
+        } else {
+          where_change <- which(sapply(indicatorVar, is.nan) | indicatorVar == "NaN" | indicatorVar == "", arr.ind=TRUE)
+        }
+        ### End of modification ###
         
         if(nrow(where_change) > 0) {
             indicatorVar[which(sapply(indicatorVar, is.nan) | indicatorVar == "NaN" | indicatorVar == "", arr.ind=TRUE)] <- NA
