@@ -82,9 +82,19 @@ testAssociations <- function(currentVar, currentVarShort, thisdata, varlogfile, 
                             file=varlogfile, append=TRUE)
                         incrementCounter("catSinToCatMul")
                     }
-
-                    data_to_add <- testCategoricalMultiple(currentVarShort, "CAT-MUL",
-                                                           thisdata, varlogfile)
+                    
+                    ### Start of Modification by Longmanz ###
+                    # need to catch the error of sapply()! Modified on 2021 Jan 21
+                    error_status <- try(testCategoricalMultiple(currentVarShort, "CAT-MUL", thisdata, varlogfile))
+                    
+                    if(class(error_status) == "try-error"){
+                       cat("testAssociations.r: An \'sapply\' error occurs, please check!.")
+                       return(NULL)
+                     } else {
+                       data_to_add <- testCategoricalMultiple(currentVarShort, "CAT-MUL", thisdata, varlogfile)
+                     }
+                    ### End of Modification ###
+                    
                 }
                 cat("\n", file=varlogfile, append=TRUE)
                 return(data_to_add)
