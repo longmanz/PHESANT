@@ -6,18 +6,12 @@
 # 5) Determine correct test to perform, either binary, ordered or unordered.
 
 testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
-{   
-    visit_number <- strsplit(varName, split="_")[[1]][2]
-    varName <- strsplit(varName, split="_")[[1]][1]
-
+{
     cat("CAT-SINGLE || ", file=varlogfile, append=TRUE)
     pheno <- thisdata[,phenoStartIdx:ncol(thisdata)]
 
     # Assert variable has only one column
-    if (!is.null(dim(pheno))) {
-        print(head(pheno))
-        stop(paste0("More than one column for categorical single, number of columns: ", dim(pheno)[2]))
-    }
+    if (!is.null(dim(pheno))) stop("More than one column for categorical single")
 
     pheno <- reassignValue(pheno, varName, varlogfile)
 
@@ -48,7 +42,7 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
     # this is used where there is no zero option e.g. field 100200
     defaultValue <- dataDataCode$default_value
     defaultRelatedID <- dataDataCode$default_related_field
-    pheno <- setDefaultValue(pheno, defaultValue, defaultRelatedID, visit_number, varlogfile)
+    pheno <- setDefaultValue(pheno, defaultValue, defaultRelatedID, varlogfile)
 
     # All categories coded as < 0 we assume are `missing' values
     pheno <- replaceMissingCodes(pheno)
@@ -75,12 +69,6 @@ testCategoricalSingle <- function(varName, varType, thisdata, varlogfile)
         return(data_to_add)
     } else {
         # > 2 categories
-        if(length(is.na(ordered)) > 1) {
-            print("problem:")
-            print(varName)
-            print(length(is.na(ordered)))
-            print(ordered)
-        }
         if (is.na(ordered)) {
             cat(" ERROR: 'ordered' not found in data code info file")
             return(NULL)	
@@ -146,30 +134,35 @@ reorderOrderedCategory <- function(pheno, order, varlogfile)
 # Sets default value for people with no value in pheno, but with a value in the
 # field specified in the default_value_related_field column in the data coding info file.
 # the default value is specified in the default_value column in the data coding info file.
-setDefaultValue <- function(pheno, defaultValue, defaultRelatedID, visit_number, varlogfile)
-{   
+setDefaultValue <- function(pheno, defaultValue, defaultRelatedID, varlogfile)
+{
     if (!is.na(defaultValue) && nchar(defaultValue) > 0) {
         # Remove people who have no value for indicator variable
-        # Altered this from initial PHESANT.
-        # indName <- paste("x", defaultRelatedID, "_0_0", sep="")
-        indName <- paste0("x", defaultRelatedID, "_", visit_number, "_0")
+        indName <- paste("x", defaultRelatedID, "_0_0", sep="")
      	cat("Default related field:", indName, "|| ",
             file=varlogfile, append=TRUE)
-    	indicatorVar <- data[,indName]
-    	# Remove participants with NA value in this related field
-    	indicatorVar <- replaceNaN(indicatorVar)
-        # Check if there are already examples with default value and if so display warning
-        numWithDefault <- length(which(pheno==defaultValue))
+            
+        if(length(indName) == 0){
+            cat("Related field ", indName, " not exist in the data frame. SKIPPING...|| ",
+                file=varlogfile, append=TRUE)
+        } else {
+            indicatorVar <- data[,indName]
+            # Remove participants with NA value in this related field
+    	    indicatorVar <- replaceNaN(indicatorVar)
+            # Check if there are already examples with default value and if so display warning
+            numWithDefault <- length(which(pheno==defaultValue))
 
-        if (numWithDefault > 0) 
-            cat("(WARNING: already", numWithDefault, "values with default value) ")
+            if (numWithDefault > 0) 
+                cat("(WARNING: already", numWithDefault, "values with default value) ")
 
-        # Set default value in people who have no value in the pheno but do 
-        # have a value in the default_value_related_field
-    	defaultIdxs <- which(!is.na(indicatorVar) & is.na(pheno))
-        pheno[defaultIdxs] <- defaultValue
-       	cat("default value", defaultValue, "set, N=", length(defaultIdxs), "|| ",
-            file=varlogfile, append=TRUE)
+            # Set default value in people who have no value in the pheno but do 
+            # have a value in the default_value_related_field
+    	    defaultIdxs <- which(!is.na(indicatorVar) & is.na(pheno))
+            pheno[defaultIdxs] <- defaultValue
+       	    cat("default value", defaultValue, "set, N=", length(defaultIdxs), "|| ",
+                file=varlogfile, append=TRUE)
+
+        }
     }
     return(pheno)
 }
