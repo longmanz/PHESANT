@@ -1,5 +1,6 @@
 # Forked from astheeggeggs/PHESANT. 
-Fixed an error in PHESANT when it processes some strange multi-categorical phenotypes. Two files: testAssociations.r and testCatMultiple.r are modified. 
+1. Fixed an error in PHESANT when it processes some strange multi-categorical phenotypes. Two files: testAssociations.r and testCatMultiple.r are modified. 
+2. Fixed an bug in the setDefaultValue() function in testCatSingle.r. Now it allows missing related data IDs in the data frame (instead of aborting the program). 
 
 # Customised PHESANT - PHEnome Scan ANalysis Tool.
 Run a phenome scan and write the resultant phenotypes to disk. Much of the code is identical to [PHESANT](https://github.com/MRCIEU/PHESANT), and we refer users to that repository for running analyses and creating visualisations.
