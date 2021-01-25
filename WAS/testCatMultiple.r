@@ -128,6 +128,7 @@ restrictSample2 <- function(varName,pheno, varIndicator, variableVal, varlogfile
         error_status <- try(which(sapply(indicatorVar, is.nan) | indicatorVar == "NaN" | indicatorVar == "", arr.ind=TRUE))
         
         if(class(error_status) == "try-error"){
+            cat("Sapply error for ", indName, " || ", sep="", file=varlogfile, append=TRUE)
             stop("An \'sapply\' error occurs, please check!", call.=FALSE)
         } else {
           where_change <- which(sapply(indicatorVar, is.nan) | indicatorVar == "NaN" | indicatorVar == "", arr.ind=TRUE)
